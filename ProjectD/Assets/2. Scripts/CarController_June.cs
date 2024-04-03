@@ -7,6 +7,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using static CarControllerv2_June;
 
+
+// CarController_June 클래스 선언
+public class CarController_June : MonoBehaviour
+{
 // 자동차의 기어 상태를 나타내는 열거형
 public enum GearState
 {
@@ -16,9 +20,11 @@ public enum GearState
     Changing        // 기어를 변경 중일 때
 };
 
-// CarController_June 클래스 선언
-public class CarController_June : MonoBehaviour
+public enum Transmission
 {
+    Auto_Transmission,
+    Manual_Transmission,
+}
     // 플레이어의 Rigidbody 구성 요소
     private Rigidbody playerRB;
     public Vector3 _centerOfMass;
@@ -28,6 +34,7 @@ public class CarController_June : MonoBehaviour
 
     // 입력 변수
     private float gasInput;
+    private float gasIn;
     private float brakeInput;
 
     // 자동차 이동을 위한 매개변수
@@ -57,6 +64,7 @@ public class CarController_June : MonoBehaviour
     public float increaseGearRPM;    // RPM이 증가할 때 기어 변경을 위해 필요한 추가 RPM
     public float decreaseGearRPM;    // RPM이 감소할 때 기어 변경을 위해 필요한 추가 RPM
     public float changeGearTime = 0.5f;    // 기어를 변경하는 데 걸리는 시간
+    public Transmission transmission;
     private bool handrbake = false; //핸드 브레이크
 
 
@@ -78,6 +86,8 @@ public class CarController_June : MonoBehaviour
 
         // 입력 확인
         CheckInput();
+   
+
     }
 
     // 물리 업데이트마다 호출되는 함수
@@ -87,7 +97,7 @@ public class CarController_June : MonoBehaviour
         ApplyMotor();
         ApplySteering();
         ApplyBrake();
-       
+
     }
 
     // 스티어링 슬라이더
@@ -96,34 +106,36 @@ public class CarController_June : MonoBehaviour
     // 입력 확인 함수
     void CheckInput()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            if(isEngineRunning ==0)
-            {
-                isEngineRunning++;
-            }
-            else if (isEngineRunning == 1)
-            {
-                isEngineRunning--;
-            }
-        }
+        //if (Input.GetKeyDown(KeyCode.Alpha1))
+        //{
+        //    if (isEngineRunning == 0)
+        //    {
+        //        isEngineRunning++;
+        //    }
+        //    else if (isEngineRunning == 1)
+        //    {
+        //        isEngineRunning--;
+        //    }
+        //}
         handrbake = (Input.GetKey(KeyCode.Space));
 
         // 가스 및 브레이크 입력 확인
         gasInput = Input.GetAxis("Vertical");
+        Debug.Log(gasInput);
         if (gasInput > 0)
         {
-            gasInput += sensitivity * Time.deltaTime;
+            gasInput += Mathf.Clamp01(sensitivity * Time.deltaTime);
         }
         if (gasInput < 0)
         {
-            gasInput -= sensitivity * Time.deltaTime;
+            gasInput -= Mathf.Clamp01(sensitivity * Time.deltaTime);
         }
 
         // 엔진이 꺼져 있고 가스 입력이 있을 때 엔진 시작
         if (Mathf.Abs(gasInput) > 0 && isEngineRunning == 0)
         {
             gearState = GearState.Running;
+            isEngineRunning = 1;
         }
 
         // 마우스 X 입력에 따라 스티어링 조절
@@ -194,10 +206,10 @@ public class CarController_June : MonoBehaviour
             colliders.RRWheel.brakeTorque = brakePower * 1000f;
             colliders.RLWheel.brakeTorque = brakePower * 1000f;
         }
-        
+
     }
 
- 
+
 
 
     // 모터 적용 함수
@@ -218,14 +230,30 @@ public class CarController_June : MonoBehaviour
         }
         if (gearState == GearState.Running && clutch > 0)
         {
-            if (RPM > increaseGearRPM)
+            if (transmission == Transmission.Auto_Transmission)
             {
-                StartCoroutine(ChangeGear(1));
+
+                if (RPM > increaseGearRPM)
+                {
+                    StartCoroutine(ChangeGear(1));
+                }
+                else if (RPM < decreaseGearRPM)
+                {
+                    StartCoroutine(ChangeGear(-1));
+                }
             }
-            else if (RPM < decreaseGearRPM)
+            if (transmission == Transmission.Manual_Transmission)
             {
-                StartCoroutine(ChangeGear(-1));
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    StartCoroutine(ChangeGear(1));
+                }
+                else if (Input.GetKeyDown(KeyCode.Q))
+                {
+                    StartCoroutine(ChangeGear(-1));
+                }
             }
+
         }
         if (isEngineRunning > 0)
         {
@@ -247,7 +275,7 @@ public class CarController_June : MonoBehaviour
     void ApplySteering()
     {
         float steeringAngle;
-        steeringAngle = steeringCurve.Evaluate(speed) *steerSlider.value * 30 / (1080.0f / 2);
+        steeringAngle = steeringCurve.Evaluate(speed) * steerSlider.value * 30 / (1080.0f / 2);
         colliders.FRWheel.steerAngle = steeringAngle;
         colliders.FLWheel.steerAngle = steeringAngle;
     }
