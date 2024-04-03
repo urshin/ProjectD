@@ -1,179 +1,299 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static CarControllerv2_June;
 
+// ÀÚµ¿Â÷ÀÇ ±â¾î »óÅÂ¸¦ ³ªÅ¸³»´Â ¿­°ÅÇü
+public enum GearState
+{
+    Neutral,        // Áß¸³ »óÅÂÀÏ ¶§
+    Running,        // ¿£ÁøÀÌ ÀÛµ¿ ÁßÀÏ ¶§
+    CheckingChange, // ±â¾î º¯°æÀ» È®ÀÎ ÁßÀÏ ¶§
+    Changing        // ±â¾î¸¦ º¯°æ ÁßÀÏ ¶§
+};
+
+// CarController_June Å¬·¡½º ¼±¾ğ
 public class CarController_June : MonoBehaviour
 {
-    public enum ControlMode
-    {
-        Keyboard,
-        Buttons
-    };
-
-    public enum Axel
-    {
-        Front,
-        Rear
-    }
-
-    [Serializable]
-    public struct Wheel
-    {
-        public GameObject wheelModel;
-        public WheelCollider wheelCollider;
-        public GameObject wheelEffectObj;
-        public ParticleSystem smokeParticle;
-        public Axel axel;
-    }
-
-    public ControlMode control;
-
-    public float maxAcceleration = 30.0f;
-    public float brakeAcceleration = 50.0f;
-
-    public float turnSensitivity = 1.0f;
-    public float maxSteerAngle = 30.0f;
-
+    // ÇÃ·¹ÀÌ¾îÀÇ Rigidbody ±¸¼º ¿ä¼Ò
+    private Rigidbody playerRB;
     public Vector3 _centerOfMass;
 
-    public List<Wheel> wheels;
+    // ÀÚµ¿Â÷ÀÇ ¹ÙÄû¿¡ ´ëÇÑ WheelColliders
+    public WheelColliders colliders;
 
-    float moveInput;
-    float steerInput;
+    // ÀÔ·Â º¯¼ö
+    private float gasInput;
+    private float brakeInput;
 
-    public Slider steerSlider;
+    // ÀÚµ¿Â÷ ÀÌµ¿À» À§ÇÑ ¸Å°³º¯¼ö
+    public float motorPower;
+    public float brakePower;
+    public float slipAngle;
+    public float speed;
+    private float speedClamped;
+    public float maxSpeed;
+    public AnimationCurve steeringCurve;
+    public float sensitivity;
 
-    private Rigidbody carRb;
+    //¿£Áø °ü·Ã
+    public int isEngineRunning;// ¿£ÁøÀÌ ÀÛµ¿ ÁßÀÎÁö¸¦ ³ªÅ¸³»´Â º¯¼ö
+    public float RPM;// ÇöÀç RPM(Revolutions Per Minute, ºĞ´ç È¸Àü¼ö)À» ÀúÀåÇÏ´Â º¯¼ö
+    public float redLine;// ¿£ÁøÀÇ ÃÖ´ë È¸Àü ¼Óµµ¸¦ ³ªÅ¸³»´Â º¯¼ö
+    public float idleRPM;// ¿£ÁøÀÌ ´ë±â »óÅÂÀÏ ¶§ÀÇ RPM
+    public TMP_Text rpmText;
+    public int currentGear;// ÇöÀç ±â¾î¸¦ ³ªÅ¸³»´Â º¯¼ö
+    public float[] gearRatios; // ¿£Áø Ãâ·Â(RPM¿¡ µû¶ó º¯ÇÏ´Â ¿£Áø Ãâ·Â)¿¡ µû¸¥ ±â¾î ºñÀ²À» ÀúÀåÇÏ´Â ¹è¿­
+    public float differentialRatio; // º¯¼Ó±â(differential) ºñÀ²
+    private float currentTorque; // ÇöÀç ÅäÅ© °ªÀ» ÀúÀåÇÏ´Â º¯¼ö
+    private float clutch; // Å¬·¯Ä¡ »óÅÂ¸¦ ³ªÅ¸³»´Â º¯¼ö (0¿¡¼­ 1 »çÀÌÀÇ °ª)
+    private float wheelRPM;  // ¹ÙÄû RPMÀ» ÀúÀåÇÏ´Â º¯¼ö
+    public AnimationCurve hpToRPMCurve;    // ¿£Áø Ãâ·Â°ú RPM °£ÀÇ °ü°è¸¦ Á¤ÀÇÇÏ´Â Ä¿ºê
+    private GearState gearState;    // ÇöÀç ±â¾î »óÅÂ¸¦ ³ªÅ¸³»´Â º¯¼ö (Áß¸³, ÀÛµ¿ Áß, ±â¾î º¯°æ È®ÀÎ Áß, ±â¾î º¯°æ Áß)
+    public float increaseGearRPM;    // RPMÀÌ Áõ°¡ÇÒ ¶§ ±â¾î º¯°æÀ» À§ÇØ ÇÊ¿äÇÑ Ãß°¡ RPM
+    public float decreaseGearRPM;    // RPMÀÌ °¨¼ÒÇÒ ¶§ ±â¾î º¯°æÀ» À§ÇØ ÇÊ¿äÇÑ Ãß°¡ RPM
+    public float changeGearTime = 0.5f;    // ±â¾î¸¦ º¯°æÇÏ´Â µ¥ °É¸®´Â ½Ã°£
+    private bool handrbake = false; //ÇÚµå ºê·¹ÀÌÅ©
 
-    //private CarLights carLights;
 
+    // Start is called before the first frame update
     void Start()
     {
-        carRb = GetComponent<Rigidbody>();
-        carRb.centerOfMass = _centerOfMass;
-
-       // carLights = GetComponent<CarLights>();
+        // Rigidbody ±¸¼º ¿ä¼Ò °¡Á®¿À±â
+        playerRB = gameObject.GetComponent<Rigidbody>();
+        playerRB.centerOfMass = _centerOfMass;
     }
 
+    // Update is called once per frame
     void Update()
     {
-        GetInputs();
-        //AnimateWheels();
-        //WheelEffects();
+        // RPM ¹× ¼Óµµ °»½Å
+        rpmText.text = RPM.ToString("0,000") + "rpm";
+        speed = colliders.RRWheel.rpm * colliders.RRWheel.radius * 2f * Mathf.PI / 10f;
+        speedClamped = Mathf.Lerp(speedClamped, speed, Time.deltaTime);
+
+        // ÀÔ·Â È®ÀÎ
+        CheckInput();
     }
 
-    void LateUpdate()
+    // ¹°¸® ¾÷µ¥ÀÌÆ®¸¶´Ù È£ÃâµÇ´Â ÇÔ¼ö
+    private void FixedUpdate()
     {
-        Move();
-        Steer();
-        Brake();
+        // ÀÚµ¿Â÷ Á¦¾î ÇÔ¼ö È£Ãâ
+        ApplyMotor();
+        ApplySteering();
+        ApplyBrake();
+       
     }
 
-    public void MoveInput(float input)
-    {
-        moveInput = input;
-    }
+    // ½ºÆ¼¾î¸µ ½½¶óÀÌ´õ
+    public Slider steerSlider;
 
-    public void SteerInput(float input)
+    // ÀÔ·Â È®ÀÎ ÇÔ¼ö
+    void CheckInput()
     {
-        steerInput = input;
-    }
-
-    void GetInputs()
-    {
-        if (control == ControlMode.Keyboard)
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            moveInput = Input.GetAxis("Vertical");
-            steerInput = Input.GetAxis("Horizontal");
+            if(isEngineRunning ==0)
+            {
+                isEngineRunning++;
+            }
+            else if (isEngineRunning == 1)
+            {
+                isEngineRunning--;
+            }
         }
-        // ë§ˆìš°ìŠ¤ì˜ Xì¶• ì›€ì§ì„ì„ ê°€ì ¸ì˜µë‹ˆë‹¤.
-        float mouseX = Input.GetAxis("Mouse X");
+        handrbake = (Input.GetKey(KeyCode.Space));
 
-        // ì›€ì§ì„ì´ ê°ì§€ë˜ë©´ ë””ë²„ê·¸ ë¡œê·¸ë¡œ ì¶œë ¥í•©ë‹ˆë‹¤.
+        // °¡½º ¹× ºê·¹ÀÌÅ© ÀÔ·Â È®ÀÎ
+        gasInput = Input.GetAxis("Vertical");
+        if (gasInput > 0)
+        {
+            gasInput += sensitivity * Time.deltaTime;
+        }
+        if (gasInput < 0)
+        {
+            gasInput -= sensitivity * Time.deltaTime;
+        }
+
+        // ¿£ÁøÀÌ ²¨Á® ÀÖ°í °¡½º ÀÔ·ÂÀÌ ÀÖÀ» ¶§ ¿£Áø ½ÃÀÛ
+        if (Mathf.Abs(gasInput) > 0 && isEngineRunning == 0)
+        {
+            gearState = GearState.Running;
+        }
+
+        // ¸¶¿ì½º X ÀÔ·Â¿¡ µû¶ó ½ºÆ¼¾î¸µ Á¶Àı
+        float mouseX = Input.GetAxis("Mouse X");
         if (mouseX != 0)
         {
             steerSlider.value += mouseX;
-            Debug.Log("Mouse X movement: " + mouseX);
         }
-    }
 
-    void Move()
-    {
-        foreach (var wheel in wheels)
+        // ¼Óµµ ¹æÇâ¿¡ µû¶ó ºê·¹ÀÌÅ© ÀÔ·Â Á¶Àı
+        slipAngle = Vector3.Angle(transform.forward, playerRB.velocity - transform.forward);
+        float movingDirection = Vector3.Dot(transform.forward, playerRB.velocity);
+        if (gearState != GearState.Changing)
         {
-            wheel.wheelCollider.motorTorque = moveInput * 600 * maxAcceleration * Time.deltaTime;
-        }
-    }
-
-    void Steer()
-    {
-        foreach (var wheel in wheels)
-        {
-            if (wheel.axel == Axel.Front)
+            if (gearState == GearState.Neutral)
             {
-                //var _steerAngle = steerInput * turnSensitivity * maxSteerAngle;
-                //wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, _steerAngle, 0.6f);
-                
-                var _steerAngle = steerSlider.value * maxSteerAngle / (1080.0f / 2);
-                wheel.wheelCollider.steerAngle = _steerAngle;
-            }
-        }
-    }
-
-    void Brake()
-    {
-        if (Input.GetKey(KeyCode.Space) || moveInput == 0)
-        {
-            foreach (var wheel in wheels)
-            {
-                wheel.wheelCollider.brakeTorque = 300 * brakeAcceleration * Time.deltaTime;
-            }
-
-            //carLights.isBackLightOn = true;
-            //carLights.OperateBackLights();
-        }
-        else
-        {
-            foreach (var wheel in wheels)
-            {
-                wheel.wheelCollider.brakeTorque = 0;
-            }
-
-            //carLights.isBackLightOn = false;
-            //carLights.OperateBackLights();
-        }
-    }
-
-    void AnimateWheels()
-    {
-        foreach (var wheel in wheels)
-        {
-            Quaternion rot;
-            Vector3 pos;
-            wheel.wheelCollider.GetWorldPose(out pos, out rot);
-            wheel.wheelModel.transform.position = pos;
-            wheel.wheelModel.transform.rotation = rot;
-        }
-    }
-
-    void WheelEffects()
-    {
-        foreach (var wheel in wheels)
-        {
-            //var dirtParticleMainSettings = wheel.smokeParticle.main;
-
-            if (Input.GetKey(KeyCode.Space) && wheel.axel == Axel.Rear && wheel.wheelCollider.isGrounded == true && carRb.velocity.magnitude >= 10.0f)
-            {
-                wheel.wheelEffectObj.GetComponentInChildren<TrailRenderer>().emitting = true;
-                wheel.smokeParticle.Emit(1);
+                clutch = 0;
+                if (Mathf.Abs(gasInput) > 0) gearState = GearState.Running;
             }
             else
             {
-                wheel.wheelEffectObj.GetComponentInChildren<TrailRenderer>().emitting = false;
+                clutch = Input.GetKey(KeyCode.LeftShift) ? 0 : Mathf.Lerp(clutch, 1, Time.deltaTime);
             }
+        }
+        else
+        {
+            clutch = 0;
+        }
+        if (movingDirection < -0.5f && gasInput > 0)
+        {
+            brakeInput = Mathf.Abs(gasInput);
+        }
+        else if (movingDirection > 0.5f && gasInput < 0)
+        {
+            brakeInput = Mathf.Abs(gasInput);
+        }
+        else
+        {
+            brakeInput = 0;
         }
     }
 
+
+
+    public float originFriction = 1f;
+    public float handbreakFriction = 0.8f;
+
+    WheelFrictionCurve fFriction;
+    WheelFrictionCurve sFriction;
+
+    // ºê·¹ÀÌÅ© Àû¿ë ÇÔ¼ö
+    void ApplyBrake()
+    {
+        colliders.FRWheel.brakeTorque = brakeInput * brakePower * 0.7f;
+        colliders.FLWheel.brakeTorque = brakeInput * brakePower * 0.7f;
+        colliders.RRWheel.brakeTorque = brakeInput * brakePower * 0.3f;
+        colliders.RLWheel.brakeTorque = brakeInput * brakePower * 0.3f;
+        if (handrbake)
+        {
+            //fFriction.stiffness = handbreakFriction;
+            //sFriction.stiffness = handbreakFriction;
+            //colliders.RRWheel.forwardFriction = fFriction;
+            //colliders.RRWheel.sidewaysFriction = sFriction;
+            //colliders.RLWheel.forwardFriction = fFriction;
+            //colliders.RLWheel.sidewaysFriction = sFriction;
+
+            clutch = 0;
+            colliders.RRWheel.brakeTorque = brakePower * 1000f;
+            colliders.RLWheel.brakeTorque = brakePower * 1000f;
+        }
+        
+    }
+
+ 
+
+
+    // ¸ğÅÍ Àû¿ë ÇÔ¼ö
+    void ApplyMotor()
+    {
+        currentTorque = CalculateTorque();
+        colliders.RRWheel.motorTorque = currentTorque * gasInput;
+        colliders.RLWheel.motorTorque = currentTorque * gasInput;
+    }
+
+    // ÅäÅ© °è»ê ÇÔ¼ö
+    float CalculateTorque()
+    {
+        float torque = 0;
+        if (RPM < idleRPM + 200 && gasInput == 0 && currentGear == 0)
+        {
+            gearState = GearState.Neutral;
+        }
+        if (gearState == GearState.Running && clutch > 0)
+        {
+            if (RPM > increaseGearRPM)
+            {
+                StartCoroutine(ChangeGear(1));
+            }
+            else if (RPM < decreaseGearRPM)
+            {
+                StartCoroutine(ChangeGear(-1));
+            }
+        }
+        if (isEngineRunning > 0)
+        {
+            if (clutch < 0.1f)
+            {
+                RPM = Mathf.Lerp(RPM, Mathf.Max(idleRPM, redLine * gasInput) + UnityEngine.Random.Range(-50, 50), Time.deltaTime);
+            }
+            else
+            {
+                wheelRPM = Mathf.Abs((colliders.RRWheel.rpm + colliders.RLWheel.rpm) / 2f) * gearRatios[currentGear] * differentialRatio;
+                RPM = Mathf.Lerp(RPM, Mathf.Max(idleRPM - 100, wheelRPM), Time.deltaTime * 3f);
+                torque = (hpToRPMCurve.Evaluate(RPM / redLine) * motorPower / RPM) * gearRatios[currentGear] * differentialRatio * 5252f * clutch;
+            }
+        }
+        return torque;
+    }
+
+    // ½ºÆ¼¾î¸µ Àû¿ë ÇÔ¼ö
+    void ApplySteering()
+    {
+        float steeringAngle;
+        steeringAngle = steeringCurve.Evaluate(speed) *steerSlider.value * 30 / (1080.0f / 2);
+        colliders.FRWheel.steerAngle = steeringAngle;
+        colliders.FLWheel.steerAngle = steeringAngle;
+    }
+
+    // ±â¾î º¯°æ ÄÚ·çÆ¾
+    IEnumerator ChangeGear(int gearChange)
+    {
+        gearState = GearState.CheckingChange;
+        if (currentGear + gearChange >= 0)
+        {
+            if (gearChange > 0)
+            {
+                // ±â¾î ¿Ã¸®±â
+                yield return new WaitForSeconds(0.7f);
+                if (RPM < increaseGearRPM || currentGear >= gearRatios.Length - 1)
+                {
+                    gearState = GearState.Running;
+                    yield break;
+                }
+            }
+            if (gearChange < 0)
+            {
+                // ±â¾î ³»¸®±â
+                yield return new WaitForSeconds(0.1f);
+                if (RPM > decreaseGearRPM || currentGear <= 0)
+                {
+                    gearState = GearState.Running;
+                    yield break;
+                }
+            }
+            gearState = GearState.Changing;
+            yield return new WaitForSeconds(changeGearTime);
+            currentGear += gearChange;
+        }
+
+        if (gearState != GearState.Neutral)
+            gearState = GearState.Running;
+    }
+}
+
+// WheelColliders Å¬·¡½º ¼±¾ğ
+[System.Serializable]
+public class WheelColliders
+{
+    public WheelCollider FRWheel;
+    public WheelCollider FLWheel;
+    public WheelCollider RRWheel;
+    public WheelCollider RLWheel;
 }

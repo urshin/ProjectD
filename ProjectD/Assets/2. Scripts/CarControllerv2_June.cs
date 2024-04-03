@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -43,11 +44,19 @@ public class CarControllerv2_June : MonoBehaviour
     float moveInput;
     float steerInput;
 
+
+
+    //informations
     public Slider steerSlider;
+    public TextMeshProUGUI RPM;
+
 
     private Rigidbody carRb;
 
     //private CarLights carLights;
+
+
+    
 
     void Start()
     {
@@ -69,6 +78,8 @@ public class CarControllerv2_June : MonoBehaviour
     {
         GetInputs();
         AnimateWheels();
+        ShowInformations();
+
     }
 
     void LateUpdate()
@@ -111,6 +122,7 @@ public class CarControllerv2_June : MonoBehaviour
         foreach (var wheel in wheels)
         {
             wheel.wheelCollider.motorTorque = moveInput * 600 * maxAcceleration * Time.deltaTime;
+            
         }
     }
 
@@ -169,7 +181,7 @@ public class CarControllerv2_June : MonoBehaviour
                     sFriction.stiffness = handbreakFriction;
                 wheel.wheelCollider.forwardFriction = fFriction;
                 wheel.wheelCollider.sidewaysFriction = sFriction;
-                
+                    wheel.wheelCollider.brakeTorque = 500 * brakeAcceleration * Time.deltaTime;
 
                 }
             }
@@ -187,6 +199,8 @@ public class CarControllerv2_June : MonoBehaviour
                     sFriction.stiffness = originFriction;
                     wheel.wheelCollider.forwardFriction = fFriction;
                     wheel.wheelCollider.sidewaysFriction = sFriction;
+                    wheel.wheelCollider.brakeTorque = 0;
+
                 }
             }
 
@@ -205,5 +219,11 @@ public class CarControllerv2_June : MonoBehaviour
             wheel.wheelModel.transform.position = pos;
             wheel.wheelModel.transform.rotation = rot;
         }
+    }
+
+
+    void ShowInformations()
+    {
+        RPM.text = wheels[3].wheelCollider.rpm.ToString();
     }
 }
