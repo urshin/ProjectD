@@ -22,6 +22,13 @@ public class CarControllerv3_June : MonoBehaviour
         Changing        // 기어를 변경 중일 때
     };
 
+    public enum WheelWork //전,후,4륜
+    {
+        FRONT,
+        REAR,
+        AWD,
+    };
+
     public enum Transmission
     {
         Auto_Transmission,
@@ -49,7 +56,9 @@ public class CarControllerv3_June : MonoBehaviour
 
     //엔진
     public Transmission transmission;
+    public WheelWork wheelWork;
     public float minRPM; //최소RPM
+    public float maxRPM; //최소RPM
     public float motorRPM; //모터 RPM
     public float wheelRPM; //바퀴 RPM
     public float finalDriveRatio; //최종 구동 비율 3~4 사이
@@ -82,11 +91,11 @@ public class CarControllerv3_June : MonoBehaviour
 
     public AnimationCurve test_gearRatios;
     public AnimationCurve test_torqueCurve;
-    public float[] test_gearRatiosArray; 
-    public float[] test_torqueCurveArray; 
+    public float[] test_gearRatiosArray;
+    public float[] test_torqueCurveArray;
 
-
-
+    [Header("Manager")]
+    public float tempFloat;
 
     private void Start()
     {
@@ -94,34 +103,47 @@ public class CarControllerv3_June : MonoBehaviour
         playerRB.centerOfMass = _centerOfMass;
         wheelDiameter = colliders.RLWheel.radius;
         MakingGearCurve();
+        MakingtorqueCurve();
+        initializedminmaxRPM();
 
+        gearRatios = test_gearRatios;
+        torqueCurve = test_torqueCurve;
+
+    }
+    void initializedminmaxRPM()
+    {
 
     }
     //기어비 만들기
     void MakingGearCurve()
     {
-        for (int i = -1; i < test_gearRatiosArray.Length; i++)
+        for (int i = -1; i < test_gearRatiosArray.Length - 1; i++)
         {
             test_gearRatios.AddKey(i, test_gearRatiosArray[i + 1]);
         }
     }
-
+    void MakingtorqueCurve()
+    {
+        for (int i = 0; i < test_torqueCurveArray.Length; i++)
+        {
+            test_torqueCurve.AddKey(i * 100 + 1000, test_torqueCurveArray[i]);
+        }
+    }
 
     private void Update()
     {
         //wheelRPM = colliders.RLWheel.rpm;
-        wheelRPM = Mathf.Abs((colliders.RRWheel.rpm + colliders.RLWheel.rpm) / 2f);
-
+       
         //차속 (km/h) = 2pi * 타이어반지름 * 엔진RPM/(번속기 기어비 x 종감속 기어비)x60/1000
         float tireCircumference = 2 * Mathf.PI * (wheelDiameter / 2);
-        speed =  tireCircumference * (motorRPM / (gearRatios.Evaluate(gearindex) * finalDriveRatio)) * (60f / 1000f);
-        gearratiostext.text = "gearRatios :"+gearRatios.Evaluate(gearindex).ToString();
-        torqueCurvetext.text = "torqueCurve : "+ torqueCurve.Evaluate(motorRPM).ToString();
+        speed = tireCircumference * (motorRPM / (gearRatios.Evaluate(gearindex) * finalDriveRatio)) * (60f / 1000f);
+        gearratiostext.text = "gearRatios :" + test_gearRatios.Evaluate(gearindex).ToString();
+        torqueCurvetext.text = "torqueCurve : " + test_torqueCurve.Evaluate(motorRPM).ToString();
 
 
 
         GetInput();
-        gearText.text = "Current Gear : "+gearindex.ToString();
+        gearText.text = "Current Gear : " + gearindex.ToString();
         //speedText.text = speed.ToString() ;
         speedText.text = "Speed : " + playerRB.velocity.magnitude.ToString();
 
@@ -130,7 +152,7 @@ public class CarControllerv3_June : MonoBehaviour
             Debug.Log(Time.fixedTime);
         }
 
-        ApplyGear();
+         ApplyGear();
 
     }
     private void FixedUpdate()
@@ -138,6 +160,8 @@ public class CarControllerv3_June : MonoBehaviour
         ApplyMotor();
         ApplySteering();
         ApplyBrake();
+
+      
     }
 
 
@@ -148,19 +172,12 @@ public class CarControllerv3_June : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X");
         if (mouseX != 0)
         {
-            //steerSlider.value += mouseX;
+            //steerSlider.value += mouseX * sensitivity;
         }
         gasInput = Input.GetAxis("Vertical");
         //print(gasInput);
         handrbake = (Input.GetKey(KeyCode.Space));
-        if (gasInput > 0)
-        {
-            gasInput += Mathf.Clamp01(sensitivity * Time.deltaTime);
-        }
-        if (gasInput < 0)
-        {
-            gasInput -= Mathf.Clamp01(sensitivity * Time.deltaTime);
-        }
+        
         // 엔진이 꺼져 있고 가스 입력이 있을 때 엔진 시작
         if (Mathf.Abs(gasInput) > 0 && isEngineRunning == 0)
         {
@@ -206,10 +223,28 @@ public class CarControllerv3_June : MonoBehaviour
 
     public void ApplyMotor()
     {
+        
         float currentTorque = CalculateTorque();
 
-        colliders.RLWheel.motorTorque = currentTorque / 2; //뒷바퀴만
-        colliders.RRWheel.motorTorque = currentTorque / 2;
+        if (wheelWork == WheelWork.FRONT) //전륜
+        {
+            colliders.FLWheel.motorTorque = currentTorque / 2;
+            colliders.FRWheel.motorTorque = currentTorque / 2;
+
+        }
+        if (wheelWork == WheelWork.REAR) //후륜
+        {
+            colliders.RLWheel.motorTorque = currentTorque / 2;
+            colliders.RRWheel.motorTorque = currentTorque / 2;
+
+        }
+        if (wheelWork == WheelWork.AWD) //4륜
+        {
+            colliders.FLWheel.motorTorque = currentTorque / 4;
+            colliders.FRWheel.motorTorque = currentTorque / 4;
+            colliders.RLWheel.motorTorque = currentTorque / 4;
+            colliders.RRWheel.motorTorque = currentTorque / 4;
+        }
     }
     float CalculateTorque()
     {
@@ -233,18 +268,18 @@ public class CarControllerv3_June : MonoBehaviour
                 }
             }
 
-            if (transmission == Transmission.Manual_Transmission)
-            {
+            //if (transmission == Transmission.Manual_Transmission)
+            //{
 
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    StartCoroutine(ChangeGear(1));
-                }
-                else if (Input.GetKeyDown(KeyCode.Q))
-                {
-                    StartCoroutine(ChangeGear(-1));
-                }
-            }
+            //    if (Input.GetKeyDown(KeyCode.E))
+            //    {
+            //        StartCoroutine(ChangeGear(1));
+            //    }
+            //    else if (Input.GetKeyDown(KeyCode.Q))
+            //    {
+            //        StartCoroutine(ChangeGear(-1));
+            //    }
+            //}
 
 
 
@@ -253,17 +288,58 @@ public class CarControllerv3_June : MonoBehaviour
         {
             if (clutch < 0.1f)
             {
-                totalMotorTorque = Mathf.Lerp(motorRPM, Mathf.Max(minRPM, redLine * gasInput) + UnityEngine.Random.Range(-50, 50), Time.deltaTime);
+                totalMotorTorque = Mathf.Lerp(motorRPM, Mathf.Max(minRPM, maxRPM * gasInput) + UnityEngine.Random.Range(-50, 50), Time.deltaTime);
             }
             else
             {
-                motorRPM = minRPM + (wheelRPM * finalDriveRatio * gearRatios.Evaluate(gearindex));
-                totalMotorTorque = torqueCurve.Evaluate(motorRPM) * gearRatios.Evaluate(gearindex) * finalDriveRatio * gasInput;
+                wheelRPM = Mathf.Abs((colliders.RRWheel.rpm + colliders.RLWheel.rpm) / 2f);
+                if (wheelRPM < 0)
+                {
+                    wheelRPM = 0;
+                }
+                //currentRPM = Mathf.Lerp(currentRPM, minRPM + (wheelsRPM * finalDriveRatio * gearRatio), Time.fixedDeltaTime * RPMSmoothness);
+
+                //motorRPM = minRPM + (wheelRPM * finalDriveRatio * gearRatios.Evaluate(gearindex));
+                motorRPM = Mathf.Lerp(motorRPM,minRPM + (wheelRPM * finalDriveRatio * gearRatios.Evaluate(gearindex)), Time.fixedDeltaTime *2);
+                //totalMotorTorque = torqueCurve.Evaluate(motorRPM) * gearRatios.Evaluate(gearindex) * finalDriveRatio * gasInput;
+                totalMotorTorque = torqueCurve.Evaluate(motorRPM/maxRPM) * gearRatios.Evaluate(gearindex) * finalDriveRatio * gasInput*tempFloat;
                 torque = totalMotorTorque;
             }
+            
         }
         return torque;
     }
+
+
+
+
+    
+
+
+    private void OnEnable()
+    {
+        colliders.RRWheel.ConfigureVehicleSubsteps(5.0f, 30, 10);
+        colliders.RLWheel.ConfigureVehicleSubsteps(5.0f, 30, 10);
+        colliders.FRWheel.ConfigureVehicleSubsteps(5.0f, 30, 10);
+        colliders.FLWheel.ConfigureVehicleSubsteps(5.0f, 30, 10);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     IEnumerator ChangeGear(int gearChange)
@@ -274,21 +350,38 @@ public class CarControllerv3_June : MonoBehaviour
             if (gearChange > 0)
             {
                 // 기어 올리기
-                yield return new WaitForSeconds(0.7f);
-                if (motorRPM < increaseGearRPM || gearindex >= finalDriveRatio)
+                yield return new WaitForSeconds(0.3f);
+                if (transmission == Transmission.Auto_Transmission)
                 {
-                    gearState = GearState.Running;
-                    yield break;
+                    if (motorRPM < increaseGearRPM || gearindex >= finalDriveRatio)
+                    {
+                        gearState = GearState.Running;
+                        yield break;
+                    }
+
+                    if (transmission == Transmission.Manual_Transmission)
+                    {
+                        gearState = GearState.Running;
+                        yield break;
+                    }
                 }
             }
             if (gearChange < 0)
             {
                 // 기어 내리기
                 yield return new WaitForSeconds(0.1f);
-                if (motorRPM > decreaseGearRPM || gearindex <= 0)
+                if (transmission == Transmission.Auto_Transmission)
                 {
-                    gearState = GearState.Running;
-                    yield break;
+                    if (motorRPM > decreaseGearRPM || gearindex <= 0)
+                    {
+                        gearState = GearState.Running;
+                        yield break;
+                    }
+                    if (transmission == Transmission.Manual_Transmission)
+                    {
+                        gearState = GearState.Running;
+                        yield break;
+                    }
                 }
             }
             gearState = GearState.Changing;
@@ -322,15 +415,17 @@ public class CarControllerv3_June : MonoBehaviour
     }
     public void ApplyGear()
     {
+        
         if (transmission == Transmission.Manual_Transmission)
         {
-            if (Input.GetKeyDown(KeyCode.E) && gearindex < finalDriveRatio)
+
+            if (Input.GetKeyDown(KeyCode.E) && gearindex < test_gearRatiosArray.Length - 2)
             {
-                gearindex++;
+                StartCoroutine(ChangeGear(1));
             }
-            else if (Input.GetKeyDown(KeyCode.Q) && gearindex > 0)
+            else if (Input.GetKeyDown(KeyCode.Q) && gearindex > -1)
             {
-                gearindex--;
+                StartCoroutine(ChangeGear(-1));
             }
         }
     }
