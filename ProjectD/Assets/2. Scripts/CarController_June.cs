@@ -1,327 +1,410 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Xml;
+using System.Linq;
+using System.Security.Cryptography;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using static CarControllerv2_June;
 
 
-// CarController_June 클래스 선언
 public class CarController_June : MonoBehaviour
 {
-// 자동차의 기어 상태를 나타내는 열거형
-public enum GearState
-{
-    Neutral,        // 중립 상태일 때
-    Running,        // 엔진이 작동 중일 때
-    CheckingChange, // 기어 변경을 확인 중일 때
-    Changing        // 기어를 변경 중일 때
-};
+    // WheelColliders 클래스 선언
+    [System.Serializable]
+    public class Pair
+    {
+        public WheelCollider left; // 왼쪽 바퀴 콜라이더
+        public WheelCollider right; // 오른쪽 바퀴 콜라이더
+        public bool IsMoterPower; // 모터 힘 받는지
+        public bool IsSteering; //스티어 힘 받는지
+        public float brakeBias = 0.5f; //브레이크 전달 크기
+        public float handbrakeBias = 5f; //핸드브레이크 전달 크기
+        [System.NonSerialized] //public이라도 인스펙터 창에서 가리기 위함
+        public WheelHit hitLeft; // 왼쪽 휠 히트
+        [System.NonSerialized]
+        public WheelHit hitRight; // 오른쪽 휠 히트
+        //[System.NonSerialized]
+        public bool isGroundedLeft = false; // 왼쪽이 땅에 붙어있는지 여부
+        //[System.NonSerialized]
+        public bool isGroundedRight = false; // 오른쪽이 땅에 붙어있는지 여부
+    }
 
-public enum Transmission
-{
-    Auto_Transmission,
-    Manual_Transmission,
-}
+    public List<Pair> pair;
+
+
+
+
+
+    public enum WheelWork //전,후,4륜
+    {
+        FRONT,
+        REAR,
+        AWD,
+    };
+
+    public enum Transmission
+    {
+        Auto_Transmission,
+        Manual_Transmission,
+    }
     // 플레이어의 Rigidbody 구성 요소
     private Rigidbody playerRB;
     public Vector3 _centerOfMass;
 
-    // 자동차의 바퀴에 대한 WheelColliders
-    public WheelColliders colliders;
 
-    // 입력 변수
-    private float gasInput;
-    private float gasIn;
-    private float brakeInput;
-
-    // 자동차 이동을 위한 매개변수
-    public float motorPower;
-    public float brakePower;
-    public float slipAngle;
-    public float speed;
-    private float speedClamped;
-    public float maxSpeed;
-    public AnimationCurve steeringCurve;
-    public float sensitivity;
-
-    //엔진 관련
-    public int isEngineRunning;// 엔진이 작동 중인지를 나타내는 변수
-    public float RPM;// 현재 RPM(Revolutions Per Minute, 분당 회전수)을 저장하는 변수
-    public float redLine;// 엔진의 최대 회전 속도를 나타내는 변수
-    public float idleRPM;// 엔진이 대기 상태일 때의 RPM
-    public TMP_Text rpmText;
-    public int currentGear;// 현재 기어를 나타내는 변수
-    public float[] gearRatios; // 엔진 출력(RPM에 따라 변하는 엔진 출력)에 따른 기어 비율을 저장하는 배열
-    public float differentialRatio; // 변속기(differential) 비율
-    private float currentTorque; // 현재 토크 값을 저장하는 변수
-    private float clutch; // 클러치 상태를 나타내는 변수 (0에서 1 사이의 값)
-    private float wheelRPM;  // 바퀴 RPM을 저장하는 변수
-    public AnimationCurve hpToRPMCurve;    // 엔진 출력과 RPM 간의 관계를 정의하는 커브
-    private GearState gearState;    // 현재 기어 상태를 나타내는 변수 (중립, 작동 중, 기어 변경 확인 중, 기어 변경 중)
-    public float increaseGearRPM;    // RPM이 증가할 때 기어 변경을 위해 필요한 추가 RPM
-    public float decreaseGearRPM;    // RPM이 감소할 때 기어 변경을 위해 필요한 추가 RPM
-    public float changeGearTime = 0.5f;    // 기어를 변경하는 데 걸리는 시간
-    public Transmission transmission;
-    private bool handrbake = false; //핸드 브레이크
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        // Rigidbody 구성 요소 가져오기
-        playerRB = gameObject.GetComponent<Rigidbody>();
-        playerRB.centerOfMass = _centerOfMass;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        // RPM 및 속도 갱신
-        rpmText.text = RPM.ToString("0,000") + "rpm";
-        speed = colliders.RRWheel.rpm * colliders.RRWheel.radius * 2f * Mathf.PI / 10f;
-        speedClamped = Mathf.Lerp(speedClamped, speed, Time.deltaTime);
-
-        // 입력 확인
-        CheckInput();
-   
-
-    }
-
-    // 물리 업데이트마다 호출되는 함수
-    private void FixedUpdate()
-    {
-        // 자동차 제어 함수 호출
-        ApplyMotor();
-        ApplySteering();
-        ApplyBrake();
-
-    }
 
     // 스티어링 슬라이더
     public Slider steerSlider;
 
-    // 입력 확인 함수
-    void CheckInput()
+
+
+    // 자동차 이동을 위한 매개변수
+
+    //핸들링
+    public float maxSteerAngle;
+    public float sensitivity;
+
+    //엔진
+    public Transmission transmission;
+    public WheelWork wheelWork;
+    public float minRPM; //최소RPM
+    public float maxRPM; //최소RPM
+    public float currentRPM; //모터 RPM
+    public float wheelRPM; //바퀴 RPM
+    public float finalDriveRatio; //최종 구동 비율 3~4 사이
+    public float maxMotorTorque;  // 토크 커브의 피크에서의 토크
+    public float maxBrakeTorque;// 최대 브레이크 토크
+    public float totalMotorTorque; //최종 모터 토크
+    public AnimationCurve gearRatiosCurve;//기어 비율
+    public float[] gearRatiosArray;
+    public AnimationCurve torqueCurve;//토크 커브
+
+
+    //기어
+    public AnimationCurve shiftUpCurve; //기어 올리는거
+    public AnimationCurve shiftDownCurve; //기어 내리는거
+    private float lastShift = 0.0f; //마지막 기어 시간
+    public float shiftDelay = 1.0f; //기어 바꾸는 시간
+    private int targetGear = 1; //목표로 하는 기어
+    private int lastGear = 1; //마지막 기어
+    private bool shifting = false; //기어 변속중?
+    public float shiftTime = 0.4f;// 기어 변속이 완료되는 시간 (보간됨)
+
+    //info
+    public float motorWheelNum; //모터 힘을 받는 바퀴 수
+    public float currentGear; //현재 기어
+    public float KPH; // 속도
+    [SerializeField] bool LockWheel;
+    //input
+    [SerializeField] float mouseX;
+    [SerializeField] float gasInput;
+    [SerializeField] float brakeInput;
+
+
+    //ui
+    public TextMeshProUGUI speedText;
+    public TextMeshProUGUI gearText;
+    public TextMeshProUGUI gearratiostext;
+    public TextMeshProUGUI torqueCurvetext;
+    public TextMeshProUGUI wheelRPMtext;
+
+    private void OnEnable()
     {
-        //if (Input.GetKeyDown(KeyCode.Alpha1))
-        //{
-        //    if (isEngineRunning == 0)
-        //    {
-        //        isEngineRunning++;
-        //    }
-        //    else if (isEngineRunning == 1)
-        //    {
-        //        isEngineRunning--;
-        //    }
-        //}
-        handrbake = (Input.GetKey(KeyCode.Space));
+        InitializedSetting();
+    }
+    private void Update()
+    {
+        GetInput();
+        UpdateUI();
+    }
+    private void FixedUpdate()
+    {
+        if(!LockWheel)Steering();
+        ApplySteering();
+        CalculateTorque();
+        ApplyTorque();
+        CheckingIsGrounded();
+        
+        
+        if(transmission == Transmission.Auto_Transmission)
+        {
+            AutoGear();
+        }
+        else if (transmission == Transmission.Manual_Transmission)
+        {
+            ManualGear();
+        }
+    }
 
-        // 가스 및 브레이크 입력 확인
+
+
+    public void GetInput()
+    {
+        mouseX = Input.GetAxis("Mouse X");
         gasInput = Input.GetAxis("Vertical");
-        Debug.Log(gasInput);
-        if (gasInput > 0)
-        {
-            gasInput += Mathf.Clamp01(sensitivity * Time.deltaTime);
-        }
-        if (gasInput < 0)
-        {
-            gasInput -= Mathf.Clamp01(sensitivity * Time.deltaTime);
-        }
 
-        // 엔진이 꺼져 있고 가스 입력이 있을 때 엔진 시작
-        if (Mathf.Abs(gasInput) > 0 && isEngineRunning == 0)
-        {
-            gearState = GearState.Running;
-            isEngineRunning = 1;
-        }
+    }
 
-        // 마우스 X 입력에 따라 스티어링 조절
-        float mouseX = Input.GetAxis("Mouse X");
+    //초기화(기어비, 토크 등) 및 ui등
+    void InitializedSetting()
+    {
+        RecalcDrivingWheels();
+        MakingGearRatiotoCurve();
+        playerRB = gameObject.GetComponent<Rigidbody>();
+        playerRB.centerOfMass = _centerOfMass;
+    }
+
+    public void RecalcDrivingWheels()
+    {
+        //calculate how many wheels are driving
+        motorWheelNum = pair.Where(a => a.IsMoterPower).Count() * 2;
+    }
+    public void MakingGearRatiotoCurve()
+    {
+        for (int i = 0; i < gearRatiosArray.Length; i++)
+        {
+            gearRatiosCurve.AddKey(i, gearRatiosArray[i]);
+        }
+    }
+
+    public void UpdateUI()
+    {
+        KPH = Mathf.RoundToInt(playerRB.velocity.magnitude * 2.23693629f * 1.6f);
+        speedText.text = "Km/h " + KPH;
+        gearText.text = "GEAR " + (Mathf.RoundToInt(currentGear));
+        torqueCurvetext.text = "Torque " + torqueCurve.Evaluate(currentRPM / maxRPM);
+    }
+
+    //스티어링 관련
+    #region
+    public void Steering()//fixedUpdate
+    {
+
         if (mouseX != 0)
         {
-            steerSlider.value += mouseX;
-        }
-
-        // 속도 방향에 따라 브레이크 입력 조절
-        slipAngle = Vector3.Angle(transform.forward, playerRB.velocity - transform.forward);
-        float movingDirection = Vector3.Dot(transform.forward, playerRB.velocity);
-        if (gearState != GearState.Changing)
-        {
-            if (gearState == GearState.Neutral)
-            {
-                clutch = 0;
-                if (Mathf.Abs(gasInput) > 0) gearState = GearState.Running;
-            }
-            else
-            {
-                clutch = Input.GetKey(KeyCode.LeftShift) ? 0 : Mathf.Lerp(clutch, 1, Time.deltaTime);
-            }
-        }
-        else
-        {
-            clutch = 0;
-        }
-        if (movingDirection < -0.5f && gasInput > 0)
-        {
-            brakeInput = Mathf.Abs(gasInput);
-        }
-        else if (movingDirection > 0.5f && gasInput < 0)
-        {
-            brakeInput = Mathf.Abs(gasInput);
-        }
-        else
-        {
-            brakeInput = 0;
+            steerSlider.value += mouseX * sensitivity;
         }
     }
 
-
-
-    public float originFriction = 1f;
-    public float handbreakFriction = 0.8f;
-
-    WheelFrictionCurve fFriction;
-    WheelFrictionCurve sFriction;
-
-    // 브레이크 적용 함수
-    void ApplyBrake()
-    {
-        colliders.FRWheel.brakeTorque = brakeInput * brakePower * 0.7f;
-        colliders.FLWheel.brakeTorque = brakeInput * brakePower * 0.7f;
-        colliders.RRWheel.brakeTorque = brakeInput * brakePower * 0.3f;
-        colliders.RLWheel.brakeTorque = brakeInput * brakePower * 0.3f;
-        if (handrbake)
-        {
-            //fFriction.stiffness = handbreakFriction;
-            //sFriction.stiffness = handbreakFriction;
-            //colliders.RRWheel.forwardFriction = fFriction;
-            //colliders.RRWheel.sidewaysFriction = sFriction;
-            //colliders.RLWheel.forwardFriction = fFriction;
-            //colliders.RLWheel.sidewaysFriction = sFriction;
-
-            clutch = 0;
-            colliders.RRWheel.brakeTorque = brakePower * 1000f;
-            colliders.RLWheel.brakeTorque = brakePower * 1000f;
-        }
-
-    }
-
-
-
-
-    // 모터 적용 함수
-    void ApplyMotor()
-    {
-        currentTorque = CalculateTorque();
-        colliders.RRWheel.motorTorque = currentTorque * gasInput;
-        colliders.RLWheel.motorTorque = currentTorque * gasInput;
-    }
-
-    // 토크 계산 함수
-    float CalculateTorque()
-    {
-        float torque = 0;
-        if (RPM < idleRPM + 200 && gasInput == 0 && currentGear == 0)
-        {
-            gearState = GearState.Neutral;
-        }
-        if (gearState == GearState.Running && clutch > 0)
-        {
-            if (transmission == Transmission.Auto_Transmission)
-            {
-
-                if (RPM > increaseGearRPM)
-                {
-                    StartCoroutine(ChangeGear(1));
-                }
-                else if (RPM < decreaseGearRPM)
-                {
-                    StartCoroutine(ChangeGear(-1));
-                }
-            }
-            if (transmission == Transmission.Manual_Transmission)
-            {
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    StartCoroutine(ChangeGear(1));
-                }
-                else if (Input.GetKeyDown(KeyCode.Q))
-                {
-                    StartCoroutine(ChangeGear(-1));
-                }
-            }
-
-        }
-        if (isEngineRunning > 0)
-        {
-            if (clutch < 0.1f)
-            {
-                RPM = Mathf.Lerp(RPM, Mathf.Max(idleRPM, redLine * gasInput) + UnityEngine.Random.Range(-50, 50), Time.deltaTime);
-            }
-            else
-            {
-                wheelRPM = Mathf.Abs((colliders.RRWheel.rpm + colliders.RLWheel.rpm) / 2f) * gearRatios[currentGear] * differentialRatio;
-                RPM = Mathf.Lerp(RPM, Mathf.Max(idleRPM - 100, wheelRPM), Time.deltaTime * 3f);
-                torque = (hpToRPMCurve.Evaluate(RPM / redLine) * motorPower / RPM) * gearRatios[currentGear] * differentialRatio * 5252f * clutch;
-            }
-        }
-        return torque;
-    }
-
-    // 스티어링 적용 함수
-    void ApplySteering()
+    public void ApplySteering()//fixedUpdate
     {
         float steeringAngle;
-        steeringAngle = steeringCurve.Evaluate(speed) * steerSlider.value * 30 / (1080.0f / 2);
-        colliders.FRWheel.steerAngle = steeringAngle;
-        colliders.FLWheel.steerAngle = steeringAngle;
-    }
+        //스티어 앵글 계산
+        steeringAngle = steerSlider.value * maxSteerAngle / (1080.0f / 2);
 
-    // 기어 변경 코루틴
-    IEnumerator ChangeGear(int gearChange)
-    {
-        gearState = GearState.CheckingChange;
-        if (currentGear + gearChange >= 0)
+        //스티어링 바퀴에만 적용
+        foreach (var wheel in pair)
         {
-            if (gearChange > 0)
+            if (wheel.IsSteering)
             {
-                // 기어 올리기
-                yield return new WaitForSeconds(0.7f);
-                if (RPM < increaseGearRPM || currentGear >= gearRatios.Length - 1)
-                {
-                    gearState = GearState.Running;
-                    yield break;
-                }
+                wheel.left.steerAngle = steeringAngle;
+                wheel.right.steerAngle = steeringAngle;
             }
-            if (gearChange < 0)
+        }
+    }
+    #endregion
+
+
+    //accel and brake
+    #region
+
+    //토크 적용
+    private void ApplyTorque()//fixedUpdate
+    {
+
+        if (gasInput >= 0)
+        {
+            //motor
+            float torquePerWheel = gasInput * (totalMotorTorque / motorWheelNum);
+            foreach (var wheel in pair)
             {
-                // 기어 내리기
-                yield return new WaitForSeconds(0.1f);
-                if (RPM > decreaseGearRPM || currentGear <= 0)
+                if (wheel.IsMoterPower)
                 {
-                    gearState = GearState.Running;
-                    yield break;
+                    if (wheel.isGroundedLeft)
+                        wheel.left.motorTorque = torquePerWheel;
+                    else
+                        wheel.left.motorTorque = 0f;
+
+                    if (wheel.isGroundedRight)
+                        wheel.right.motorTorque = torquePerWheel;
+                    else
+                        wheel.left.motorTorque = 0f;
                 }
+
+                wheel.left.brakeTorque = 0f;
+                wheel.right.brakeTorque = 0f;
             }
-            gearState = GearState.Changing;
-            yield return new WaitForSeconds(changeGearTime);
-            currentGear += gearChange;
+
+        }
+        else
+        {
+            //brakes 
+            foreach (var wheel in pair)
+            {
+                var brakeTorque = maxBrakeTorque * gasInput * -1 * wheel.brakeBias;
+                wheel.left.brakeTorque = brakeTorque;
+                wheel.right.brakeTorque = brakeTorque;
+                wheel.left.motorTorque = 0f;
+                wheel.right.motorTorque = 0f;
+            }
         }
 
-        if (gearState != GearState.Neutral)
-            gearState = GearState.Running;
     }
-}
 
-// WheelColliders 클래스 선언
-[System.Serializable]
-public class WheelColliders
-{
-    public WheelCollider FRWheel;
-    public WheelCollider FLWheel;
-    public WheelCollider RRWheel;
-    public WheelCollider RLWheel;
+    public void CalculateTorque()//fixedUpdate
+    {
+        //float gearRatio = Mathf.Lerp(gearRatiosArray[Mathf.FloorToInt(currentGear) - 1], gearRatiosArray[Mathf.CeilToInt(currentGear) - 1], currentGear - Mathf.Floor(currentGear));
+        float gearRatio = gearRatiosCurve.Evaluate(currentGear); //이거 써보고 안되면 위에꺼로 써보기
+        wheelRPM = (pair[1].right.rpm + pair[1].left.rpm) / 2f; //바퀴 RPM //나중에 Rear로 쓸 지 고민해보기
+        //wheelRPM = wheelRPM < 0 ? 0 : wheelRPM; //바퀴 rpm이 0보다 작으면 0으로 고정
+        if (wheelRPM < 0)
+            wheelRPM = 0;
+        currentRPM = Mathf.Lerp(currentRPM, minRPM + (wheelRPM * finalDriveRatio * gearRatio), Time.fixedDeltaTime * 2); //2있는 곳은 나중에 수치로 변환 시켜보기
+        if(currentRPM > maxRPM)
+        {
+            currentRPM= maxRPM;
+        }
+        totalMotorTorque = torqueCurve.Evaluate(currentRPM / maxRPM) * gearRatio * finalDriveRatio * maxMotorTorque; // maxMotorTorque있는 곳은 나중에 tractionControlAdjustedMaxTorque생각해보기
+
+    }
+
+    public void CheckingIsGrounded()//땅체크
+    {
+        foreach (var wheel in pair)
+        {
+            wheel.isGroundedLeft = wheel.left.GetGroundHit(out wheel.hitLeft);
+            wheel.isGroundedRight = wheel.right.GetGroundHit(out wheel.hitRight);
+        }
+    }
+
+
+
+    #endregion
+
+
+    //기어 변환
+    //auto
+    private void AutoGear()
+    {
+        // 변속이 너무 빠르게 일어나지 않도록 지연 시간을 확인
+        if (Time.time - lastShift > shiftDelay)
+        {
+            // 상승 변속
+            if (currentRPM / maxRPM > shiftUpCurve.Evaluate(gasInput) && Mathf.RoundToInt(currentGear) < gearRatiosArray.Length)
+            {
+                // 1기어에서 단순히 회전 중인 경우 상승 변속하지 않음
+                // 또는 1기어에서 15km/h 이상 이동 중인 경우에만 상승 변속합니다.
+                if (Mathf.RoundToInt(currentGear) > 1 || KPH > 15f)
+                {
+                    // 마지막 변속 시간을 기록합니다.
+                    lastGear = Mathf.RoundToInt(currentGear);
+                    // 상승 변속할 기어를 설정합니다.
+                    targetGear = lastGear + 1;
+                    // 마지막 변속 시간을 기록하고, 변속 중임을 표시합니다.
+                    lastShift = Time.time;
+                    shifting = true;
+                }
+            }
+            // 하락 변속
+            else if (currentRPM / maxRPM < shiftDownCurve.Evaluate(gasInput) && Mathf.RoundToInt(currentGear) > 1)
+            {
+                // 마지막 변속 시간을 기록합니다.
+                lastGear = Mathf.RoundToInt(currentGear);
+                // 하락 변속할 기어를 설정합니다.
+                targetGear = lastGear - 1;
+                // 마지막 변속 시간을 기록하고, 변속 중임을 표시합니다.
+                lastShift = Time.time;
+                shifting = true;
+            }
+        }
+
+        // 변속 중인 경우
+        if (shifting)
+        {
+            // 시간에 따른 보간값을 계산하여 현재 기어를 조정합니다.
+            float lerpVal = (Time.time - lastShift) / shiftTime;
+            currentGear = Mathf.Lerp(lastGear, targetGear, lerpVal);
+            // 보간이 완료되면 변속 중 상태를 해제합니다.
+            if (lerpVal >= 1f)
+                shifting = false;
+        }
+
+        // 기어 범위를 벗어나지 않도록 클램핑합니다.
+        if (currentGear >= gearRatiosArray.Length)
+        {
+            currentGear = gearRatiosArray.Length - 1;
+        }
+        else if (currentGear < 1)
+        {
+            currentGear = 1;
+        }
+    }
+    //manual
+    private void ManualGear()
+    {
+        // 변속이 너무 빠르게 일어나지 않도록 지연 시간을 확인
+        if (Time.time - lastShift > shiftDelay)
+        {
+            // 상승 변속
+            if (Input.GetKey(KeyCode.E))
+            {
+                // 1기어에서 단순히 회전 중인 경우 상승 변속하지 않음
+                // 또는 1기어에서 15km/h 이상 이동 중인 경우에만 상승 변속합니다.
+                if (Mathf.RoundToInt(currentGear) < gearRatiosArray.Length)
+                {
+                    // 마지막 변속 시간을 기록합니다.
+                    lastGear = Mathf.RoundToInt(currentGear);
+                    // 상승 변속할 기어를 설정합니다.
+                    targetGear = lastGear + 1;
+                    // 마지막 변속 시간을 기록하고, 변속 중임을 표시합니다.
+                    lastShift = Time.time;
+                    shifting = true;
+                }
+            }
+            // 하락 변속
+            else if (Input.GetKey(KeyCode.Q))
+            {
+                if (Mathf.RoundToInt(currentGear) > 1)
+                {
+
+                    // 마지막 변속 시간을 기록합니다.
+                    lastGear = Mathf.RoundToInt(currentGear);
+                    // 하락 변속할 기어를 설정합니다.
+                    targetGear = lastGear - 1;
+                    // 마지막 변속 시간을 기록하고, 변속 중임을 표시합니다.
+                    lastShift = Time.time;
+                    shifting = true;
+                }
+
+            }
+        }
+
+        // 변속 중인 경우
+        if (shifting)
+        {
+            // 시간에 따른 보간값을 계산하여 현재 기어를 조정합니다.
+            float lerpVal = (Time.time - lastShift) / shiftTime;
+            currentGear = Mathf.Lerp(lastGear, targetGear, lerpVal);
+            // 보간이 완료되면 변속 중 상태를 해제합니다.
+            if (lerpVal >= 1f)
+                shifting = false;
+        }
+
+        // 기어 범위를 벗어나지 않도록 클램핑합니다.
+        if (currentGear >= gearRatiosArray.Length)
+        {
+            currentGear = gearRatiosArray.Length - 1;
+        }
+        else if (currentGear < 1)
+        {
+            currentGear = 1;
+        }
+    }
+
+
+
 }

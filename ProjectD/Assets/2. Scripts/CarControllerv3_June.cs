@@ -14,6 +14,15 @@ using static CarControllerv2_June;
 
 public class CarControllerv3_June : MonoBehaviour
 {
+    // WheelColliders 클래스 선언
+    [System.Serializable]
+    public class WheelColliders
+    {
+        public WheelCollider FRWheel;
+        public WheelCollider FLWheel;
+        public WheelCollider RRWheel;
+        public WheelCollider RLWheel;
+    }
     public enum GearState
     {
         Neutral,        // 중립 상태일 때
@@ -299,9 +308,9 @@ public class CarControllerv3_June : MonoBehaviour
                 }
                 //currentRPM = Mathf.Lerp(currentRPM, minRPM + (wheelsRPM * finalDriveRatio * gearRatio), Time.fixedDeltaTime * RPMSmoothness);
 
-                //motorRPM = minRPM + (wheelRPM * finalDriveRatio * gearRatios.Evaluate(gearindex));
+                //currentTorque = minRPM + (wheelRPM * finalDriveRatio * gearRatios.Evaluate(gearindex));
                 motorRPM = Mathf.Lerp(motorRPM,minRPM + (wheelRPM * finalDriveRatio * gearRatios.Evaluate(gearindex)), Time.fixedDeltaTime *2);
-                //totalMotorTorque = torqueCurve.Evaluate(motorRPM) * gearRatios.Evaluate(gearindex) * finalDriveRatio * gasInput;
+                //totalMotorTorque = torqueCurve.Evaluate(currentTorque) * gearRatios.Evaluate(gearindex) * finalDriveRatio * gasInput;
                 totalMotorTorque = torqueCurve.Evaluate(motorRPM/maxRPM) * gearRatios.Evaluate(gearindex) * finalDriveRatio * gasInput*tempFloat;
                 torque = totalMotorTorque;
             }

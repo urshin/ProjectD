@@ -12,7 +12,15 @@ using static CarControllerv2_June;
 
 
 public class Test : MonoBehaviour
-{
+{    // WheelColliders 클래스 선언
+    [System.Serializable]
+    public class WheelColliders
+    {
+        public WheelCollider FRWheel;
+        public WheelCollider FLWheel;
+        public WheelCollider RRWheel;
+        public WheelCollider RLWheel;
+    }
     public enum GearState
     {
         Neutral,        // 중립 상태일 때
