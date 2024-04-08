@@ -99,6 +99,11 @@ public class CarController_June : MonoBehaviour
     public float currentGear; //현재 기어
     public float KPH; // 속도
     [SerializeField] bool LockWheel;
+    public float airDragCoeff;
+    public float airDownForceCoeff;
+    public float tireDragCoeff;
+
+
     //input
     [SerializeField] float mouseX;
     [SerializeField] float gasInput;
@@ -123,14 +128,16 @@ public class CarController_June : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if(!LockWheel)Steering();
+        if (!LockWheel) Steering();
         ApplySteering();
+
         CalculateTorque();
         ApplyTorque();
         CheckingIsGrounded();
-        
-        
-        if(transmission == Transmission.Auto_Transmission)
+        DragAndDownForce();
+
+
+        if (transmission == Transmission.Auto_Transmission)
         {
             AutoGear();
         }
@@ -179,6 +186,17 @@ public class CarController_June : MonoBehaviour
         torqueCurvetext.text = "Torque " + torqueCurve.Evaluate(currentRPM / maxRPM);
     }
 
+    public void DragAndDownForce()
+    {
+        //air drag (quadratic)
+        playerRB.AddForce(-airDragCoeff * playerRB.velocity * playerRB.velocity.magnitude);
+
+        //downforce (quadratic)
+        playerRB.AddForce(-airDownForceCoeff * playerRB.velocity.sqrMagnitude * transform.up);
+
+        //tire drag (Linear)
+        playerRB.AddForceAtPosition(-tireDragCoeff * playerRB.velocity, transform.position);
+    }
     //스티어링 관련
     #region
     public void Steering()//fixedUpdate
@@ -253,22 +271,39 @@ public class CarController_June : MonoBehaviour
             }
         }
 
+        if (Input.GetKey(KeyCode.Space))
+        {
+            foreach (var wheel in pair)
+            {
+                var brakeTorque = maxBrakeTorque * wheel.handbrakeBias;
+                wheel.left.brakeTorque = brakeTorque;
+                wheel.right.brakeTorque = brakeTorque;
+
+            }
+
+
+        }
     }
 
     public void CalculateTorque()//fixedUpdate
     {
-        //float gearRatio = Mathf.Lerp(gearRatiosArray[Mathf.FloorToInt(currentGear) - 1], gearRatiosArray[Mathf.CeilToInt(currentGear) - 1], currentGear - Mathf.Floor(currentGear));
         float gearRatio = gearRatiosCurve.Evaluate(currentGear); //이거 써보고 안되면 위에꺼로 써보기
-        wheelRPM = (pair[1].right.rpm + pair[1].left.rpm) / 2f; //바퀴 RPM //나중에 Rear로 쓸 지 고민해보기
-        //wheelRPM = wheelRPM < 0 ? 0 : wheelRPM; //바퀴 rpm이 0보다 작으면 0으로 고정
+        wheelRPM = (pair[1].right.rpm + pair[1].left.rpm) / 2f * gearRatio; //바퀴 RPM //나중에 Rear로 쓸 지 고민해보기
         if (wheelRPM < 0)
             wheelRPM = 0;
         currentRPM = Mathf.Lerp(currentRPM, minRPM + (wheelRPM * finalDriveRatio * gearRatio), Time.fixedDeltaTime * 2); //2있는 곳은 나중에 수치로 변환 시켜보기
-        if(currentRPM > maxRPM)
+
+        if (currentRPM > maxRPM)
         {
-            currentRPM= maxRPM;
+            currentRPM = maxRPM; //최대 RPM 제한
+            totalMotorTorque = 0; //토크에 0을 줌으로써 일정 속도로 유지 되게
         }
-        totalMotorTorque = torqueCurve.Evaluate(currentRPM / maxRPM) * gearRatio * finalDriveRatio * maxMotorTorque; // maxMotorTorque있는 곳은 나중에 tractionControlAdjustedMaxTorque생각해보기
+        else
+        {
+
+            totalMotorTorque = torqueCurve.Evaluate(currentRPM / maxRPM) * gearRatio * finalDriveRatio * maxMotorTorque; // maxMotorTorque있는 곳은 나중에 tractionControlAdjustedMaxTorque생각해보기
+        }
+
 
     }
 
@@ -336,7 +371,7 @@ public class CarController_June : MonoBehaviour
         // 기어 범위를 벗어나지 않도록 클램핑합니다.
         if (currentGear >= gearRatiosArray.Length)
         {
-            currentGear = gearRatiosArray.Length - 1;
+            currentGear = gearRatiosArray.Length;
         }
         else if (currentGear < 1)
         {
