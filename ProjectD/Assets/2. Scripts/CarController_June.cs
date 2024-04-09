@@ -8,7 +8,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using static CarControllerv2_June;
+
 
 
 public class CarController_June : MonoBehaviour
@@ -23,9 +23,9 @@ public class CarController_June : MonoBehaviour
         public bool IsSteering; //스티어 힘 받는지
         public float brakeBias = 0.5f; //브레이크 전달 크기
         public float handbrakeBias = 5f; //핸드브레이크 전달 크기
-        [System.NonSerialized] //public이라도 인스펙터 창에서 가리기 위함
+        //[System.NonSerialized] //public이라도 인스펙터 창에서 가리기 위함
         public WheelHit hitLeft; // 왼쪽 휠 히트
-        [System.NonSerialized]
+        //[System.NonSerialized]
         public WheelHit hitRight; // 오른쪽 휠 히트
         //[System.NonSerialized]
         public bool isGroundedLeft = false; // 왼쪽이 땅에 붙어있는지 여부
@@ -82,7 +82,7 @@ public class CarController_June : MonoBehaviour
     public AnimationCurve gearRatiosCurve;//기어 비율
     public float[] gearRatiosArray;
     public AnimationCurve torqueCurve;//토크 커브
-
+    public float RPMSmoothness;
 
     //기어
     public AnimationCurve shiftUpCurve; //기어 올리는거
@@ -100,7 +100,7 @@ public class CarController_June : MonoBehaviour
     public float KPH; // 속도
     [SerializeField] bool LockWheel;
     public float airDragCoeff;
-    public float airDownForceCoeff;
+    [Range(5, 20)] public float DownForceValue;
     public float tireDragCoeff;
 
 
@@ -134,7 +134,8 @@ public class CarController_June : MonoBehaviour
         CalculateTorque();
         ApplyTorque();
         CheckingIsGrounded();
-        DragAndDownForce();
+        addDownForce();
+
 
 
         if (transmission == Transmission.Auto_Transmission)
@@ -147,7 +148,8 @@ public class CarController_June : MonoBehaviour
         }
     }
 
-
+    
+    
 
     public void GetInput()
     {
@@ -163,6 +165,14 @@ public class CarController_June : MonoBehaviour
         MakingGearRatiotoCurve();
         playerRB = gameObject.GetComponent<Rigidbody>();
         playerRB.centerOfMass = _centerOfMass;
+
+        foreach(var a in pair)
+        {
+            a.left.ConfigureVehicleSubsteps(5.0f, 30, 10);
+            a.right.ConfigureVehicleSubsteps(5.0f, 30, 10);
+        }
+
+
     }
 
     public void RecalcDrivingWheels()
@@ -186,17 +196,18 @@ public class CarController_June : MonoBehaviour
         torqueCurvetext.text = "Torque " + torqueCurve.Evaluate(currentRPM / maxRPM);
     }
 
-    public void DragAndDownForce()
+    
+
+    public  float downforce;
+
+    private void addDownForce()
     {
-        //air drag (quadratic)
-        playerRB.AddForce(-airDragCoeff * playerRB.velocity * playerRB.velocity.magnitude);
+        downforce = Mathf.Abs(DownForceValue * playerRB.velocity.magnitude);
+        downforce = KPH > 60 ? downforce : 0;
+        playerRB.AddForce(-transform.up * downforce);
 
-        //downforce (quadratic)
-        playerRB.AddForce(-airDownForceCoeff * playerRB.velocity.sqrMagnitude * transform.up);
-
-        //tire drag (Linear)
-        playerRB.AddForceAtPosition(-tireDragCoeff * playerRB.velocity, transform.position);
     }
+    
     //스티어링 관련
     #region
     public void Steering()//fixedUpdate
@@ -291,7 +302,7 @@ public class CarController_June : MonoBehaviour
         wheelRPM = (pair[1].right.rpm + pair[1].left.rpm) / 2f * gearRatio; //바퀴 RPM //나중에 Rear로 쓸 지 고민해보기
         if (wheelRPM < 0)
             wheelRPM = 0;
-        currentRPM = Mathf.Lerp(currentRPM, minRPM + (wheelRPM * finalDriveRatio * gearRatio), Time.fixedDeltaTime * 2); //2있는 곳은 나중에 수치로 변환 시켜보기
+        currentRPM = Mathf.Lerp(currentRPM, minRPM + (wheelRPM * finalDriveRatio * gearRatio), Time.fixedDeltaTime * RPMSmoothness); //2있는 곳은 나중에 수치로 변환 시켜보기
 
         if (currentRPM > maxRPM)
         {
@@ -301,6 +312,7 @@ public class CarController_June : MonoBehaviour
         else
         {
 
+            //totalMotorTorque = torqueCurve.Evaluate(currentRPM / maxRPM) * gearRatio * finalDriveRatio * maxMotorTorque; // maxMotorTorque있는 곳은 나중에 tractionControlAdjustedMaxTorque생각해보기
             totalMotorTorque = torqueCurve.Evaluate(currentRPM / maxRPM) * gearRatio * finalDriveRatio * maxMotorTorque; // maxMotorTorque있는 곳은 나중에 tractionControlAdjustedMaxTorque생각해보기
         }
 
@@ -441,5 +453,5 @@ public class CarController_June : MonoBehaviour
     }
 
 
-
+   
 }
