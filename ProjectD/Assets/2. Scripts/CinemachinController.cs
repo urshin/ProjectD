@@ -13,7 +13,7 @@ public class CinemachinController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        cinemachineStateDrivenCamera = gameObject.GetComponent<CinemachineStateDrivenCamera>();
 
     }
 

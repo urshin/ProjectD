@@ -5,22 +5,23 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using static CarController_June;
 
 public class FinalCarController_June : MonoBehaviour
 {
     [System.Serializable]
     public class Wheel
     {
-        public GameObject wheelGameObject; //ÈÙ °ÔÀÓ ¿ÀºêÁ§Æ®
-        public WheelCollider wheelCollider; //ÈÙ Äİ¶óÀÌ´õ
-        public bool IsMoter; // ¸ğÅÍ Èû ¹Ş´ÂÁö
-        public bool IsSteering; //½ºÆ¼¾îÀÎÁö
-        public float brakeBias = 0.5f; //ºê·¹ÀÌÅ© Àü´Ş Å©±â
+        public GameObject wheelGameObject; //íœ  ê²Œì„ ì˜¤ë¸Œì íŠ¸
+        public WheelCollider wheelCollider; //íœ  ì½œë¼ì´ë”
+        public bool IsMoter; // ëª¨í„° í˜ ë°›ëŠ”ì§€
+        public bool IsSteering; //ìŠ¤í‹°ì–´ì¸ì§€
+        public float brakeBias = 0.5f; //ë¸Œë ˆì´í¬ ì „ë‹¬ í¬ê¸°
         public WheelHit hit;
         public bool isGrounded;
     }
 
-    public enum WheelWork //Àü,ÈÄ,4·û
+    public enum WheelWork //ì „,í›„,4ë¥œ
     {
         FRONT,
         REAR,
@@ -33,19 +34,19 @@ public class FinalCarController_June : MonoBehaviour
         Manual_Transmission,
     }
 
-    //ÈÙ ¸®½ºÆ®
+    //íœ  ë¦¬ìŠ¤íŠ¸
     public List<Wheel> wheels;
 
 
-    [Header("¹«°Ô ¹× ¸®Áöµå ¹Ùµğ")]
-    // ÇÃ·¹ÀÌ¾îÀÇ Rigidbody ±¸¼º ¿ä¼Ò
-    private Rigidbody playerRB; //¸®Áöµå ¹Ùµğ
+    [Header("ë¬´ê²Œ ë° ë¦¬ì§€ë“œ ë°”ë””")]
+    // í”Œë ˆì´ì–´ì˜ Rigidbody êµ¬ì„± ìš”ì†Œ
+    private Rigidbody playerRB; //ë¦¬ì§€ë“œ ë°”ë””
     [SerializeField] GameObject centerofmassObject;
-    [SerializeField] Vector3 centerofmass; //Â÷ ¹«°Ô Áß½É ÀÌ µÉ °÷
+    [SerializeField] Vector3 centerofmass; //ì°¨ ë¬´ê²Œ ì¤‘ì‹¬ ì´ ë  ê³³
 
 
     [Header("About UI")]
-    // ½ºÆ¼¾î¸µ ½½¶óÀÌ´õ
+    // ìŠ¤í‹°ì–´ë§ ìŠ¬ë¼ì´ë”
     public Slider steerSlider;
     public TextMeshProUGUI speedText;
     public TextMeshProUGUI gearText;
@@ -58,47 +59,48 @@ public class FinalCarController_June : MonoBehaviour
     [SerializeField] TextMeshProUGUI TarcometerGear;
 
     [Header("Handling")]
-    //ÇÚµé¸µ
-    [Range(10, 90)] public float maxSteerAngle; //ÃÖ´ë °¢µµ
-    public float sensitivity; //¸¶¿ì½º °¨µµ 
+    //í•¸ë“¤ë§
+    [Range(10, 90)] public float maxSteerAngle; //ìµœëŒ€ ê°ë„
+    public float sensitivity; //ë§ˆìš°ìŠ¤ ê°ë„ 
     [SerializeField] bool handBrake = false;
     public float handBrakeSleepAmout = 0.55f;
+    public float resetSteerAngleSpeed = 100f; //ìŠ¤í‹°ì–´ ì•µê¸€ ê°ë„ ì´ˆê¸°í™” ì‹œê°„
 
     [Header("Engine")]
-    public Transmission transmission; // ¼öµ¿ ÀÚµ¿
-    public WheelWork wheelWork; //Àü·û µî
-    public float minRPM; //ÃÖ¼ÒRPM
-    public float maxRPM; //ÃÖ¼ÒRPM
-    public float currentRPM; //¸ğÅÍ RPM
-    public float wheelRPM; //¹ÙÄû RPM
-    public bool reverse;//¹İ´ëÀÎÁö
-    public float maxMotorTorque;  // ÅäÅ© Ä¿ºêÀÇ ÇÇÅ©¿¡¼­ÀÇ ÅäÅ©
-    public float maxBrakeTorque;// ÃÖ´ë ºê·¹ÀÌÅ© ÅäÅ©
-    public float finalDriveRatio; //ÃÖÁ¾ ±¸µ¿ ºñÀ² 3~4 »çÀÌ
-    public float totalMotorTorque; //ÃÖÁ¾ ¸ğÅÍ ÅäÅ©
-    public AnimationCurve torqueCurve;//ÅäÅ© Ä¿ºê
+    public Transmission transmission; // ìˆ˜ë™ ìë™
+    public WheelWork wheelWork; //ì „ë¥œ ë“±
+    public float minRPM; //ìµœì†ŒRPM
+    public float maxRPM; //ìµœì†ŒRPM
+    public float currentRPM; //ëª¨í„° RPM
+    public float wheelRPM; //ë°”í€´ RPM
+    public bool reverse;//ë°˜ëŒ€ì¸ì§€
+    public float maxMotorTorque;  // í† í¬ ì»¤ë¸Œì˜ í”¼í¬ì—ì„œì˜ í† í¬
+    public float maxBrakeTorque;// ìµœëŒ€ ë¸Œë ˆì´í¬ í† í¬
+    public float finalDriveRatio; //ìµœì¢… êµ¬ë™ ë¹„ìœ¨ 3~4 ì‚¬ì´
+    public float totalMotorTorque; //ìµœì¢… ëª¨í„° í† í¬
+    public AnimationCurve torqueCurve;//í† í¬ ì»¤ë¸Œ
     public float RPMSmoothness;
-    private float motorWheelNum; //¸ğÅÍ ÈûÀ» ¹Ş´Â ¹ÙÄû ¼ö
+    private float motorWheelNum; //ëª¨í„° í˜ì„ ë°›ëŠ” ë°”í€´ ìˆ˜
 
     [Header("Gear")]
-    //±â¾î
-    public AnimationCurve gearRatiosCurve;//±â¾î ºñÀ²
+    //ê¸°ì–´
+    public AnimationCurve gearRatiosCurve;//ê¸°ì–´ ë¹„ìœ¨
     public float[] gearRatiosArray;
     public float reverseRatio;
-    public AnimationCurve shiftUpCurve; //±â¾î ¿Ã¸®´Â°Å
-    public AnimationCurve shiftDownCurve; //±â¾î ³»¸®´Â°Å
-    private float lastShift = 0.0f; //¸¶Áö¸· ±â¾î ½Ã°£
-    public float shiftDelay = 1.0f; //±â¾î ¹Ù²Ù´Â ½Ã°£
-    private int targetGear = 1; //¸ñÇ¥·Î ÇÏ´Â ±â¾î
-    private int lastGear = 1; //¸¶Áö¸· ±â¾î
-    private bool shifting = false; //±â¾î º¯¼ÓÁß?
-    private float shiftTime = 0.4f;// ±â¾î º¯¼ÓÀÌ ¿Ï·áµÇ´Â ½Ã°£ (º¸°£µÊ)
-    public float currentGear; //ÇöÀç ±â¾î
+    public AnimationCurve shiftUpCurve; //ê¸°ì–´ ì˜¬ë¦¬ëŠ”ê±°
+    public AnimationCurve shiftDownCurve; //ê¸°ì–´ ë‚´ë¦¬ëŠ”ê±°
+    private float lastShift = 0.0f; //ë§ˆì§€ë§‰ ê¸°ì–´ ì‹œê°„
+    public float shiftDelay = 1.0f; //ê¸°ì–´ ë°”ê¾¸ëŠ” ì‹œê°„
+    private int targetGear = 1; //ëª©í‘œë¡œ í•˜ëŠ” ê¸°ì–´
+    private int lastGear = 1; //ë§ˆì§€ë§‰ ê¸°ì–´
+    private bool shifting = false; //ê¸°ì–´ ë³€ì†ì¤‘?
+    private float shiftTime = 0.4f;// ê¸°ì–´ ë³€ì†ì´ ì™„ë£Œë˜ëŠ” ì‹œê°„ (ë³´ê°„ë¨)
+    public float currentGear; //í˜„ì¬ ê¸°ì–´
 
 
     [Header("Information")]
 
-    public float KPH; // ¼Óµµ
+    public float KPH; // ì†ë„
 
     [Header("Tire")]
     [SerializeField] bool LockWheel;
@@ -107,13 +109,15 @@ public class FinalCarController_June : MonoBehaviour
 
 
     [Header("Environment Variable")]
-    [Range(5, 20)] public float DownForceValue; //´Ù¿î Æ÷½º
+    [Range(5, 20)] public float DownForceValue; //ë‹¤ìš´ í¬ìŠ¤
     public float downforce;
-    public float airDragCoeff; // °ø±âÀúÇ× 
+    public float airDragCoeff; // ê³µê¸°ì €í•­ 
 
 
     [Header("Camera")]
     [SerializeField] Camera cam;
+
+    
 
 
     //input
@@ -131,6 +135,7 @@ public class FinalCarController_June : MonoBehaviour
     {
         GetInput();
         UIupdate();
+        AnimationUpdate();
     }
     private void FixedUpdate()
     {
@@ -138,7 +143,8 @@ public class FinalCarController_June : MonoBehaviour
         if (!LockWheel) Steering();
         ApplySteering();
         ApplyTorque();
-        friction();
+        // friction();
+        CheckingIsGrounded();//ë•…ì²´í¬
 
         if (transmission == Transmission.Auto_Transmission)
         {
@@ -165,7 +171,7 @@ public class FinalCarController_June : MonoBehaviour
 
     }
 
-    public void GetInput() //ÀÎÇ² °ª ¹Ş±â
+    public void GetInput() //ì¸í’‹ ê°’ ë°›ê¸°
     {
         mouseX = Input.GetAxis("Mouse X");
         gasInput = Input.GetAxis("Vertical");
@@ -174,20 +180,20 @@ public class FinalCarController_June : MonoBehaviour
 
     void InitializedSetting()
     {
-        //¹«°Ô Áß½É ÃÊ±âÈ­
+        //ë¬´ê²Œ ì¤‘ì‹¬ ì´ˆê¸°í™”
         playerRB = gameObject.GetComponent<Rigidbody>();
         playerRB.centerOfMass = centerofmassObject.transform.position;
         centerofmass = playerRB.centerOfMass;
 
-        ApplyMotorWork(); //Àü·û ÈÄ·û Á¤ÇÏ±â
+        ApplyMotorWork(); //ì „ë¥œ í›„ë¥œ ì •í•˜ê¸°
         foreach (var wheel in wheels)
         {
             wheel.wheelCollider.ConfigureVehicleSubsteps(5.0f, 30, 10);
         }
-        //¸ğÅÍ ÈÙ Ä«¿îÆ®
+        //ëª¨í„° íœ  ì¹´ìš´íŠ¸
         motorWheelNum = wheels.Where(a => a.IsMoter).Count();
 
-        //±â¾îºñ Ä¿ºê·Î ¸¸µé¾îÁÖ±â
+        //ê¸°ì–´ë¹„ ì»¤ë¸Œë¡œ ë§Œë“¤ì–´ì£¼ê¸°
         for (int i = 0; i < gearRatiosArray.Length; i++)
         {
             gearRatiosCurve.AddKey(i, gearRatiosArray[i]);
@@ -225,46 +231,60 @@ public class FinalCarController_June : MonoBehaviour
         }    
         
     }
+    public void CheckingIsGrounded()//ë•…ì²´í¬
+    {
+        foreach (var wheel in wheels)
+        {
+            wheel.isGrounded = wheel.wheelCollider.GetGroundHit(out wheel.hit);
+        }
+    }
 
 
-
-    private void addDownForce() //´Ù¿îÆ÷½º °ª °è»êÇÏ±â
+    private void addDownForce() //ë‹¤ìš´í¬ìŠ¤ ê°’ ê³„ì‚°í•˜ê¸°
     {
 
         playerRB.angularDrag = (KPH > 100) ? KPH / 100 : 0;
         playerRB.drag = airDragCoeff + (KPH / 40000);
 
-        KPH = playerRB.velocity.magnitude * 3.6f; //¼Óµµ
+        KPH = playerRB.velocity.magnitude * 3.6f; //ì†ë„
 
-        downforce = Mathf.Abs(DownForceValue * playerRB.velocity.magnitude); //´Ù¿îÆ÷½º°ª °è»ê
-        downforce = KPH > 60 ? downforce : 0; //60 Å°·Î ÀÌ»óÀÌ¸é ´Ù¿î Æ÷½º Àû¿ë½ÃÅ°±â
-        playerRB.AddForce(-transform.up * downforce); //Àû¿ë
+        downforce = Mathf.Abs(DownForceValue * playerRB.velocity.magnitude); //ë‹¤ìš´í¬ìŠ¤ê°’ ê³„ì‚°
+        downforce = KPH > 60 ? downforce : 0; //60 í‚¤ë¡œ ì´ìƒì´ë©´ ë‹¤ìš´ í¬ìŠ¤ ì ìš©ì‹œí‚¤ê¸°
+        playerRB.AddForce(-transform.up * downforce); //ì ìš©
 
     }
 
-    //½ºÆ¼¾î¸µ °è»ê
+    //ìŠ¤í‹°ì–´ë§ ê³„ì‚°
     public void Steering()//fixedUpdate
     {
+        if(Input.GetMouseButton(0))
+        {
         if (mouseX != 0)
         {
             steerSlider.value += mouseX * sensitivity;
+        }
+
+        }
+        else
+        {
+            steerSlider.value = Mathf.Lerp(steerSlider.value, 0, Time.fixedDeltaTime* resetSteerAngleSpeed);
         }
     }
 
     public void ApplySteering()//fixedUpdate
     {
         float steeringAngle;
-        //½ºÆ¼¾î ¾Ş±Û °è»ê
+        //ìŠ¤í‹°ì–´ ì•µê¸€ ê³„ì‚°
         steeringAngle = steerSlider.value * maxSteerAngle / (1080.0f / 2);
 
-        //½ºÆ¼¾î¸µ ¹ÙÄû¿¡¸¸ Àû¿ë
+        //ìŠ¤í‹°ì–´ë§ ë°”í€´ì—ë§Œ ì ìš©
         foreach (var wheel in wheels)
         {
-            wheel.wheelCollider.steerAngle = wheel.IsSteering ? steeringAngle : 0; // ½ºÆ¼¾î¸µ °ª Àû¿ë
+            wheel.wheelCollider.steerAngle = wheel.IsSteering ? steeringAngle : 0; // ìŠ¤í‹°ì–´ë§ ê°’ ì ìš©
         }
     }
 
-    //ÅäÅ© Àû¿ë
+    //í† í¬ ì ìš©
     private void ApplyTorque()//fixedUpdate
     {
         CalculateTorque();
@@ -272,6 +292,22 @@ public class FinalCarController_June : MonoBehaviour
         {
             //motor
             float torquePerWheel = gasInput * (totalMotorTorque / motorWheelNum);
+            foreach (var wheel in wheels)
+            {
+                if (wheel.IsMoter)
+                {
+                    if (wheel.isGrounded)
+                        wheel.wheelCollider.motorTorque = torquePerWheel;
+                    else
+                        wheel.wheelCollider.motorTorque = 0f;
+                }
+
+                wheel.wheelCollider.brakeTorque = 0f;
+            }
+        }
+        else if (gasInput < 0.5f && wheelRPM <= 0)
+        {
+            float torquePerWheel = -torqueCurve.Evaluate(currentRPM / maxRPM) * reverseRatio * finalDriveRatio * maxMotorTorque;
             foreach (var wheel in wheels)
             {
                 if (wheel.IsMoter)
@@ -295,26 +331,10 @@ public class FinalCarController_June : MonoBehaviour
                 wheel.wheelCollider.motorTorque = 0f;
             }
         }
+        //Debug.Log(gasInput);
+        
 
-        //if (gasInput < 0)
-        //{
-        //    float torquePerWheel = -torqueCurve.Evaluate(currentRPM / maxRPM) * reverseRatio * finalDriveRatio * maxMotorTorque;
-        //    Debug.Log(torquePerWheel);
-        //    foreach (var wheel in wheels)
-        //    {
-        //        if (wheel.IsMoter)
-        //        {
-        //            if (wheel.isGrounded)
-        //                wheel.wheelCollider.motorTorque = torquePerWheel;
-        //            else
-        //                wheel.wheelCollider.motorTorque = 0f;
-        //        }
-
-        //        wheel.wheelCollider.brakeTorque = 0f;
-        //    }
-        //}
-
-        if (Input.GetKey(KeyCode.Space)) //ÇÚµå ºê·¹ÀÌÅ©
+        if (Input.GetKey(KeyCode.Space)) //í•¸ë“œ ë¸Œë ˆì´í¬
         {
             handBrake = true;
             foreach (var wheel in wheels)
@@ -322,6 +342,7 @@ public class FinalCarController_June : MonoBehaviour
                 if(wheel.wheelCollider.name == "RR"|| wheel.wheelCollider.name == "RL")
                 {
                     wheel.wheelCollider.brakeTorque = Mathf.Infinity;
+                    //wheel.wheelCollider.motorTorque = 0f;
                 }
             }
         }
@@ -331,23 +352,23 @@ public class FinalCarController_June : MonoBehaviour
         }
     }
 
-    //ÅäÅ© °è»ê
+    //í† í¬ ê³„ì‚°
     public void CalculateTorque()//fixedUpdate
     {
-        float gearRatio = gearRatiosCurve.Evaluate(currentGear); //ÀÌ°Å ½áº¸°í ¾ÈµÇ¸é À§¿¡²¨·Î ½áº¸±â
-        WheelRPMCalculate(); //ÈÙ RPM °è»ê
-        //wheelRPM = wheelRPM < 0 ? 0 : wheelRPM; //ÈÙ À½¼ö °¡´Â°Å ¸·±â
-        currentRPM = Mathf.Lerp(currentRPM, minRPM + (wheelRPM* finalDriveRatio * gearRatio), Time.fixedDeltaTime * RPMSmoothness); //2ÀÖ´Â °÷Àº ³ªÁß¿¡ ¼öÄ¡·Î º¯È¯ ½ÃÄÑº¸±â
+        float gearRatio = gearRatiosCurve.Evaluate(currentGear); //ì´ê±° ì¨ë³´ê³  ì•ˆë˜ë©´ ìœ„ì—êº¼ë¡œ ì¨ë³´ê¸°
+        WheelRPMCalculate(); //íœ  RPM ê³„ì‚°
+        //wheelRPM = wheelRPM < 0 ? 0 : wheelRPM; //íœ  ìŒìˆ˜ ê°€ëŠ”ê±° ë§‰ê¸°
+        currentRPM = Mathf.Lerp(currentRPM, minRPM + (wheelRPM* finalDriveRatio * gearRatio), Time.fixedDeltaTime * RPMSmoothness); //2ìˆëŠ” ê³³ì€ ë‚˜ì¤‘ì— ìˆ˜ì¹˜ë¡œ ë³€í™˜ ì‹œì¼œë³´ê¸°
         //currentRPM = minRPM + (wheelRPM * finalDriveRatio * gearRatio);
-        if (currentRPM > maxRPM-500)
+        if (currentRPM > maxRPM-200)
         {
-            currentRPM = maxRPM; //ÃÖ´ë RPM Á¦ÇÑ
-            totalMotorTorque = 0; //ÅäÅ©¿¡ 0À» ÁÜÀ¸·Î½á ÀÏÁ¤ ¼Óµµ·Î À¯Áö µÇ°Ô
+            currentRPM = maxRPM - Random.Range(0,200); //ìµœëŒ€ RPM ì œí•œ
+            totalMotorTorque = 0; //í† í¬ì— 0ì„ ì¤Œìœ¼ë¡œì¨ ì¼ì • ì†ë„ë¡œ ìœ ì§€ ë˜ê²Œ
         }
         else
         {
        
-            totalMotorTorque = torqueCurve.Evaluate(currentRPM / maxRPM) * gearRatio * finalDriveRatio * maxMotorTorque; // maxMotorTorqueÀÖ´Â °÷Àº ³ªÁß¿¡ tractionControlAdjustedMaxTorque»ı°¢ÇØº¸±â
+            totalMotorTorque = torqueCurve.Evaluate(currentRPM / maxRPM) * gearRatio * finalDriveRatio * maxMotorTorque; // maxMotorTorqueìˆëŠ” ê³³ì€ ë‚˜ì¤‘ì— tractionControlAdjustedMaxTorqueìƒê°í•´ë³´ê¸°
             
         }
 
@@ -379,50 +400,50 @@ public class FinalCarController_June : MonoBehaviour
 
     private void AutoGear()
     {
-        // º¯¼ÓÀÌ ³Ê¹« ºü¸£°Ô ÀÏ¾î³ªÁö ¾Êµµ·Ï Áö¿¬ ½Ã°£À» È®ÀÎ
+        // ë³€ì†ì´ ë„ˆë¬´ ë¹ ë¥´ê²Œ ì¼ì–´ë‚˜ì§€ ì•Šë„ë¡ ì§€ì—° ì‹œê°„ì„ í™•ì¸
         if (Time.time - lastShift > shiftDelay)
         {
-            // »ó½Â º¯¼Ó
+            // ìƒìŠ¹ ë³€ì†
             if (currentRPM / maxRPM > shiftUpCurve.Evaluate(gasInput) && Mathf.RoundToInt(currentGear) < gearRatiosArray.Length)
             {
-                // 1±â¾î¿¡¼­ ´Ü¼øÈ÷ È¸Àü ÁßÀÎ °æ¿ì »ó½Â º¯¼ÓÇÏÁö ¾ÊÀ½
-                // ¶Ç´Â 1±â¾î¿¡¼­ 15km/h ÀÌ»ó ÀÌµ¿ ÁßÀÎ °æ¿ì¿¡¸¸ »ó½Â º¯¼ÓÇÕ´Ï´Ù.
+                // 1ê¸°ì–´ì—ì„œ ë‹¨ìˆœíˆ íšŒì „ ì¤‘ì¸ ê²½ìš° ìƒìŠ¹ ë³€ì†í•˜ì§€ ì•ŠìŒ
+                // ë˜ëŠ” 1ê¸°ì–´ì—ì„œ 15km/h ì´ìƒ ì´ë™ ì¤‘ì¸ ê²½ìš°ì—ë§Œ ìƒìŠ¹ ë³€ì†í•©ë‹ˆë‹¤.
                 if (Mathf.RoundToInt(currentGear) > 1 || KPH > 15f)
                 {
-                    // ¸¶Áö¸· º¯¼Ó ½Ã°£À» ±â·ÏÇÕ´Ï´Ù.
+                    // ë§ˆì§€ë§‰ ë³€ì† ì‹œê°„ì„ ê¸°ë¡í•©ë‹ˆë‹¤.
                     lastGear = Mathf.RoundToInt(currentGear);
-                    // »ó½Â º¯¼ÓÇÒ ±â¾î¸¦ ¼³Á¤ÇÕ´Ï´Ù.
+                    // ìƒìŠ¹ ë³€ì†í•  ê¸°ì–´ë¥¼ ì„¤ì •í•©ë‹ˆë‹¤.
                     targetGear = lastGear + 1;
-                    // ¸¶Áö¸· º¯¼Ó ½Ã°£À» ±â·ÏÇÏ°í, º¯¼Ó ÁßÀÓÀ» Ç¥½ÃÇÕ´Ï´Ù.
+                    // ë§ˆì§€ë§‰ ë³€ì† ì‹œê°„ì„ ê¸°ë¡í•˜ê³ , ë³€ì† ì¤‘ì„ì„ í‘œì‹œí•©ë‹ˆë‹¤.
                     lastShift = Time.time;
                     shifting = true;
                 }
             }
-            // ÇÏ¶ô º¯¼Ó
+            // í•˜ë½ ë³€ì†
             else if (currentRPM / maxRPM < shiftDownCurve.Evaluate(gasInput) && Mathf.RoundToInt(currentGear) > 1)
             {
-                // ¸¶Áö¸· º¯¼Ó ½Ã°£À» ±â·ÏÇÕ´Ï´Ù.
+                // ë§ˆì§€ë§‰ ë³€ì† ì‹œê°„ì„ ê¸°ë¡í•©ë‹ˆë‹¤.
                 lastGear = Mathf.RoundToInt(currentGear);
-                // ÇÏ¶ô º¯¼ÓÇÒ ±â¾î¸¦ ¼³Á¤ÇÕ´Ï´Ù.
+                // í•˜ë½ ë³€ì†í•  ê¸°ì–´ë¥¼ ì„¤ì •í•©ë‹ˆë‹¤.
                 targetGear = lastGear - 1;
-                // ¸¶Áö¸· º¯¼Ó ½Ã°£À» ±â·ÏÇÏ°í, º¯¼Ó ÁßÀÓÀ» Ç¥½ÃÇÕ´Ï´Ù.
+                // ë§ˆì§€ë§‰ ë³€ì† ì‹œê°„ì„ ê¸°ë¡í•˜ê³ , ë³€ì† ì¤‘ì„ì„ í‘œì‹œí•©ë‹ˆë‹¤.
                 lastShift = Time.time;
                 shifting = true;
             }
         }
 
-        // º¯¼Ó ÁßÀÎ °æ¿ì
+        // ë³€ì† ì¤‘ì¸ ê²½ìš°
         if (shifting)
         {
-            // ½Ã°£¿¡ µû¸¥ º¸°£°ªÀ» °è»êÇÏ¿© ÇöÀç ±â¾î¸¦ Á¶Á¤ÇÕ´Ï´Ù.
+            // ì‹œê°„ì— ë”°ë¥¸ ë³´ê°„ê°’ì„ ê³„ì‚°í•˜ì—¬ í˜„ì¬ ê¸°ì–´ë¥¼ ì¡°ì •í•©ë‹ˆë‹¤.
             float lerpVal = (Time.time - lastShift) / shiftTime;
             currentGear = Mathf.Lerp(lastGear, targetGear, lerpVal);
-            // º¸°£ÀÌ ¿Ï·áµÇ¸é º¯¼Ó Áß »óÅÂ¸¦ ÇØÁ¦ÇÕ´Ï´Ù.
+            // ë³´ê°„ì´ ì™„ë£Œë˜ë©´ ë³€ì† ì¤‘ ìƒíƒœë¥¼ í•´ì œí•©ë‹ˆë‹¤.
             if (lerpVal >= 1f)
                 shifting = false;
         }
 
-        // ±â¾î ¹üÀ§¸¦ ¹ş¾î³ªÁö ¾Êµµ·Ï Å¬·¥ÇÎÇÕ´Ï´Ù.
+        // ê¸°ì–´ ë²”ìœ„ë¥¼ ë²—ì–´ë‚˜ì§€ ì•Šë„ë¡ í´ë¨í•‘í•©ë‹ˆë‹¤.
         if (currentGear >= gearRatiosArray.Length)
         {
             currentGear = gearRatiosArray.Length;
@@ -435,36 +456,36 @@ public class FinalCarController_June : MonoBehaviour
     //manual
     private void ManualGear()
     {
-        // º¯¼ÓÀÌ ³Ê¹« ºü¸£°Ô ÀÏ¾î³ªÁö ¾Êµµ·Ï Áö¿¬ ½Ã°£À» È®ÀÎ
+        // ë³€ì†ì´ ë„ˆë¬´ ë¹ ë¥´ê²Œ ì¼ì–´ë‚˜ì§€ ì•Šë„ë¡ ì§€ì—° ì‹œê°„ì„ í™•ì¸
         if (Time.time - lastShift > shiftDelay)
         {
-            // »ó½Â º¯¼Ó
+            // ìƒìŠ¹ ë³€ì†
             if (Input.GetKey(KeyCode.E))
             {
-                // 1±â¾î¿¡¼­ ´Ü¼øÈ÷ È¸Àü ÁßÀÎ °æ¿ì »ó½Â º¯¼ÓÇÏÁö ¾ÊÀ½
-                // ¶Ç´Â 1±â¾î¿¡¼­ 15km/h ÀÌ»ó ÀÌµ¿ ÁßÀÎ °æ¿ì¿¡¸¸ »ó½Â º¯¼ÓÇÕ´Ï´Ù.
+                // 1ê¸°ì–´ì—ì„œ ë‹¨ìˆœíˆ íšŒì „ ì¤‘ì¸ ê²½ìš° ìƒìŠ¹ ë³€ì†í•˜ì§€ ì•ŠìŒ
+                // ë˜ëŠ” 1ê¸°ì–´ì—ì„œ 15km/h ì´ìƒ ì´ë™ ì¤‘ì¸ ê²½ìš°ì—ë§Œ ìƒìŠ¹ ë³€ì†í•©ë‹ˆë‹¤.
                 if (Mathf.RoundToInt(currentGear) < gearRatiosArray.Length)
                 {
-                    // ¸¶Áö¸· º¯¼Ó ½Ã°£À» ±â·ÏÇÕ´Ï´Ù.
+                    // ë§ˆì§€ë§‰ ë³€ì† ì‹œê°„ì„ ê¸°ë¡í•©ë‹ˆë‹¤.
                     lastGear = Mathf.RoundToInt(currentGear);
-                    // »ó½Â º¯¼ÓÇÒ ±â¾î¸¦ ¼³Á¤ÇÕ´Ï´Ù.
+                    // ìƒìŠ¹ ë³€ì†í•  ê¸°ì–´ë¥¼ ì„¤ì •í•©ë‹ˆë‹¤.
                     targetGear = lastGear + 1;
-                    // ¸¶Áö¸· º¯¼Ó ½Ã°£À» ±â·ÏÇÏ°í, º¯¼Ó ÁßÀÓÀ» Ç¥½ÃÇÕ´Ï´Ù.
+                    // ë§ˆì§€ë§‰ ë³€ì† ì‹œê°„ì„ ê¸°ë¡í•˜ê³ , ë³€ì† ì¤‘ì„ì„ í‘œì‹œí•©ë‹ˆë‹¤.
                     lastShift = Time.time;
                     shifting = true;
                 }
             }
-            // ÇÏ¶ô º¯¼Ó
+            // í•˜ë½ ë³€ì†
             else if (Input.GetKey(KeyCode.Q))
             {
                 if (Mathf.RoundToInt(currentGear) > 1)
                 {
 
-                    // ¸¶Áö¸· º¯¼Ó ½Ã°£À» ±â·ÏÇÕ´Ï´Ù.
+                    // ë§ˆì§€ë§‰ ë³€ì† ì‹œê°„ì„ ê¸°ë¡í•©ë‹ˆë‹¤.
                     lastGear = Mathf.RoundToInt(currentGear);
-                    // ÇÏ¶ô º¯¼ÓÇÒ ±â¾î¸¦ ¼³Á¤ÇÕ´Ï´Ù.
+                    // í•˜ë½ ë³€ì†í•  ê¸°ì–´ë¥¼ ì„¤ì •í•©ë‹ˆë‹¤.
                     targetGear = lastGear - 1;
-                    // ¸¶Áö¸· º¯¼Ó ½Ã°£À» ±â·ÏÇÏ°í, º¯¼Ó ÁßÀÓÀ» Ç¥½ÃÇÕ´Ï´Ù.
+                    // ë§ˆì§€ë§‰ ë³€ì† ì‹œê°„ì„ ê¸°ë¡í•˜ê³ , ë³€ì† ì¤‘ì„ì„ í‘œì‹œí•©ë‹ˆë‹¤.
                     lastShift = Time.time;
                     shifting = true;
                 }
@@ -472,18 +493,18 @@ public class FinalCarController_June : MonoBehaviour
             }
         }
 
-        // º¯¼Ó ÁßÀÎ °æ¿ì
+        // ë³€ì† ì¤‘ì¸ ê²½ìš°
         if (shifting)
         {
-            // ½Ã°£¿¡ µû¸¥ º¸°£°ªÀ» °è»êÇÏ¿© ÇöÀç ±â¾î¸¦ Á¶Á¤ÇÕ´Ï´Ù.
+            // ì‹œê°„ì— ë”°ë¥¸ ë³´ê°„ê°’ì„ ê³„ì‚°í•˜ì—¬ í˜„ì¬ ê¸°ì–´ë¥¼ ì¡°ì •í•©ë‹ˆë‹¤.
             float lerpVal = (Time.time - lastShift) / shiftTime;
             currentGear = Mathf.Lerp(lastGear, targetGear, lerpVal);
-            // º¸°£ÀÌ ¿Ï·áµÇ¸é º¯¼Ó Áß »óÅÂ¸¦ ÇØÁ¦ÇÕ´Ï´Ù.
+            // ë³´ê°„ì´ ì™„ë£Œë˜ë©´ ë³€ì† ì¤‘ ìƒíƒœë¥¼ í•´ì œí•©ë‹ˆë‹¤.
             if (lerpVal >= 1f)
                 shifting = false;
         }
 
-        // ±â¾î ¹üÀ§¸¦ ¹ş¾î³ªÁö ¾Êµµ·Ï Å¬·¥ÇÎÇÕ´Ï´Ù.
+        // ê¸°ì–´ ë²”ìœ„ë¥¼ ë²—ì–´ë‚˜ì§€ ì•Šë„ë¡ í´ë¨í•‘í•©ë‹ˆë‹¤.
         if (currentGear >= gearRatiosArray.Length)
         {
             currentGear = gearRatiosArray.Length - 1;
@@ -495,7 +516,7 @@ public class FinalCarController_June : MonoBehaviour
     }
 
 
-    private void friction() //¸¶Âû °è»ê
+    private void friction() //ë§ˆì°° ê³„ì‚°
     {
 
         WheelHit hit;
@@ -513,12 +534,12 @@ public class FinalCarController_June : MonoBehaviour
                 sidewaysFriction.stiffness = (handBrake) ? handBrakeSleepAmout : Friction;
                 wheels[i].wheelCollider.sidewaysFriction = sidewaysFriction;
 
-                wheels[i].isGrounded = true;
+               // wheels[i].isGrounded = true;
 
                 sum += Mathf.Abs(hit.sidewaysSlip);
 
             }
-            else wheels[i].isGrounded = false;
+            //else wheels[i].isGrounded = false;
 
             //wheelSlip[i] = Mathf.Abs(hit.forwardSlip) + Mathf.Abs(hit.sidewaysSlip);
             sidewaysSlip[i] = Mathf.Abs(hit.sidewaysSlip);
@@ -528,5 +549,24 @@ public class FinalCarController_June : MonoBehaviour
 
         sum /= wheels.Count - 2;
 
+    }
+
+    [SerializeField] GameObject racingWheel;
+    void AnimationUpdate()
+    {
+        foreach (var wheel in wheels)
+        {
+        Transform visualWheel = wheel.wheelGameObject.transform;
+
+        Vector3 position;
+        Quaternion rotation;
+        wheel.wheelCollider.GetWorldPose(out position, out rotation);
+
+        visualWheel.transform.position = position;
+        visualWheel.transform.rotation = rotation;
+
+        }
+    
+        //racingWheel.transform.rotation = Quaternion.Euler(0, 0, steerSlider.value);
     }
 }
