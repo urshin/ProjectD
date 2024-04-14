@@ -1,0 +1,12 @@
+{
+	"name": "Mt. Akina Drift",
+	"description": "Free run",
+	"tags" : ["Touge", "#drift", "Japan"],
+	"geotags": ["lat", "lon"],
+	"country": "Japan",
+	"city": "Gunma",
+	"length": "5040",
+	"width": "8",
+	"pitboxes": "32",
+	"run": "Point to Point"
+}

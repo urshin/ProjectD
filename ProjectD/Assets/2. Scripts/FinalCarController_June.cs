@@ -105,7 +105,7 @@ public class FinalCarController_June : MonoBehaviour
     [Header("Tire")]
     [SerializeField] bool LockWheel;
     private WheelFrictionCurve forwardFriction, sidewaysFriction;
-    [Range(.8f, 1.7f)] public float Friction;
+    [Range(0f, 10f)] public float Friction;
 
 
     [Header("Environment Variable")]
@@ -143,7 +143,7 @@ public class FinalCarController_June : MonoBehaviour
         if (!LockWheel) Steering();
         ApplySteering();
         ApplyTorque();
-        // friction();
+        friction();
         CheckingIsGrounded();//땅체크
 
         if (transmission == Transmission.Auto_Transmission)
@@ -154,6 +154,10 @@ public class FinalCarController_June : MonoBehaviour
         {
             ManualGear();
         }
+
+
+
+        //DriftControl();
     }
 
     void UIupdate()
@@ -270,12 +274,25 @@ public class FinalCarController_June : MonoBehaviour
             steerSlider.value = Mathf.Lerp(steerSlider.value, 0, Time.fixedDeltaTime* resetSteerAngleSpeed);
         }
     }
-
+    [SerializeField] float slipAngle;
+    [SerializeField] float steeringInput;
+    [SerializeField] float speed;
     public void ApplySteering()//fixedUpdate
     {
-        float steeringAngle;
-        //스티어 앵글 계산
-        steeringAngle = steerSlider.value * maxSteerAngle / (1080.0f / 2);
+        //float steeringAngle;
+        // //스티어 앵글 계산
+        
+
+        //미끌어지는 각
+        slipAngle = Vector3.Angle(transform.forward, playerRB.velocity - transform.forward);
+        float steeringAngle = steerSlider.value * maxSteerAngle / (1080.0f / 2); 
+        if (slipAngle < 120f)
+        {
+            steeringAngle += Vector3.SignedAngle(transform.forward, playerRB.velocity + transform.forward, Vector3.up);
+        }
+        steeringAngle = Mathf.Clamp(steeringAngle, -90f, 90f);
+
+
 
         //스티어링 바퀴에만 적용
         foreach (var wheel in wheels)
@@ -516,6 +533,7 @@ public class FinalCarController_June : MonoBehaviour
     }
 
 
+  
     private void friction() //마찰 계산
     {
 
@@ -524,22 +542,31 @@ public class FinalCarController_June : MonoBehaviour
         float[] sidewaysSlip = new float[wheels.Count];
         for (int i = 0; i < wheels.Count; i++)
         {
+            //앞바퀴
+            if (wheels[i].wheelCollider.GetGroundHit(out hit) && i < 2)
+            {
+                
+
+            }
+            //뒷바퀴
             if (wheels[i].wheelCollider.GetGroundHit(out hit) && i >= 2)
             {
                 forwardFriction = wheels[i].wheelCollider.forwardFriction;
-                forwardFriction.stiffness = (handBrake) ? handBrakeSleepAmout : Friction;
+                forwardFriction.stiffness = (handBrake) ? handBrakeSleepAmout : Mathf.Lerp(forwardFriction.stiffness, Friction, Time.fixedDeltaTime * 6); 
+                forwardFriction.extremumValue = (handBrake) ? 0.35f : Mathf.Lerp(forwardFriction.extremumValue, 2,Time.fixedDeltaTime*3);
                 wheels[i].wheelCollider.forwardFriction = forwardFriction;
 
                 sidewaysFriction = wheels[i].wheelCollider.sidewaysFriction;
-                sidewaysFriction.stiffness = (handBrake) ? handBrakeSleepAmout : Friction;
+                sidewaysFriction.stiffness = (handBrake) ? handBrakeSleepAmout : Mathf.Lerp(forwardFriction.stiffness, Friction, Time.fixedDeltaTime * 6);
+                sidewaysFriction.extremumValue = (handBrake) ? 0.35f : Mathf.Lerp(forwardFriction.extremumValue, 2, Time.fixedDeltaTime * 3);
                 wheels[i].wheelCollider.sidewaysFriction = sidewaysFriction;
 
-               // wheels[i].isGrounded = true;
+
 
                 sum += Mathf.Abs(hit.sidewaysSlip);
 
             }
-            //else wheels[i].isGrounded = false;
+
 
             //wheelSlip[i] = Mathf.Abs(hit.forwardSlip) + Mathf.Abs(hit.sidewaysSlip);
             sidewaysSlip[i] = Mathf.Abs(hit.sidewaysSlip);
