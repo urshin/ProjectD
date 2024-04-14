@@ -186,7 +186,7 @@ public class FinalCarController_June : MonoBehaviour
     {
         //무게 중심 초기화
         playerRB = gameObject.GetComponent<Rigidbody>();
-        playerRB.centerOfMass = centerofmassObject.transform.position;
+        playerRB.centerOfMass = centerofmassObject.transform.localPosition;
         centerofmass = playerRB.centerOfMass;
 
         ApplyMotorWork(); //전륜 후륜 정하기
@@ -322,7 +322,7 @@ public class FinalCarController_June : MonoBehaviour
                 wheel.wheelCollider.brakeTorque = 0f;
             }
         }
-        else if (gasInput < 0.5f && wheelRPM <= 0)
+        else if (gasInput <= -0.5f && wheelRPM <= 0)
         {
             float torquePerWheel = -torqueCurve.Evaluate(currentRPM / maxRPM) * reverseRatio * finalDriveRatio * maxMotorTorque;
             foreach (var wheel in wheels)
