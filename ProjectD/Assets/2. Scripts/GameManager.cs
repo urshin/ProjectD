@@ -6,6 +6,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+
     public void Awake()
     {
         if (Instance == null) //정적으로 자신을 체크함, null인진
@@ -15,6 +16,7 @@ public class GameManager : MonoBehaviour
     }
     public GameObject player;
 
+    public string Carname;
     public List<Transform> TrackPosition;
     int trackIndex = 0;
 

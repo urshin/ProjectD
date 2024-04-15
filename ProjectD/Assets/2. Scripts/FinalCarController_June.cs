@@ -6,7 +6,18 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using static CarController_June;
+public enum WheelWork //전,후,4륜
+{
+    FRONT,
+    REAR,
+    AWD,
+};
 
+public enum Transmission
+{
+    Auto_Transmission,
+    Manual_Transmission,
+}
 public class FinalCarController_June : MonoBehaviour
 {
     [System.Serializable]
@@ -21,18 +32,7 @@ public class FinalCarController_June : MonoBehaviour
         public bool isGrounded;
     }
 
-    public enum WheelWork //전,후,4륜
-    {
-        FRONT,
-        REAR,
-        AWD,
-    };
 
-    public enum Transmission
-    {
-        Auto_Transmission,
-        Manual_Transmission,
-    }
 
     //휠 리스트
     public List<Wheel> wheels;
@@ -87,8 +87,8 @@ public class FinalCarController_June : MonoBehaviour
     public AnimationCurve gearRatiosCurve;//기어 비율
     public float[] gearRatiosArray;
     public float reverseRatio;
-    public AnimationCurve shiftUpCurve; //기어 올리는거
-    public AnimationCurve shiftDownCurve; //기어 내리는거
+    public float shiftUp; //기어 올리는거
+    public float shiftDown; //기어 내리는거
     private float lastShift = 0.0f; //마지막 기어 시간
     public float shiftDelay = 1.0f; //기어 바꾸는 시간
     private int targetGear = 1; //목표로 하는 기어
@@ -117,7 +117,7 @@ public class FinalCarController_June : MonoBehaviour
     [Header("Camera")]
     [SerializeField] Camera cam;
 
-    
+
 
 
     //input
@@ -129,7 +129,7 @@ public class FinalCarController_June : MonoBehaviour
     private void OnEnable()
     {
         InitializedSetting();
-        
+
     }
     private void Update()
     {
@@ -165,7 +165,7 @@ public class FinalCarController_June : MonoBehaviour
         speedText.text = "Km/H : " + KPH;
         gearText.text = "Gear : " + currentGear;
         //gearratiostext.text =
-        torqueCurvetext.text = "Torque : "+ torqueCurve.Evaluate(currentRPM / maxRPM);
+        torqueCurvetext.text = "Torque : " + torqueCurve.Evaluate(currentRPM / maxRPM);
         wheelRPMtext.text = "WheelRPM : " + wheelRPM;
 
         niddle.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(0, -250, currentRPM / maxRPM));
@@ -184,6 +184,20 @@ public class FinalCarController_June : MonoBehaviour
 
     void InitializedSetting()
     {
+
+
+        steerSlider = GameObject.Find("steerSlider").GetComponent<Slider>();
+        speedText = GameObject.Find("speedText").GetComponent<TextMeshProUGUI>();
+        gearText = GameObject.Find("gearText").GetComponent<TextMeshProUGUI>();
+        //gearratiostext = GameObject.Find("gearratiostext").GetComponent<TextMeshProUGUI>();
+        torqueCurvetext = GameObject.Find("torqueCurvetext").GetComponent<TextMeshProUGUI>();
+        wheelRPMtext = GameObject.Find("wheelRPMtext").GetComponent<TextMeshProUGUI>();
+
+        niddle = GameObject.Find("niddle").GetComponent<RectTransform>();
+        TarcometerRPM = GameObject.Find("TarcometerRPM").GetComponent<TextMeshProUGUI>();
+        TarcometerGear = GameObject.Find("TarcometerGear").GetComponent<TextMeshProUGUI>();
+
+
         //무게 중심 초기화
         playerRB = gameObject.GetComponent<Rigidbody>();
         playerRB.centerOfMass = centerofmassObject.transform.localPosition;
@@ -203,25 +217,25 @@ public class FinalCarController_June : MonoBehaviour
             gearRatiosCurve.AddKey(i, gearRatiosArray[i]);
         }
 
-        cam=Camera.main;
+        cam = Camera.main;
         cam.GetComponent<CamController_June>().player = gameObject.transform;
     }
 
     void ApplyMotorWork()
     {
-        switch(wheelWork)
+        switch (wheelWork)
         {
             case WheelWork.AWD:
                 foreach (var wheel in wheels)
                 {
-                   wheel.IsMoter = true;
+                    wheel.IsMoter = true;
                 }
                 break;
             case WheelWork.FRONT:
                 foreach (var wheel in wheels)
                 {
-                    if(wheel.IsSteering)
-                    wheel.IsMoter = true;
+                    if (wheel.IsSteering)
+                        wheel.IsMoter = true;
                 }
                 break;
 
@@ -232,8 +246,8 @@ public class FinalCarController_June : MonoBehaviour
                         wheel.IsMoter = true;
                 }
                 break;
-        }    
-        
+        }
+
     }
     public void CheckingIsGrounded()//땅체크
     {
@@ -261,17 +275,17 @@ public class FinalCarController_June : MonoBehaviour
     //스티어링 계산
     public void Steering()//fixedUpdate
     {
-        if(Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0))
         {
-        if (mouseX != 0)
-        {
-            steerSlider.value += mouseX * sensitivity;
-        }
+            if (mouseX != 0)
+            {
+                steerSlider.value += mouseX * sensitivity;
+            }
 
         }
         else
         {
-            steerSlider.value = Mathf.Lerp(steerSlider.value, 0, Time.fixedDeltaTime* resetSteerAngleSpeed);
+            steerSlider.value = Mathf.Lerp(steerSlider.value, 0, Time.fixedDeltaTime * resetSteerAngleSpeed);
         }
     }
     [SerializeField] float slipAngle;
@@ -281,11 +295,11 @@ public class FinalCarController_June : MonoBehaviour
     {
         //float steeringAngle;
         // //스티어 앵글 계산
-        
+
 
         //미끌어지는 각
         slipAngle = Vector3.Angle(transform.forward, playerRB.velocity - transform.forward);
-        float steeringAngle = steerSlider.value * maxSteerAngle / (1080.0f / 2); 
+        float steeringAngle = steerSlider.value * maxSteerAngle / (1080.0f / 2);
         if (slipAngle < 120f)
         {
             steeringAngle += Vector3.SignedAngle(transform.forward, playerRB.velocity + transform.forward, Vector3.up);
@@ -349,14 +363,14 @@ public class FinalCarController_June : MonoBehaviour
             }
         }
         //Debug.Log(gasInput);
-        
+
 
         if (Input.GetKey(KeyCode.Space)) //핸드 브레이크
         {
             handBrake = true;
             foreach (var wheel in wheels)
             {
-                if(wheel.wheelCollider.name == "RR"|| wheel.wheelCollider.name == "RL")
+                if (wheel.wheelCollider.name == "RR" || wheel.wheelCollider.name == "RL")
                 {
                     wheel.wheelCollider.brakeTorque = Mathf.Infinity;
                     //wheel.wheelCollider.motorTorque = 0f;
@@ -372,21 +386,22 @@ public class FinalCarController_June : MonoBehaviour
     //토크 계산
     public void CalculateTorque()//fixedUpdate
     {
-        float gearRatio = gearRatiosCurve.Evaluate(currentGear); //이거 써보고 안되면 위에꺼로 써보기
+       // float gearRatio = gearRatiosCurve.Evaluate(currentGear); //이거 써보고 안되면 위에꺼로 써보기
+        float gearRatio = gearRatiosArray[(int)currentGear]; //이거 써보고 안되면 위에꺼로 써보기
         WheelRPMCalculate(); //휠 RPM 계산
         //wheelRPM = wheelRPM < 0 ? 0 : wheelRPM; //휠 음수 가는거 막기
-        currentRPM = Mathf.Lerp(currentRPM, minRPM + (wheelRPM* finalDriveRatio * gearRatio), Time.fixedDeltaTime * RPMSmoothness); //2있는 곳은 나중에 수치로 변환 시켜보기
+        currentRPM = Mathf.Lerp(currentRPM, minRPM + (wheelRPM * finalDriveRatio * gearRatio), Time.fixedDeltaTime * RPMSmoothness); //2있는 곳은 나중에 수치로 변환 시켜보기
         //currentRPM = minRPM + (wheelRPM * finalDriveRatio * gearRatio);
-        if (currentRPM > maxRPM-200)
+        if (currentRPM > maxRPM - 200)
         {
-            currentRPM = maxRPM - Random.Range(0,200); //최대 RPM 제한
+            currentRPM = maxRPM - Random.Range(0, 200); //최대 RPM 제한
             totalMotorTorque = 0; //토크에 0을 줌으로써 일정 속도로 유지 되게
-        }
+        } 
         else
         {
-       
+
             totalMotorTorque = torqueCurve.Evaluate(currentRPM / maxRPM) * gearRatio * finalDriveRatio * maxMotorTorque; // maxMotorTorque있는 곳은 나중에 tractionControlAdjustedMaxTorque생각해보기
-            
+
         }
 
 
@@ -406,12 +421,12 @@ public class FinalCarController_June : MonoBehaviour
         if (wheelRPM < 0 && !reverse)
         {
             reverse = true;
-            
+
         }
         else if (wheelRPM > 0 && reverse)
         {
             reverse = false;
-            
+
         }
     }
 
@@ -421,7 +436,7 @@ public class FinalCarController_June : MonoBehaviour
         if (Time.time - lastShift > shiftDelay)
         {
             // 상승 변속
-            if (currentRPM / maxRPM > shiftUpCurve.Evaluate(gasInput) && Mathf.RoundToInt(currentGear) < gearRatiosArray.Length)
+            if (currentRPM / maxRPM > shiftUp && Mathf.RoundToInt(currentGear) < gearRatiosArray.Length)
             {
                 // 1기어에서 단순히 회전 중인 경우 상승 변속하지 않음
                 // 또는 1기어에서 15km/h 이상 이동 중인 경우에만 상승 변속합니다.
@@ -437,7 +452,7 @@ public class FinalCarController_June : MonoBehaviour
                 }
             }
             // 하락 변속
-            else if (currentRPM / maxRPM < shiftDownCurve.Evaluate(gasInput) && Mathf.RoundToInt(currentGear) > 1)
+            else if (currentRPM / maxRPM < shiftDown && Mathf.RoundToInt(currentGear) > 1)
             {
                 // 마지막 변속 시간을 기록합니다.
                 lastGear = Mathf.RoundToInt(currentGear);
@@ -533,7 +548,7 @@ public class FinalCarController_June : MonoBehaviour
     }
 
 
-  
+
     private void friction() //마찰 계산
     {
 
@@ -545,15 +560,15 @@ public class FinalCarController_June : MonoBehaviour
             //앞바퀴
             if (wheels[i].wheelCollider.GetGroundHit(out hit) && i < 2)
             {
-                
+
 
             }
             //뒷바퀴
             if (wheels[i].wheelCollider.GetGroundHit(out hit) && i >= 2)
             {
                 forwardFriction = wheels[i].wheelCollider.forwardFriction;
-                forwardFriction.stiffness = (handBrake) ? handBrakeSleepAmout : Mathf.Lerp(forwardFriction.stiffness, Friction, Time.fixedDeltaTime * 6); 
-                forwardFriction.extremumValue = (handBrake) ? 0.35f : Mathf.Lerp(forwardFriction.extremumValue, 2,Time.fixedDeltaTime*3);
+                forwardFriction.stiffness = (handBrake) ? handBrakeSleepAmout : Mathf.Lerp(forwardFriction.stiffness, Friction, Time.fixedDeltaTime * 6);
+                forwardFriction.extremumValue = (handBrake) ? 0.35f : Mathf.Lerp(forwardFriction.extremumValue, 2, Time.fixedDeltaTime * 3);
                 wheels[i].wheelCollider.forwardFriction = forwardFriction;
 
                 sidewaysFriction = wheels[i].wheelCollider.sidewaysFriction;
@@ -583,17 +598,17 @@ public class FinalCarController_June : MonoBehaviour
     {
         foreach (var wheel in wheels)
         {
-        Transform visualWheel = wheel.wheelGameObject.transform;
+            Transform visualWheel = wheel.wheelGameObject.transform;
 
-        Vector3 position;
-        Quaternion rotation;
-        wheel.wheelCollider.GetWorldPose(out position, out rotation);
+            Vector3 position;
+            Quaternion rotation;
+            wheel.wheelCollider.GetWorldPose(out position, out rotation);
 
-        visualWheel.transform.position = position;
-        visualWheel.transform.rotation = rotation;
+            visualWheel.transform.position = position;
+            visualWheel.transform.rotation = rotation;
 
         }
-    
+
         //racingWheel.transform.rotation = Quaternion.Euler(0, 0, steerSlider.value);
     }
 }
