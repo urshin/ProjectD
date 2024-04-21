@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using TMPro;
+using AutoMoverPro;
+using UnityEngine.SceneManagement;
 
 public class LobbyUIHandler : MonoBehaviour
 {
@@ -22,30 +25,50 @@ public class LobbyUIHandler : MonoBehaviour
     [SerializeField] GameObject optionPanel;
     [SerializeField] GameObject garagePanel;
     [SerializeField] GameObject backBTN;
+    [SerializeField] GameObject logo;
+    [SerializeField] GameObject logocar;
+    [SerializeField] GameObject startCar;
     public LobbyState lobbystate;
 
     // Start is called before the first frame update
     void Start()
     {
-        HideAllPanel();
-        mainPanel.SetActive(true);
         lobbystate = LobbyState.Logo;
-        lobbystate = LobbyState.Main;
+        ShowingLogo();
 
+        
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(lobbystate != LobbyState.Logo && lobbystate != LobbyState.Main)
+        if(lobbystate == LobbyState.Logo || lobbystate == LobbyState.Main)
+        {
+            backBTN.SetActive(false);
+        }
+        else
         {
             backBTN.SetActive(true);
+        }
+
+        if(lobbystate == LobbyState.Logo)
+        {
+            if(Input.anyKeyDown)
+            {
+                MainPanel();
+                logocar.GetComponent<AutoMover>().StartMoving();
+            }
         }
     }
 
     
-
+    public void MainPanel() 
+    {
+        HideAllPanel();
+        mainPanel.SetActive(true);
+        lobbystate = LobbyState.Main;
+    }
 
     public void HideAllPanel()
     {
@@ -58,7 +81,11 @@ public class LobbyUIHandler : MonoBehaviour
         backBTN.SetActive(false);
     }
 
-
+    public void ShowingLogo()
+    {
+        logo.GetComponent<TextMeshProUGUI>().DOFade(255, 500);
+        logo.transform.GetChild(0).GetComponent<TextMeshProUGUI>().DOFade(255, 500);
+    }
     public void OnClickStartBTN()
     {
         HideAllPanel();
@@ -80,6 +107,10 @@ public class LobbyUIHandler : MonoBehaviour
         HideAllPanel();
         versusModePanel.SetActive(true);
         lobbystate = LobbyState.VersusMode;
+        startCar.GetComponent<AutoMover>().StartMoving();
+       StartCoroutine(  GoToGarage(3));
+
+
 
 
     }
@@ -98,6 +129,16 @@ public class LobbyUIHandler : MonoBehaviour
 
     }
 
+
+
+
+
+ 
+    IEnumerator GoToGarage(float time)
+    {
+        yield return new WaitForSeconds(time);
+        SceneManager.LoadScene("GarageScene1");
+    }
     public void OnClickBackBTN()
     {
         switch(lobbystate)
@@ -126,4 +167,6 @@ public class LobbyUIHandler : MonoBehaviour
                 break;
         }
     }
+
+    
 }

@@ -1,5 +1,5 @@
 {
-  "name": "test1",
+  "name": "car1",
   "Handling": {
     "MaxSteerAngle": 30
   },

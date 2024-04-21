@@ -14,32 +14,41 @@ public class GameManager : MonoBehaviour
             Instance = this; //이후 자기 자신을 저장함.
         }
     }
-    public GameObject player;
+    
+    public string carName;
+    public GameMode gameMode;
+    public GameState gameState;
 
-    public string Carname;
-    public List<Transform> TrackPosition;
-    int trackIndex = 0;
 
     private void Start()
     {
-        
+        gameMode = GameMode.None;
+        gameState = GameState.Lobby;
     }
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.P))
-        {
-            player.transform.position = TrackPosition[trackIndex].position;
-
-            if(trackIndex >= TrackPosition.Count-1)
-            {
-                trackIndex = 0;
-            }
-            else
-            {
-                trackIndex++;
-            }
-            
-        }
+        
     }
 
+
+
+
+
+
+
+
+
+}
+public enum GameMode
+{
+    AI,
+    TimeAttack,
+    Story,
+    None,
+}
+public enum GameState
+{
+    Lobby,
+    Garage,
+    InGame,
 }

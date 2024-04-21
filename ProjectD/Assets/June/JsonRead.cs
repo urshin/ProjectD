@@ -9,9 +9,9 @@ public class JsonRead : MonoBehaviour
 
     void Start()
     {
-        carName = GameManager.Instance.Carname;
+        carName = GameManager.Instance.carName;
         // JSON 파일 읽기
-        string jsonText = File.ReadAllText("Assets\\Resources\\CarData\\CarInformation\\" + carName + ".txt");
+        string jsonText = File.ReadAllText("Assets\\Resources\\CarDataScriptableObject\\CarInformation\\" + carName + ".txt");
 
         // JSON 문자열을 객체로 변환
         carData = JsonUtility.FromJson<CarData>(jsonText);
@@ -21,10 +21,8 @@ public class JsonRead : MonoBehaviour
 
     void SpawnPlayer()
     {
-        gameObject.GetComponent<CarSpawner_june>().SpawnCar();
+       // gameObject.GetComponent<CarSpawner_june>().SpawnCar();
     }
-
-}
 
 
 
@@ -73,4 +71,5 @@ public class EnvironmentData
     public float DownForceValue;
     public float DownForce;
     public float AirDragCoeff;
+}
 }

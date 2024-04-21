@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 72c718ba91f2fef4aa0673a995d6b65b
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Glitch Goblin
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 0da51d44a1309724dbd4b4ada2c7af50, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

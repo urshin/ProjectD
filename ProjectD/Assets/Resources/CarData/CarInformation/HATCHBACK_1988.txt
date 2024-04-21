@@ -1,0 +1,35 @@
+{
+  "name": "test2",
+  "Handling": {
+    "MaxSteerAngle": 40
+  },
+  "Engine": {
+    "Transmission": "Manual",
+    "WheelWork": "REAR",
+    "MinRPM": 1300,
+    "MaxRPM": 7000,
+    "MaxMotorTorque": 340,
+    "MaxBrakeTorque": 5000,
+    "RPMSmoothness": 100
+  },
+  "Gear": {
+    "FinalGearRatio": 3.7,
+    "GearRatios": [
+      4,
+      2.3,
+      1.5,
+      1.2,
+      1,
+      0.7
+    ],
+    "ReverseRatio": 3.3,
+    "ShiftUp": 0.9,
+    "ShiftDown": 0.6,
+    "ShiftDelay": 1
+  },
+  "Environment": {
+    "DownForceValue": 5,
+    "DownForce": 1,
+    "AirDragCoeff": 0.015
+  }
+}
