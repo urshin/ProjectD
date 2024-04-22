@@ -1,5 +1,5 @@
 {
-  "name": "test2",
+  "name": "Chev666",
   "Handling": {
     "MaxSteerAngle": 40
   },

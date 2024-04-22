@@ -13,9 +13,11 @@ public class GameManager : MonoBehaviour
         {
             Instance = this; //이후 자기 자신을 저장함.
         }
+        DontDestroyOnLoad(gameObject);
     }
     
     public string carName;
+    
     public GameMode gameMode;
     public GameState gameState;
 

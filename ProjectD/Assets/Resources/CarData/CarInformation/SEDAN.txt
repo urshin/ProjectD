@@ -1,14 +1,14 @@
 {
-  "name": "test2",
+  "name": "SEDAN",
   "Handling": {
     "MaxSteerAngle": 40
   },
   "Engine": {
-    "Transmission": "Manual",
-    "WheelWork": "REAR",
+    "Transmission": "Auto",
+    "WheelWork": "AWD",
     "MinRPM": 1300,
-    "MaxRPM": 7000,
-    "MaxMotorTorque": 340,
+    "MaxRPM": 8000,
+    "MaxMotorTorque": 276,
     "MaxBrakeTorque": 5000,
     "RPMSmoothness": 100
   },

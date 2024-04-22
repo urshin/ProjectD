@@ -35,8 +35,9 @@ public class LobbyUIHandler : MonoBehaviour
     {
         lobbystate = LobbyState.Logo;
         ShowingLogo();
+        GameManager.Instance.gameState = GameState.Lobby;
 
-        
+
 
     }
 

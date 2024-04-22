@@ -1,14 +1,14 @@
 {
-  "name": "test2",
+  "name": "Bolide",
   "Handling": {
     "MaxSteerAngle": 40
   },
   "Engine": {
     "Transmission": "Manual",
-    "WheelWork": "REAR",
-    "MinRPM": 1300,
-    "MaxRPM": 7000,
-    "MaxMotorTorque": 340,
+    "WheelWork": "AWD",
+    "MinRPM": 1000,
+    "MaxRPM": 6000,
+    "MaxMotorTorque": 240,
     "MaxBrakeTorque": 5000,
     "RPMSmoothness": 100
   },

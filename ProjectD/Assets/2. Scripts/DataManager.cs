@@ -7,13 +7,14 @@ using UnityEditor;
 
 public class DataManager : MonoBehaviour
 {
-    private static DataManager Instance;
+    public static DataManager Instance;
     public void Awake()
     {
         if (Instance == null) //정적으로 자신을 체크함, null인진
         {
             Instance = this; //이후 자기 자신을 저장함.
         }
+        DontDestroyOnLoad(gameObject);
     }
 
     public List<GameObject> garageCarPrefab = new List<GameObject>();
@@ -53,14 +54,18 @@ public class DataManager : MonoBehaviour
 
 
     public string jsonFolderPath = "Resources/CarInformation";
-
+    [SerializeField] public CarData carData;
+    public TextAsset[] textAsset;
     public void ParsingcarDatas()
     {
+        textAsset = Resources.LoadAll<TextAsset>("CarData\\CarInformation");
        
     }
-   
 
-
+    public void UpdateCarData(TextAsset text)
+    {
+        carData = JsonUtility.FromJson<CarData>(text.ToString());
+    }
 
     [System.Serializable]
     public class CarData

@@ -1,14 +1,14 @@
 {
-  "name": "test2",
+  "name": "HATCHBACK_1988",
   "Handling": {
     "MaxSteerAngle": 40
   },
   "Engine": {
-    "Transmission": "Manual",
-    "WheelWork": "REAR",
-    "MinRPM": 1300,
-    "MaxRPM": 7000,
-    "MaxMotorTorque": 340,
+    "Transmission": "Auto",
+    "WheelWork": "Front",
+    "MinRPM": 1100,
+    "MaxRPM": 8000,
+    "MaxMotorTorque": 240,
     "MaxBrakeTorque": 5000,
     "RPMSmoothness": 100
   },
