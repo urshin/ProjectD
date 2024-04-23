@@ -11,4 +11,31 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/1. Scenes/GarageScene1.unity
     guid: e63e0b549e0b43641b7445edebf6bc7f
+  - enabled: 1
+    path: Assets/1. Scenes/MapScene/Autumn_4.unity
+    guid: 9bbb15764fddee84ca97f484ed03e83a
+  - enabled: 1
+    path: Assets/1. Scenes/MapScene/Autumn_5.unity
+    guid: 83fa49bf3d1b0434897c92a42166db0e
+  - enabled: 1
+    path: Assets/1. Scenes/MapScene/Autumn_6.unity
+    guid: bfa95350a88850b49a84484d64a95dce
+  - enabled: 1
+    path: Assets/1. Scenes/MapScene/Summer_4.unity
+    guid: 37f6b483d08878f4db02b7aabfcb3b76
+  - enabled: 1
+    path: Assets/1. Scenes/MapScene/Summer_5.unity
+    guid: 7843efb0de3c37848af0d28f9f9eebe3
+  - enabled: 1
+    path: Assets/1. Scenes/MapScene/Summer_6.unity
+    guid: f1336146296de1d48a39135c3e2938ca
+  - enabled: 1
+    path: Assets/1. Scenes/MapScene/Winter_4.unity
+    guid: 6bacf389c731d7540a851326c296d7a7
+  - enabled: 1
+    path: Assets/1. Scenes/MapScene/Winter_5.unity
+    guid: fdf4680920c68bb4181a79196957ea32
+  - enabled: 1
+    path: Assets/1. Scenes/MapScene/Winter_6.unity
+    guid: 8d94cab2306727443944e1fd7453ca70
   m_configObjects: {}

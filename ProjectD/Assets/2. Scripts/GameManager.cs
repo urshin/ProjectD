@@ -59,7 +59,7 @@ public enum GameState
 
 public enum MapWeatherState
 {
-    Spring,
+    Autumn,
     Summer,
     Winter,
 }

@@ -4,6 +4,8 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
 using TMPro;
+using AutoMoverPro;
+using UnityEngine.SceneManagement;
 
 
 public class GarageManager : MonoBehaviour
@@ -82,7 +84,27 @@ public class GarageManager : MonoBehaviour
         startBlackPanel.SetActive(true);
         startBlackPanel.GetComponent<Image>().DOFade(0, 3); //검은 패널 지우기
     }
+    public void OnClickStartGame()
+    {
+        StartCoroutine(StartGame(1));
+    }
 
+    private string weather;
+    IEnumerator StartGame(float time)
+    {
+        yield return new WaitForSeconds(time);
+        
+        switch(GameManager.Instance.mapWeatherState)
+        {
+            case MapWeatherState.Autumn: weather = "Autumn"; break;
+            case MapWeatherState.Summer: weather = "Summer"; break;
+            case MapWeatherState.Winter: weather = "Winter"; break;
+
+        }
+
+
+         SceneManager.LoadScene(weather + "_"+GameManager.Instance.Map);
+    }
     // Update is called once per frame
     void Update()
     {

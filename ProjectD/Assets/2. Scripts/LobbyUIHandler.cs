@@ -49,7 +49,7 @@ public class LobbyUIHandler : MonoBehaviour
         ShowingLogo();
         GameManager.Instance.gameState = GameState.Lobby;
         GameManager.Instance.Map = 4;
-        GameManager.Instance.mapWeatherState = MapWeatherState.Spring;
+        GameManager.Instance.mapWeatherState = MapWeatherState.Autumn;
         GameManager.Instance.mapTimeState = MapTimeState.Cold_Night;
     }
 
@@ -183,7 +183,7 @@ public class LobbyUIHandler : MonoBehaviour
         switch (op)
         {
             case "Spring":
-                GameManager.Instance.mapWeatherState = MapWeatherState.Spring;
+                GameManager.Instance.mapWeatherState = MapWeatherState.Autumn;
                 break;
             case "Summer":
                 GameManager.Instance.mapWeatherState = MapWeatherState.Summer;

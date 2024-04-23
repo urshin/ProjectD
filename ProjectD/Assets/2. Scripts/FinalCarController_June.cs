@@ -47,12 +47,13 @@ public class FinalCarController_June : MonoBehaviour
 
     [Header("About UI")]
     // 스티어링 슬라이더
+    [SerializeField] Canvas canvas;
     public Slider steerSlider;
     public TextMeshProUGUI speedText;
-    public TextMeshProUGUI gearText;
-    public TextMeshProUGUI gearratiostext;
-    public TextMeshProUGUI torqueCurvetext;
-    public TextMeshProUGUI wheelRPMtext;
+    //public TextMeshProUGUI gearText;
+    //public TextMeshProUGUI gearratiostext;
+    //public TextMeshProUGUI torqueCurvetext;
+    //public TextMeshProUGUI wheelRPMtext;
 
     [SerializeField] Transform niddle;
     [SerializeField] TextMeshProUGUI TarcometerRPM;
@@ -163,10 +164,10 @@ public class FinalCarController_June : MonoBehaviour
     void UIupdate()
     {
         speedText.text = "Km/H : " + KPH;
-        gearText.text = "Gear : " + currentGear;
-        //gearratiostext.text =
-        torqueCurvetext.text = "Torque : " + torqueCurve.Evaluate(currentRPM / maxRPM);
-        wheelRPMtext.text = "WheelRPM : " + wheelRPM;
+        //gearText.text = "Gear : " + currentGear;
+        ////gearratiostext.text =
+        //torqueCurvetext.text = "Torque : " + torqueCurve.Evaluate(currentRPM / maxRPM);
+        //wheelRPMtext.text = "WheelRPM : " + wheelRPM;
 
         niddle.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(0, -250, currentRPM / maxRPM));
         TarcometerRPM.text = currentRPM.ToString("0,000") + "rpm";
@@ -185,13 +186,14 @@ public class FinalCarController_June : MonoBehaviour
     void InitializedSetting()
     {
 
-
-        steerSlider = GameObject.Find("steerSlider").GetComponent<Slider>();
+        canvas = GetComponentInChildren<Canvas>();
+        //steerSlider = GameObject.Find("steerSlider").GetComponent<Slider>();
+        steerSlider = canvas.GetComponentInChildren<Slider>();
         speedText = GameObject.Find("speedText").GetComponent<TextMeshProUGUI>();
-        gearText = GameObject.Find("gearText").GetComponent<TextMeshProUGUI>();
+       // gearText = GameObject.Find("gearText").GetComponent<TextMeshProUGUI>();
         //gearratiostext = GameObject.Find("gearratiostext").GetComponent<TextMeshProUGUI>();
-        torqueCurvetext = GameObject.Find("torqueCurvetext").GetComponent<TextMeshProUGUI>();
-        wheelRPMtext = GameObject.Find("wheelRPMtext").GetComponent<TextMeshProUGUI>();
+       // torqueCurvetext = GameObject.Find("torqueCurvetext").GetComponent<TextMeshProUGUI>();
+        //wheelRPMtext = GameObject.Find("wheelRPMtext").GetComponent<TextMeshProUGUI>();
 
         niddle = GameObject.Find("niddle").GetComponent<RectTransform>();
         TarcometerRPM = GameObject.Find("TarcometerRPM").GetComponent<TextMeshProUGUI>();

@@ -5429,7 +5429,6 @@ GameObject:
   - component: {fileID: 9039279417128068622}
   - component: {fileID: 3418966179315506722}
   - component: {fileID: 2498620516264873455}
-  - component: {fileID: 7524659253708419606}
   m_Layer: 0
   m_Name: sennaPrefab_CodeVer
   m_TagString: Untagged
@@ -5458,7 +5457,7 @@ Transform:
   - {fileID: 7895017751668105015}
   - {fileID: 6212770401696921741}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!54 &3422270759849361433
 Rigidbody:
@@ -5629,54 +5628,8 @@ MonoBehaviour:
   - 1.001
   - 0.796
   reverseRatio: 3.3
-  shiftUpCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0.00283432
-      value: 0.9382675
-      inSlope: 0.0024626704
-      outSlope: 0.0024626704
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1.0065918
-      value: 0.94073945
-      inSlope: 0.0024626704
-      outSlope: 0.0024626704
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  shiftDownCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0.0009460449
-      value: 0.5678833
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1.0047607
-      value: 0.5678833
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+  shiftUp: 0
+  shiftDown: 0
   shiftDelay: 1
   currentGear: 0.4
   KPH: 0
@@ -5716,29 +5669,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2a067efac18775478d98f83c8dbe6fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!136 &7524659253708419606
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4509923885061746256}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 0.4
-  m_Height: 2.3
-  m_Direction: 0
-  m_Center: {x: 0, y: 0.47, z: 1.92}
 --- !u!1 &4605141217619061804
 GameObject:
   m_ObjectHideFlags: 0
@@ -11591,7 +11521,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8207044917336525219}
-  m_LocalRotation: {x: 0.032201584, y: 0.7203189, z: -0.033515297, w: 0.69208425}
+  m_LocalRotation: {x: 0.032201577, y: 0.7203189, z: -0.033515293, w: 0.69208425}
   m_LocalPosition: {x: -0.0000009834766, y: 0.96, z: 0.34000003}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

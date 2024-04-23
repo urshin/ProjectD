@@ -21,6 +21,7 @@ public class DataManager : MonoBehaviour
     public List<GameObject> InGameCarPrefab = new List<GameObject>();
     public List<Sprite> mapImage = new List<Sprite>();
     public List<CarData> carDatas = new List<CarData>();
+    public List<Material> skyBoxs = new List<Material>();
 
 
     private void Start()
