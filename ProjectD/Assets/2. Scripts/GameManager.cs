@@ -15,13 +15,15 @@ public class GameManager : MonoBehaviour
         }
         DontDestroyOnLoad(gameObject);
     }
-    
+
     public string carName;
-    
+
     public GameMode gameMode;
     public GameState gameState;
+    public MapWeatherState mapWeatherState;
+    public MapTimeState mapTimeState;
 
-
+    public int Map;
     private void Start()
     {
         gameMode = GameMode.None;
@@ -29,7 +31,7 @@ public class GameManager : MonoBehaviour
     }
     private void Update()
     {
-        
+
     }
 
 
@@ -53,4 +55,19 @@ public enum GameState
     Lobby,
     Garage,
     InGame,
+}
+
+public enum MapWeatherState
+{
+    Spring,
+    Summer,
+    Winter,
+}
+public enum MapTimeState
+{
+    Cold_Night,
+    Cold_Sunset,
+    Deep_Dusk,
+    BlueSunset,
+    Night_MoonBurst,
 }

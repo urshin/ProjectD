@@ -5,6 +5,7 @@ using DG.Tweening;
 using TMPro;
 using AutoMoverPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LobbyUIHandler : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class LobbyUIHandler : MonoBehaviour
         SelectGameMode,
         StroyMode,
         VersusMode,
+        MapSelect,
         Option,
         
     }
@@ -23,23 +25,34 @@ public class LobbyUIHandler : MonoBehaviour
     [SerializeField] GameObject storyModePanel;
     [SerializeField] GameObject versusModePanel;
     [SerializeField] GameObject optionPanel;
-    [SerializeField] GameObject garagePanel;
+    [SerializeField] GameObject mapSelectPanel;
     [SerializeField] GameObject backBTN;
     [SerializeField] GameObject logo;
     [SerializeField] GameObject logocar;
     [SerializeField] GameObject startCar;
+    [SerializeField] GameObject[] maps;
     public LobbyState lobbystate;
 
     // Start is called before the first frame update
     void Start()
     {
-        lobbystate = LobbyState.Logo;
-        ShowingLogo();
-        GameManager.Instance.gameState = GameState.Lobby;
+        InitializedRestart();
 
 
 
     }
+
+    void InitializedRestart()
+    {
+        HideAllPanel();
+        lobbystate = LobbyState.Logo;
+        ShowingLogo();
+        GameManager.Instance.gameState = GameState.Lobby;
+        GameManager.Instance.Map = 4;
+        GameManager.Instance.mapWeatherState = MapWeatherState.Spring;
+        GameManager.Instance.mapTimeState = MapTimeState.Cold_Night;
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -61,9 +74,12 @@ public class LobbyUIHandler : MonoBehaviour
                 logocar.GetComponent<AutoMover>().StartMoving();
             }
         }
+
+        maps[0].transform.parent.Rotate(Vector3.up * 3 * Time.deltaTime); //맵 회전시키기
+
     }
 
-    
+
     public void MainPanel() 
     {
         HideAllPanel();
@@ -78,7 +94,7 @@ public class LobbyUIHandler : MonoBehaviour
         storyModePanel.SetActive(false);
         versusModePanel.SetActive(false);
         optionPanel.SetActive(false);
-        garagePanel.SetActive(false);
+        mapSelectPanel.SetActive(false);
         backBTN.SetActive(false);
     }
 
@@ -98,24 +114,92 @@ public class LobbyUIHandler : MonoBehaviour
     public void OnClickStoryBTN()
     {
         HideAllPanel();
-        storyModePanel.SetActive(true);
+        mapSelectPanel.SetActive(true);
         lobbystate = LobbyState.StroyMode;
 
-
+        MapSelect();
     }
     public void OnClickVersusBTN()
     {
         HideAllPanel();
-        versusModePanel.SetActive(true);
+        mapSelectPanel.SetActive(true);
         lobbystate = LobbyState.VersusMode;
-        startCar.GetComponent<AutoMover>().StartMoving();
-       StartCoroutine(  GoToGarage(3));
-
+        MapSelect();
 
 
 
     }
+    
+    public void MapSelect()
+    {
+        HideAllPanel();
+        logo.SetActive(false);
 
+        mapSelectPanel.SetActive(true);
+        lobbystate = LobbyState.MapSelect;
+    }
+
+   
+    public void OnClickMap(int num)
+    {
+        GameManager.Instance.Map = num;
+
+        foreach(var a in maps)
+        {
+            a.gameObject.SetActive(false);
+        }
+        
+        maps[num-4].gameObject.SetActive(true);
+    }
+
+    public void TimeDropDownEvent(TMP_Dropdown select)
+    {
+        string op = select.options[select.value].text;
+        switch (op)
+        {
+            case "Cold Night":
+                GameManager.Instance.mapTimeState = MapTimeState.Cold_Night;
+                break;
+            case "Cold Sunset":
+                GameManager.Instance.mapTimeState = MapTimeState.Cold_Sunset;
+                break;
+            case "Deep Dusk":
+                GameManager.Instance.mapTimeState = MapTimeState.Deep_Dusk;
+                break;
+            case "BlueSunset":
+                GameManager.Instance.mapTimeState = MapTimeState.BlueSunset;
+                break;
+            case "Night MoonBurst":
+                GameManager.Instance.mapTimeState = MapTimeState.Night_MoonBurst;
+                break;
+
+        }
+    }
+
+    public void WeatherDropDownEvent(TMP_Dropdown select)
+    {
+        string op = select.options[select.value].text;
+
+        switch (op)
+        {
+            case "Spring":
+                GameManager.Instance.mapWeatherState = MapWeatherState.Spring;
+                break;
+            case "Summer":
+                GameManager.Instance.mapWeatherState = MapWeatherState.Summer;
+                break;
+            case "Winter":
+                GameManager.Instance.mapWeatherState = MapWeatherState.Winter;
+                break;
+    
+
+        }
+    }
+
+    public void OnClickSelectCar()
+    {
+        StartCoroutine(  GoToGarage(3));
+    }
     public void OnClickOptionBTN()
     {
         HideAllPanel();
@@ -137,6 +221,7 @@ public class LobbyUIHandler : MonoBehaviour
  
     IEnumerator GoToGarage(float time)
     {
+        startCar.GetComponent<AutoMover>().StartMoving();
         yield return new WaitForSeconds(time);
         SceneManager.LoadScene("GarageScene1");
     }

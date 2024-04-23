@@ -19,7 +19,7 @@ public class DataManager : MonoBehaviour
 
     public List<GameObject> garageCarPrefab = new List<GameObject>();
     public List<GameObject> InGameCarPrefab = new List<GameObject>();
-    public List<GameObject> cardataObject = new List<GameObject>();
+    public List<Sprite> mapImage = new List<Sprite>();
     public List<CarData> carDatas = new List<CarData>();
 
 
@@ -28,6 +28,7 @@ public class DataManager : MonoBehaviour
         ParsingGarageCar();
         ParsingInGameCar();
         ParsingcarDatas();
+        ParsingMapData();
     }
 
 
@@ -49,6 +50,16 @@ public class DataManager : MonoBehaviour
         foreach (GameObject carPrefab in carPrefabs)
         {
             InGameCarPrefab.Add(carPrefab);
+        }
+    }
+    public void ParsingMapData()
+    {
+        Sprite[] mapImages = Resources.LoadAll<Sprite>("MapData\\Mapimage\\");
+
+        // 로드된 프리팹을 garageCarPrefab 리스트에 추가
+        foreach (Sprite mapSprite in mapImages)
+        {
+            mapImage.Add(mapSprite);
         }
     }
 
