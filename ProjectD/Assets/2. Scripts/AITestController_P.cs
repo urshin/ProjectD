@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -45,9 +46,12 @@ public class AITestController_P : MonoBehaviour
 
     [Header("AI Control Elements")]
     [SerializeField] float defaultRayDistance = 80f;
+    [SerializeField] float frontRayDistance = 120f;
     public float rayDistance;
     [Tooltip("Forward 방향이 레이를 쏠 방향이 되도록 배치할것")] [SerializeField] Transform leftHead;
     [Tooltip("Forward 방향이 레이를 쏠 방향이 되도록 배치할것")] [SerializeField] Transform rightHead;
+    [SerializeField] Transform leftFront;
+    [SerializeField] Transform rightFront;
     [SerializeField] TextMeshProUGUI leftDistanceText;
     [SerializeField] TextMeshProUGUI rightDistanceText;
     public float gasInput = 0;
@@ -119,9 +123,10 @@ public class AITestController_P : MonoBehaviour
     private void Update()
     {
         AnimationUpdate();
-        Debug.DrawRay(playerRB.transform.position, playerRB.transform.forward * rayDistance, Color.green);
         Debug.DrawRay(leftHead.position, leftHead.forward * defaultRayDistance, Color.red);
         Debug.DrawRay(rightHead.position, rightHead.forward * defaultRayDistance, Color.blue);
+        Debug.DrawRay(leftFront.position, leftFront.forward * frontRayDistance, Color.red);
+        Debug.DrawRay(rightFront.position, rightFront.forward * frontRayDistance, Color.blue);
     }
     private void FixedUpdate()
     {
@@ -151,7 +156,7 @@ public class AITestController_P : MonoBehaviour
     {
         //무게 중심 초기화
         playerRB = gameObject.GetComponent<Rigidbody>();
-        playerRB.centerOfMass = centerofmassObject.transform.position;
+        playerRB.centerOfMass = centerofmassObject.transform.localPosition;
         centerofmass = playerRB.centerOfMass;
 
         ApplyMotorWork(); //전륜 후륜 정하기
@@ -225,17 +230,20 @@ public class AITestController_P : MonoBehaviour
         // AI는 자동으로 스티어링을 계산
         // 스티어링 계산에는 gasInput 양 조절이 포함됨
         float leftDistance, rightDistance;
+        float leftFrontDistance, rightFrontDistance;
         int blockerLayer = 1 << LayerMask.NameToLayer("MapBlocker");
 
         // rayDistance를 속도에 비례하여 증감하도록 설정
-        rayDistance = KPH;
+        rayDistance = defaultRayDistance;
+        frontRayDistance = KPH;
+        Vector3 leftPoint = leftFront.forward * frontRayDistance;
+        Vector3 rightPoint = rightFront.forward * frontRayDistance;
 
         if(Physics.Raycast(leftHead.position, leftHead.forward, out RaycastHit leftInfo, Mathf.Infinity, blockerLayer))
         {
             if (leftInfo.transform.CompareTag("RoadBlocker"))
             {
                 leftDistance = leftInfo.distance;
-                Debug.Log("left");
             }
             else
             {
@@ -252,7 +260,6 @@ public class AITestController_P : MonoBehaviour
             if (rightInfo.transform.CompareTag("RoadBlocker"))
             {
                 rightDistance = rightInfo.distance;
-                Debug.Log("right");
             }
             else
             {
@@ -264,30 +271,92 @@ public class AITestController_P : MonoBehaviour
             rightDistance = defaultRayDistance;
         }
 
-        autoSteerValue = Mathf.Lerp(autoSteerValue, rightDistance - leftDistance, 0.3f);
-        //gasInput = Mathf.Lerp(1, -1, Mathf.Abs(autoSteerValue / rayDistance));
-        if(playerRB.velocity.magnitude < 3f)
+        if (Physics.Raycast(leftFront.position, leftFront.forward, out RaycastHit leftFrontInfo, frontRayDistance, blockerLayer))
         {
-            gasInput = 0.8f;
-        }
-        else if(Physics.Raycast(transform.position, transform.forward, out RaycastHit frontInfo, rayDistance, blockerLayer))
-        {
-            if (Mathf.Abs(autoSteerValue) < 0.3f)
+            if (leftFrontInfo.transform.CompareTag("RoadBlocker"))
             {
-                gasInput = Mathf.Lerp(0, -1, Mathf.Clamp01(Mathf.Abs(autoSteerValue / rayDistance)));
+                leftFrontDistance = leftFrontInfo.distance;
+                leftPoint = leftFrontInfo.point;
             }
             else
             {
-                gasInput = 0.8f;
+                leftFrontDistance = frontRayDistance;
             }
         }
         else
         {
+            leftFrontDistance = frontRayDistance;
+        }
+
+        if(Physics.Raycast(rightFront.position, rightFront.forward, out RaycastHit rightFrontInfo, frontRayDistance, blockerLayer))
+        {
+            if (rightFrontInfo.transform.CompareTag("RoadBlocker"))
+            {
+                rightFrontDistance = rightFrontInfo.distance;
+                rightPoint = rightFrontInfo.point;
+            }
+            else
+            {
+                rightFrontDistance = frontRayDistance;
+            }
+        }
+        else
+        {
+            rightFrontDistance = frontRayDistance;
+        }
+
+        //Debug.Log(Vector3.SignedAngle(rightPoint, leftPoint, transform.up));
+        Vector2 v2 = new Vector2(leftPoint.y - rightPoint.y, leftPoint.x - rightPoint.x);
+        //Debug.Log(Mathf.Atan2(v2.y, v2.x) * Mathf.Rad2Deg);
+
+        if((rightDistance - leftDistance > 0) && autoSteerValue < 0)
+        {
+            autoSteerValue = Mathf.Lerp(autoSteerValue, rightDistance - leftDistance, 0.1f);
+        }
+        else if ((rightDistance - leftDistance < 0) && autoSteerValue > 0)
+        {
+            autoSteerValue = Mathf.Lerp(autoSteerValue, rightDistance - leftDistance, 0.1f);
+        }
+        else
+        {
+            autoSteerValue = Mathf.Lerp(autoSteerValue, rightDistance - leftDistance, 0.3f);
+        }
+        gasInput = Mathf.Abs(Vector3.SignedAngle(rightPoint, leftPoint, transform.up));
+        //gasInput = Mathf.Lerp(1, -1, Mathf.Abs(autoSteerValue / rayDistance));
+        if (playerRB.velocity.magnitude < 3f)
+        {
+            gasInput = 0.8f;
+        }
+        //else if(Physics.Raycast(transform.position, transform.forward, out RaycastHit frontInfo, rayDistance, blockerLayer))
+        //{
+        //    if (Mathf.Abs(autoSteerValue) < 0.3f)
+        //    {
+        //        gasInput = Mathf.Lerp(0, -1, Mathf.Clamp01(Mathf.Abs(autoSteerValue / rayDistance)));
+        //    }
+        //    else
+        //    {
+        //        gasInput = 0.8f;
+        //    }
+        //}
+        else if ((rightFrontDistance < playerRB.velocity.magnitude * wheels[0].brakeBias) && (leftFrontDistance < playerRB.velocity.magnitude * wheels[0].brakeBias))
+        {
+            gasInput = Mathf.Lerp(gasInput, -1f, 0.6f);
+        }
+        else if (Mathf.Abs(gasInput) < 0.05f)
+        {
             gasInput = 1f;
         }
 
-        leftDistanceText.text = leftDistance.ToString();
-        rightDistanceText.text = rightDistance.ToString();
+        //Debug.Log(transform.eulerAngles.x);
+        if (Physics.Raycast(transform.position + Vector3.up, -transform.up, out RaycastHit roadInfo, 5f, blockerLayer))
+        {
+            //Debug.Log(Vector3.Reflect((-transform.up).normalized, roadInfo.normal));
+            //Debug.Log(roadInfo.normal);
+            Debug.Log(Vector3.Angle(transform.forward, roadInfo.normal));
+        }
+
+        //leftDistanceText.text = leftDistance.ToString();
+        //rightDistanceText.text = rightDistance.ToString();
     }
 
     [SerializeField] float slipAngle;
