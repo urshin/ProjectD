@@ -338,7 +338,7 @@ public class AITestController_P : MonoBehaviour
         //        gasInput = 0.8f;
         //    }
         //}
-        else if ((rightFrontDistance < playerRB.velocity.magnitude * wheels[0].brakeBias) && (leftFrontDistance < playerRB.velocity.magnitude * wheels[0].brakeBias))
+        else if ((rightFrontDistance < KPH * wheels[0].brakeBias) && (leftFrontDistance < KPH * wheels[0].brakeBias))
         {
             gasInput = Mathf.Lerp(gasInput, -1f, 0.6f);
         }
@@ -348,11 +348,27 @@ public class AITestController_P : MonoBehaviour
         }
 
         //Debug.Log(transform.eulerAngles.x);
-        if (Physics.Raycast(transform.position + Vector3.up, -transform.up, out RaycastHit roadInfo, 5f, blockerLayer))
+        //if (Physics.Raycast(transform.position + Vector3.up, transform.position - Vector3.up, out RaycastHit roadInfo, 5f, blockerLayer))
+        //{
+        //    //Debug.Log(Vector3.Reflect((-transform.up).normalized, roadInfo.normal));
+        //    //Debug.Log(roadInfo.normal);
+        //    //Debug.Log(Vector3.SignedAngle(Vector3.up, roadInfo.normal, transform.up));
+        //    //Vector3.Reflect()
+        //    Debug.Log(Vector3.Angle(transform.forward.normalized, roadInfo.normal));
+        //    Debug.DrawRay(transform.position, roadInfo.normal * 100f);
+        //    if(Vector3.Angle(Vector3.up, roadInfo.normal) > 3f)
+        //    {
+
+        //    }
+
+        //}
+
+        // 90보다 낮으면 오르막, 높으면 내리막을 가고있다고 판단
+        Debug.Log(Vector3.SignedAngle(transform.forward.normalized, Vector3.up, transform.forward.normalized));
+        float slopeAngle = (Vector3.SignedAngle(transform.forward.normalized, Vector3.up, transform.forward.normalized) - 90) * -1f;
+        if (slopeAngle > 0f)
         {
-            //Debug.Log(Vector3.Reflect((-transform.up).normalized, roadInfo.normal));
-            //Debug.Log(roadInfo.normal);
-            Debug.Log(Vector3.Angle(transform.forward, roadInfo.normal));
+            gasInput = Mathf.Lerp(gasInput, 1f, slopeAngle / 5f);
         }
 
         //leftDistanceText.text = leftDistance.ToString();
