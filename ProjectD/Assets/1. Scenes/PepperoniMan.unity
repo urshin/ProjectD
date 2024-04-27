@@ -132,7 +132,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 10378135}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LeftFront
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -165,7 +165,7 @@ GameObject:
   - component: {fileID: 18101625}
   - component: {fileID: 18101627}
   - component: {fileID: 18101626}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_radhose_FL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -334,7 +334,7 @@ GameObject:
   - component: {fileID: 19848926}
   - component: {fileID: 19848928}
   - component: {fileID: 19848927}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_hub_spindle_RR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -735,7 +735,7 @@ GameObject:
   - component: {fileID: 50403250}
   - component: {fileID: 50403252}
   - component: {fileID: 50403251}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_flank_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -941,7 +941,7 @@ GameObject:
   - component: {fileID: 56043384}
   - component: {fileID: 56043386}
   - component: {fileID: 56043385}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_radhose_FR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1274,7 +1274,7 @@ GameObject:
   - component: {fileID: 73687304}
   - component: {fileID: 73687306}
   - component: {fileID: 73687305}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_fuel_pipe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1357,7 +1357,7 @@ GameObject:
   - component: {fileID: 75229339}
   - component: {fileID: 75229341}
   - component: {fileID: 75229340}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_lowerarm_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1575,7 +1575,7 @@ GameObject:
   - component: {fileID: 86301176}
   - component: {fileID: 86301178}
   - component: {fileID: 86301177}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_skidplate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1907,7 +1907,7 @@ GameObject:
   - component: {fileID: 95661881}
   - component: {fileID: 95661883}
   - component: {fileID: 95661882}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_diff_F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1990,7 +1990,7 @@ GameObject:
   - component: {fileID: 96149279}
   - component: {fileID: 96149281}
   - component: {fileID: 96149280}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_fuel_tank_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2073,7 +2073,7 @@ GameObject:
   - component: {fileID: 100933887}
   - component: {fileID: 100933889}
   - component: {fileID: 100933888}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_headlight_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2159,7 +2159,7 @@ GameObject:
   - component: {fileID: 106368005}
   - component: {fileID: 106368007}
   - component: {fileID: 106368006}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_radiator_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2634,7 +2634,7 @@ GameObject:
   - component: {fileID: 141670484}
   - component: {fileID: 141670486}
   - component: {fileID: 141670485}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_upperarm_mount_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2856,7 +2856,7 @@ GameObject:
   - component: {fileID: 149497336}
   - component: {fileID: 149497338}
   - component: {fileID: 149497337}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_steer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2943,7 +2943,7 @@ GameObject:
   m_Component:
   - component: {fileID: 152096508}
   - component: {fileID: 152096509}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: State-Driven Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3036,7 +3036,7 @@ GameObject:
   - component: {fileID: 152573392}
   - component: {fileID: 152573394}
   - component: {fileID: 152573393}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_sideskirt_L_GTR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3431,7 +3431,7 @@ GameObject:
   - component: {fileID: 173239322}
   - component: {fileID: 173239324}
   - component: {fileID: 173239323}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_trunklid_stock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3849,7 +3849,7 @@ GameObject:
   - component: {fileID: 200601378}
   - component: {fileID: 200601380}
   - component: {fileID: 200601379}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_steeringrack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4298,7 +4298,7 @@ GameObject:
   - component: {fileID: 224719346}
   - component: {fileID: 224719348}
   - component: {fileID: 224719347}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_seat_FL_stig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4743,7 +4743,7 @@ GameObject:
   - component: {fileID: 242335230}
   - component: {fileID: 242335232}
   - component: {fileID: 242335231}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_swaybar_link_F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4909,7 +4909,7 @@ GameObject:
   - component: {fileID: 249056635}
   - component: {fileID: 249056637}
   - component: {fileID: 249056636}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_displayN
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4992,7 +4992,7 @@ GameObject:
   - component: {fileID: 254512859}
   - component: {fileID: 254512861}
   - component: {fileID: 254512860}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_transaxle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5076,7 +5076,7 @@ GameObject:
   - component: {fileID: 258338439}
   - component: {fileID: 258338441}
   - component: {fileID: 258338440}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_turbo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5242,7 +5242,7 @@ GameObject:
   - component: {fileID: 267759468}
   - component: {fileID: 267759470}
   - component: {fileID: 267759469}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_door_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5328,7 +5328,7 @@ GameObject:
   - component: {fileID: 286623015}
   - component: {fileID: 286623017}
   - component: {fileID: 286623016}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_downpipe_turbo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5631,7 +5631,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 309148154}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Lights
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5872,7 +5872,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 332523514}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LeftHead
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6208,7 +6208,7 @@ GameObject:
   - component: {fileID: 357786623}
   - component: {fileID: 357786625}
   - component: {fileID: 357786624}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_wheel1paint.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6377,7 +6377,7 @@ GameObject:
   - component: {fileID: 368360969}
   - component: {fileID: 368360971}
   - component: {fileID: 368360970}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_door_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6702,7 +6702,7 @@ GameObject:
   - component: {fileID: 387351209}
   - component: {fileID: 387351211}
   - component: {fileID: 387351210}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_wheel1paint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6944,7 +6944,7 @@ GameObject:
   - component: {fileID: 409734113}
   - component: {fileID: 409734115}
   - component: {fileID: 409734114}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_wheel1paint.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7118,7 +7118,7 @@ GameObject:
   - component: {fileID: 432710091}
   - component: {fileID: 432710093}
   - component: {fileID: 432710092}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_display7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7376,7 +7376,7 @@ GameObject:
   m_Component:
   - component: {fileID: 450636918}
   - component: {fileID: 450636919}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cam1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7449,7 +7449,7 @@ GameObject:
   - component: {fileID: 457578563}
   - component: {fileID: 457578565}
   - component: {fileID: 457578564}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_rear_subframe_A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7532,7 +7532,7 @@ GameObject:
   - component: {fileID: 467737299}
   - component: {fileID: 467737301}
   - component: {fileID: 467737300}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_dash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7710,7 +7710,7 @@ GameObject:
   - component: {fileID: 471401430}
   - component: {fileID: 471401432}
   - component: {fileID: 471401431}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_trunklid_glass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8118,7 +8118,7 @@ GameObject:
   - component: {fileID: 496112985}
   - component: {fileID: 496112987}
   - component: {fileID: 496112986}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_flank_hardtop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8296,7 +8296,7 @@ GameObject:
   - component: {fileID: 500281306}
   - component: {fileID: 500281308}
   - component: {fileID: 500281307}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_chargepipe_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8379,7 +8379,7 @@ GameObject:
   - component: {fileID: 506615478}
   - component: {fileID: 506615480}
   - component: {fileID: 506615479}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_mirror_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8673,7 +8673,7 @@ GameObject:
   - component: {fileID: 512301187}
   - component: {fileID: 512301189}
   - component: {fileID: 512301188}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_tierod_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8842,7 +8842,7 @@ GameObject:
   - component: {fileID: 520462610}
   - component: {fileID: 520462612}
   - component: {fileID: 520462611}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_driveshaft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9228,7 +9228,7 @@ GameObject:
   - component: {fileID: 550665284}
   - component: {fileID: 550665286}
   - component: {fileID: 550665285}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_upperarm_F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9311,7 +9311,7 @@ GameObject:
   - component: {fileID: 550881647}
   - component: {fileID: 550881649}
   - component: {fileID: 550881648}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_exhaust_turbo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9394,7 +9394,7 @@ GameObject:
   - component: {fileID: 551259237}
   - component: {fileID: 551259239}
   - component: {fileID: 551259238}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_display1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10549,7 +10549,7 @@ GameObject:
   - component: {fileID: 605532455}
   - component: {fileID: 605532457}
   - component: {fileID: 605532456}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_lowerarm_mount_F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10632,7 +10632,7 @@ GameObject:
   - component: {fileID: 610576028}
   - component: {fileID: 610576030}
   - component: {fileID: 610576029}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_mirror_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10798,7 +10798,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 616675088}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cam1Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10832,7 +10832,7 @@ GameObject:
   - component: {fileID: 623363046}
   - component: {fileID: 623363045}
   - component: {fileID: 623363044}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: cm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10926,7 +10926,7 @@ GameObject:
   - component: {fileID: 625380162}
   - component: {fileID: 625380164}
   - component: {fileID: 625380163}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_lowerarm_F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11008,7 +11008,7 @@ GameObject:
   m_Component:
   - component: {fileID: 638846169}
   - component: {fileID: 638846170}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11156,7 +11156,7 @@ GameObject:
   - component: {fileID: 672976239}
   - component: {fileID: 672976241}
   - component: {fileID: 672976240}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_lowerarm_mount_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11374,7 +11374,7 @@ GameObject:
   - component: {fileID: 689722601}
   - component: {fileID: 689722603}
   - component: {fileID: 689722602}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_intake_pipe_turbo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11542,7 +11542,7 @@ GameObject:
   - component: {fileID: 701508398}
   - component: {fileID: 701508400}
   - component: {fileID: 701508399}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_display3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11696,7 +11696,7 @@ GameObject:
   - component: {fileID: 718315131}
   - component: {fileID: 718315133}
   - component: {fileID: 718315132}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_sideskirt_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12037,7 +12037,7 @@ GameObject:
   - component: {fileID: 754201918}
   - component: {fileID: 754201920}
   - component: {fileID: 754201919}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_displayL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12120,7 +12120,7 @@ GameObject:
   - component: {fileID: 761274618}
   - component: {fileID: 761274620}
   - component: {fileID: 761274619}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_exhaust_tip_a
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12204,7 +12204,7 @@ GameObject:
   - component: {fileID: 762821912}
   - component: {fileID: 762821914}
   - component: {fileID: 762821913}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_swaybar_mount_F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12287,7 +12287,7 @@ GameObject:
   - component: {fileID: 762873314}
   - component: {fileID: 762873316}
   - component: {fileID: 762873315}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_rear_chassis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12370,7 +12370,7 @@ GameObject:
   - component: {fileID: 764569057}
   - component: {fileID: 764569059}
   - component: {fileID: 764569058}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_decals_gauges
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12684,7 +12684,7 @@ GameObject:
   - component: {fileID: 798643314}
   - component: {fileID: 798643316}
   - component: {fileID: 798643315}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_transfercase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12942,7 +12942,7 @@ GameObject:
   - component: {fileID: 815484253}
   - component: {fileID: 815484255}
   - component: {fileID: 815484254}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_intercooler_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13025,7 +13025,7 @@ GameObject:
   - component: {fileID: 826491707}
   - component: {fileID: 826491709}
   - component: {fileID: 826491708}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_battery
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13108,7 +13108,7 @@ GameObject:
   - component: {fileID: 835671533}
   - component: {fileID: 835671535}
   - component: {fileID: 835671534}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_wheel1paint.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13434,7 +13434,7 @@ GameObject:
   - component: {fileID: 847972261}
   - component: {fileID: 847972263}
   - component: {fileID: 847972262}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_swaybar_mount_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13602,7 +13602,7 @@ GameObject:
   - component: {fileID: 866714713}
   - component: {fileID: 866714712}
   - component: {fileID: 866714711}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TestEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13889,7 +13889,7 @@ GameObject:
   - component: {fileID: 884980682}
   - component: {fileID: 884980684}
   - component: {fileID: 884980683}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: amdb11_brakedisc_FR.004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14059,7 +14059,7 @@ GameObject:
   - component: {fileID: 923575869}
   - component: {fileID: 923575871}
   - component: {fileID: 923575870}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_flank_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14144,7 +14144,7 @@ GameObject:
   - component: {fileID: 924732364}
   - component: {fileID: 924732366}
   - component: {fileID: 924732365}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_tierod_F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14459,7 +14459,7 @@ GameObject:
   - component: {fileID: 947957555}
   - component: {fileID: 947957557}
   - component: {fileID: 947957556}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_hub_F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14542,7 +14542,7 @@ GameObject:
   - component: {fileID: 949079562}
   - component: {fileID: 949079564}
   - component: {fileID: 949079563}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_hub_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14758,7 +14758,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 951280080}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cam2Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14926,7 +14926,7 @@ GameObject:
   - component: {fileID: 955927274}
   - component: {fileID: 955927276}
   - component: {fileID: 955927275}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_engine_v8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15011,7 +15011,7 @@ GameObject:
   - component: {fileID: 972035851}
   - component: {fileID: 972035853}
   - component: {fileID: 972035852}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15355,7 +15355,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1027078956}
   - component: {fileID: 1027078957}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15427,7 +15427,7 @@ GameObject:
   - component: {fileID: 1028227184}
   - component: {fileID: 1028227186}
   - component: {fileID: 1028227185}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_bumper_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15514,7 +15514,7 @@ GameObject:
   - component: {fileID: 1029581813}
   - component: {fileID: 1029581815}
   - component: {fileID: 1029581814}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_radhose_M
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15680,7 +15680,7 @@ GameObject:
   - component: {fileID: 1036093825}
   - component: {fileID: 1036093827}
   - component: {fileID: 1036093826}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_rear_heat_shield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15763,7 +15763,7 @@ GameObject:
   - component: {fileID: 1037965334}
   - component: {fileID: 1037965336}
   - component: {fileID: 1037965335}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_doorpanel_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15849,7 +15849,7 @@ GameObject:
   - component: {fileID: 1051948032}
   - component: {fileID: 1051948034}
   - component: {fileID: 1051948033}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_fuel_tank_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15932,7 +15932,7 @@ GameObject:
   - component: {fileID: 1055296980}
   - component: {fileID: 1055296982}
   - component: {fileID: 1055296981}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_frunk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16016,7 +16016,7 @@ GameObject:
   - component: {fileID: 1055699026}
   - component: {fileID: 1055699028}
   - component: {fileID: 1055699027}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_displayP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16099,7 +16099,7 @@ GameObject:
   - component: {fileID: 1072964559}
   - component: {fileID: 1072964561}
   - component: {fileID: 1072964560}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_seat_FR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16356,7 +16356,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1084335601}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RightFront
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16480,7 +16480,7 @@ GameObject:
   - component: {fileID: 1090058118}
   - component: {fileID: 1090058120}
   - component: {fileID: 1090058119}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_airbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16646,7 +16646,7 @@ GameObject:
   - component: {fileID: 1106535359}
   - component: {fileID: 1106535361}
   - component: {fileID: 1106535360}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_coilover_F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16927,7 +16927,7 @@ GameObject:
   - component: {fileID: 1124073469}
   - component: {fileID: 1124073471}
   - component: {fileID: 1124073470}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_displayD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17010,7 +17010,7 @@ GameObject:
   - component: {fileID: 1132100220}
   - component: {fileID: 1132100222}
   - component: {fileID: 1132100221}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_rear_subframe_B
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17176,7 +17176,7 @@ GameObject:
   - component: {fileID: 1142635520}
   - component: {fileID: 1142635522}
   - component: {fileID: 1142635521}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_seat_FL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17268,7 +17268,7 @@ GameObject:
   - component: {fileID: 1143501601}
   - component: {fileID: 1143501603}
   - component: {fileID: 1143501602}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: amdb11_brakedisc_FR.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17355,7 +17355,7 @@ GameObject:
   - component: {fileID: 1143982167}
   - component: {fileID: 1143982169}
   - component: {fileID: 1143982168}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_halfshaft_FR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17742,7 +17742,7 @@ GameObject:
   - component: {fileID: 1160216112}
   - component: {fileID: 1160216114}
   - component: {fileID: 1160216113}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_headlightglass_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17907,7 +17907,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1174597566}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RightHead
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18023,7 +18023,7 @@ GameObject:
   - component: {fileID: 1190239718}
   - component: {fileID: 1190239720}
   - component: {fileID: 1190239719}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_front_subframe_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18105,7 +18105,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1190385533}
   - component: {fileID: 1190385534}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18517,7 +18517,7 @@ GameObject:
   - component: {fileID: 1210013607}
   - component: {fileID: 1210013609}
   - component: {fileID: 1210013608}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_sideskirt_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18640,7 +18640,7 @@ GameObject:
   - component: {fileID: 1224562787}
   - component: {fileID: 1224562789}
   - component: {fileID: 1224562788}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_headlightglass_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18760,7 +18760,7 @@ GameObject:
   - component: {fileID: 1233417272}
   - component: {fileID: 1233417274}
   - component: {fileID: 1233417273}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_hub_spindle_FR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18842,7 +18842,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1234943568}
   - component: {fileID: 1234943569}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18914,7 +18914,7 @@ GameObject:
   - component: {fileID: 1238738396}
   - component: {fileID: 1238738398}
   - component: {fileID: 1238738397}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_front_shield_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19198,7 +19198,7 @@ GameObject:
   - component: {fileID: 1247455022}
   - component: {fileID: 1247455024}
   - component: {fileID: 1247455023}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_tierod_mount_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19472,7 +19472,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1290565874}
   - component: {fileID: 1290565875}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cam2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19543,7 +19543,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1296237854}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: CenterOfMass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19875,7 +19875,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1323532585}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Wheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20107,7 +20107,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1336889697}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WheelCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20310,7 +20310,7 @@ GameObject:
   - component: {fileID: 1350358832}
   - component: {fileID: 1350358834}
   - component: {fileID: 1350358833}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_display2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20686,7 +20686,7 @@ GameObject:
   - component: {fileID: 1371839192}
   - component: {fileID: 1371839194}
   - component: {fileID: 1371839193}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: amdb11_brakedisc_FR.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21011,7 +21011,7 @@ GameObject:
   - component: {fileID: 1384109702}
   - component: {fileID: 1384109704}
   - component: {fileID: 1384109703}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_radhose_F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21186,7 +21186,7 @@ GameObject:
   - component: {fileID: 1385953681}
   - component: {fileID: 1385953683}
   - component: {fileID: 1385953682}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_hub_link_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21269,7 +21269,7 @@ GameObject:
   - component: {fileID: 1389414105}
   - component: {fileID: 1389414107}
   - component: {fileID: 1389414106}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_chargepipe_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21617,7 +21617,7 @@ GameObject:
   - component: {fileID: 1416165119}
   - component: {fileID: 1416165118}
   - component: {fileID: 1416165117}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: cm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21711,7 +21711,7 @@ GameObject:
   - component: {fileID: 1424030469}
   - component: {fileID: 1424030471}
   - component: {fileID: 1424030470}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_radhose_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21865,7 +21865,7 @@ GameObject:
   - component: {fileID: 1437961237}
   - component: {fileID: 1437961239}
   - component: {fileID: 1437961238}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_display6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22118,7 +22118,7 @@ GameObject:
   - component: {fileID: 1461301318}
   - component: {fileID: 1461301320}
   - component: {fileID: 1461301319}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_doorpanel_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22287,7 +22287,7 @@ GameObject:
   - component: {fileID: 1478957994}
   - component: {fileID: 1478957996}
   - component: {fileID: 1478957995}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_doorglass_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22454,7 +22454,7 @@ GameObject:
   - component: {fileID: 1491408451}
   - component: {fileID: 1491408453}
   - component: {fileID: 1491408452}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_display5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22620,7 +22620,7 @@ GameObject:
   - component: {fileID: 1521518889}
   - component: {fileID: 1521518891}
   - component: {fileID: 1521518890}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_halfshaft_RR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22703,7 +22703,7 @@ GameObject:
   - component: {fileID: 1523159733}
   - component: {fileID: 1523159735}
   - component: {fileID: 1523159734}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_upperarm_mount_F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22786,7 +22786,7 @@ GameObject:
   - component: {fileID: 1527450712}
   - component: {fileID: 1527450714}
   - component: {fileID: 1527450713}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: amdb11_brakedisc_FR.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22873,7 +22873,7 @@ GameObject:
   - component: {fileID: 1528571037}
   - component: {fileID: 1528571039}
   - component: {fileID: 1528571038}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_halfshaft_FL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22961,6 +22961,38 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RoadBlocker
       objectReference: {fileID: 0}
+    - target: {fileID: 1128844518470032, guid: 326a840eb29978f4f9137e3a7da30669, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1162949722082972, guid: 326a840eb29978f4f9137e3a7da30669, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1252897584378894, guid: 326a840eb29978f4f9137e3a7da30669, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1287930094306508, guid: 326a840eb29978f4f9137e3a7da30669, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1308019366066798, guid: 326a840eb29978f4f9137e3a7da30669, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1400794564707310, guid: 326a840eb29978f4f9137e3a7da30669, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1416756715245866, guid: 326a840eb29978f4f9137e3a7da30669, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1431385812206508, guid: 326a840eb29978f4f9137e3a7da30669, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 1455272826051700, guid: 326a840eb29978f4f9137e3a7da30669, type: 3}
       propertyPath: m_Name
       value: Track04_autumn
@@ -22968,6 +23000,42 @@ PrefabInstance:
     - target: {fileID: 1455272826051700, guid: 326a840eb29978f4f9137e3a7da30669, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1461242504147668, guid: 326a840eb29978f4f9137e3a7da30669, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1508444285355038, guid: 326a840eb29978f4f9137e3a7da30669, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1528634066028622, guid: 326a840eb29978f4f9137e3a7da30669, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1673202224407240, guid: 326a840eb29978f4f9137e3a7da30669, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1675008949761420, guid: 326a840eb29978f4f9137e3a7da30669, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1704575296750172, guid: 326a840eb29978f4f9137e3a7da30669, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1837156633766940, guid: 326a840eb29978f4f9137e3a7da30669, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1886778566976690, guid: 326a840eb29978f4f9137e3a7da30669, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1914446083424452, guid: 326a840eb29978f4f9137e3a7da30669, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4189493231793738, guid: 326a840eb29978f4f9137e3a7da30669, type: 3}
       propertyPath: m_RootOrder
@@ -23473,7 +23541,7 @@ GameObject:
   - component: {fileID: 1555944852}
   - component: {fileID: 1555944854}
   - component: {fileID: 1555944853}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_hub_spindle_FL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23639,7 +23707,7 @@ GameObject:
   - component: {fileID: 1579382404}
   - component: {fileID: 1579382406}
   - component: {fileID: 1579382405}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_rear_wheelhouse_stock_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23722,7 +23790,7 @@ GameObject:
   - component: {fileID: 1584796262}
   - component: {fileID: 1584796264}
   - component: {fileID: 1584796263}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_displayR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23806,7 +23874,7 @@ GameObject:
   - component: {fileID: 1587994786}
   - component: {fileID: 1587994785}
   - component: {fileID: 1587994784}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: cm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24088,7 +24156,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1603854496}
   - component: {fileID: 1603854497}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: CamPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24228,7 +24296,7 @@ GameObject:
   - component: {fileID: 1606607291}
   - component: {fileID: 1606607293}
   - component: {fileID: 1606607292}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_central_shield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24410,7 +24478,7 @@ GameObject:
   - component: {fileID: 1627470767}
   - component: {fileID: 1627470769}
   - component: {fileID: 1627470768}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24572,7 +24640,7 @@ GameObject:
   - component: {fileID: 1631232102}
   - component: {fileID: 1631232104}
   - component: {fileID: 1631232103}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_front_subframe_A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25071,7 +25139,7 @@ GameObject:
   - component: {fileID: 1668818687}
   - component: {fileID: 1668818689}
   - component: {fileID: 1668818688}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_front_subframe_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25191,7 +25259,7 @@ GameObject:
   - component: {fileID: 1670059786}
   - component: {fileID: 1670059788}
   - component: {fileID: 1670059787}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_halfshaft_RL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25620,7 +25688,7 @@ GameObject:
   - component: {fileID: 1678790317}
   - component: {fileID: 1678790319}
   - component: {fileID: 1678790318}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_swaybar_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25789,7 +25857,7 @@ GameObject:
   - component: {fileID: 1680682417}
   - component: {fileID: 1680682419}
   - component: {fileID: 1680682418}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_swaybar_F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25872,7 +25940,7 @@ GameObject:
   - component: {fileID: 1681797608}
   - component: {fileID: 1681797610}
   - component: {fileID: 1681797609}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_sideskirt_R_GTR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26259,7 +26327,7 @@ GameObject:
   - component: {fileID: 1697029791}
   - component: {fileID: 1697029793}
   - component: {fileID: 1697029792}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_doorglass_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26478,7 +26546,7 @@ GameObject:
   - component: {fileID: 1700270782}
   - component: {fileID: 1700270784}
   - component: {fileID: 1700270783}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_display4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26561,7 +26629,7 @@ GameObject:
   - component: {fileID: 1700590503}
   - component: {fileID: 1700590505}
   - component: {fileID: 1700590504}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_radiator_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27002,7 +27070,7 @@ GameObject:
   - component: {fileID: 1730481511}
   - component: {fileID: 1730481513}
   - component: {fileID: 1730481512}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_coolantlines_brackets
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27257,7 +27325,7 @@ GameObject:
   - component: {fileID: 1760750434}
   - component: {fileID: 1760750436}
   - component: {fileID: 1760750435}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_swaybar_link_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27423,7 +27491,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1763513431}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cam3Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27542,7 +27610,7 @@ GameObject:
   - component: {fileID: 1778087705}
   - component: {fileID: 1778087707}
   - component: {fileID: 1778087706}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_bumper_F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27776,7 +27844,7 @@ GameObject:
   - component: {fileID: 1788239433}
   - component: {fileID: 1788239435}
   - component: {fileID: 1788239434}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_roof_hardtop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28036,7 +28104,7 @@ GameObject:
   - component: {fileID: 1807229317}
   - component: {fileID: 1807229319}
   - component: {fileID: 1807229318}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_front_shield_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28202,7 +28270,7 @@ GameObject:
   - component: {fileID: 1833131499}
   - component: {fileID: 1833131501}
   - component: {fileID: 1833131500}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28288,7 +28356,7 @@ GameObject:
   - component: {fileID: 1866725604}
   - component: {fileID: 1866725606}
   - component: {fileID: 1866725605}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_hub_spindle_RL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28761,7 +28829,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1921588022}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28912,7 +28980,7 @@ GameObject:
   - component: {fileID: 1924840516}
   - component: {fileID: 1924840518}
   - component: {fileID: 1924840517}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_fender_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29082,7 +29150,7 @@ GameObject:
   - component: {fileID: 1945114591}
   - component: {fileID: 1945114593}
   - component: {fileID: 1945114592}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_hood
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29168,7 +29236,7 @@ GameObject:
   - component: {fileID: 1948429096}
   - component: {fileID: 1948429098}
   - component: {fileID: 1948429097}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_steeringrack_boot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29334,7 +29402,7 @@ GameObject:
   - component: {fileID: 1952643720}
   - component: {fileID: 1952643722}
   - component: {fileID: 1952643721}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_rear_wheelhouse_stock_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29669,7 +29737,7 @@ GameObject:
   - component: {fileID: 1975093105}
   - component: {fileID: 1975093107}
   - component: {fileID: 1975093106}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_headlight_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30316,7 +30384,7 @@ GameObject:
   - component: {fileID: 2014543728}
   - component: {fileID: 2014543730}
   - component: {fileID: 2014543729}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_rear_spoiler_GTR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30483,7 +30551,7 @@ GameObject:
   - component: {fileID: 2024595480}
   - component: {fileID: 2024595482}
   - component: {fileID: 2024595481}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_header_turbo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30566,7 +30634,7 @@ GameObject:
   - component: {fileID: 2030932045}
   - component: {fileID: 2030932047}
   - component: {fileID: 2030932046}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_fender_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30652,7 +30720,7 @@ GameObject:
   - component: {fileID: 2034541210}
   - component: {fileID: 2034541212}
   - component: {fileID: 2034541211}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31403,7 +31471,7 @@ GameObject:
   - component: {fileID: 2093012011}
   - component: {fileID: 2093012013}
   - component: {fileID: 2093012012}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_windshield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31485,7 +31553,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2100842397}
   - component: {fileID: 2100842398}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cam3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31558,7 +31626,7 @@ GameObject:
   - component: {fileID: 2111403241}
   - component: {fileID: 2111403243}
   - component: {fileID: 2111403242}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31644,7 +31712,7 @@ GameObject:
   - component: {fileID: 2116196428}
   - component: {fileID: 2116196430}
   - component: {fileID: 2116196429}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_intercooler_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31727,7 +31795,7 @@ GameObject:
   - component: {fileID: 2133460562}
   - component: {fileID: 2133460564}
   - component: {fileID: 2133460563}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_upperarm_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31810,7 +31878,7 @@ GameObject:
   - component: {fileID: 2138547414}
   - component: {fileID: 2138547416}
   - component: {fileID: 2138547415}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: euansenna_coilover_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
