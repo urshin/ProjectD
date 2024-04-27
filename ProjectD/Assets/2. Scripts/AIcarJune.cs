@@ -6,6 +6,8 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
+
 
 
 
@@ -40,7 +42,7 @@ public class AIcarJune : MonoBehaviour
 
     [Header("About UI")]
     // 스티어링 슬라이더
-    public Slider steerSlider;
+    public UnityEngine.UI. Slider steerSlider;
 
 
     [Header("Handling")]
@@ -136,10 +138,7 @@ public class AIcarJune : MonoBehaviour
         {
             AutoGear();
         }
-        else if (transmission == Transmission.Manual_Transmission)
-        {
-            ManualGear();
-        }
+      
 
 
 
@@ -160,36 +159,64 @@ public class AIcarJune : MonoBehaviour
     [SerializeField] GameObject RightRayPoint;
     [SerializeField] float WallhitRayRatio;
     [SerializeField] LayerMask detectedLayer;
-
-
-    public void AIupdate()
+    [SerializeField]
+    Transform[] wallCheckPoint;
+    Transform steerRayPoint;
+    public void WallCheck()
     {
-        gas.text = gasInput.ToString();
-        if (Input.GetKey(KeyCode.W))
+        
+        
+        Ray leftray = new Ray(wallCheckPoint[0].position, Vector3.forward);
+        Ray rightray = new Ray(wallCheckPoint[1].position, Vector3.forward);
+
+        RaycastHit leftwallhit;
+        RaycastHit rightwallhit;
+
+        float leftDis = 0;
+        float rightDis = 0;
+   
+
+        if (Physics.Raycast(leftray, out leftwallhit, currentRayLength, detectedLayer))
         {
-            gasInput = Mathf.Lerp(gasInput, 1, 1);
+            leftDis = leftwallhit.distance;
         }
-        else if (Input.GetKey(KeyCode.S))
+        if (Physics.Raycast(rightray, out rightwallhit, currentRayLength, detectedLayer))
         {
-            gasInput = Mathf.Lerp(gasInput, -1, 1);
+            rightDis = rightwallhit.distance;
+        }
+        
+        if(leftDis > rightDis)
+        {
+            steerRayPoint = wallCheckPoint[1];
+        }
+        else if(rightDis > leftDis)
+        {
+            steerRayPoint = wallCheckPoint[0];
         }
         else
         {
-            gasInput = 0;
+            steerRayPoint = raypoint.transform;
         }
+
+
+      
+    }
+
+    public void AIupdate()
+    {
+        WallCheck();
         gas.text = playerRB.velocity.magnitude.ToString();
 
         // 움직이는 속도에 비례하여 레이의 길이 증가
         currentRayLength = playerRB.velocity.magnitude * raySensitive;
 
         // 레이를 쏘는 방향 설정
-        //Vector3 rayDirection = Quaternion.Euler(0, transform.eulerAngles.y, 0) * Vector3.forward;
-        Vector3 rayDirection =  raypoint.transform.forward;
-        Ray ray = new Ray(raypoint.transform.position, rayDirection);
+        Vector3 rayDirection = steerRayPoint.forward;
+        Ray ray = new Ray(steerRayPoint.position, rayDirection);
 
 
         // 레이를 그리기 위한 디버그 라인
-        Debug.DrawRay(ray.origin, ray.direction * (currentRayLength+2), Color.red);
+        Debug.DrawRay(ray.origin, ray.direction * (currentRayLength + 2), Color.red);
 
         // 레이캐스트로 충돌 검사
         RaycastHit hit;
@@ -207,8 +234,8 @@ public class AIcarJune : MonoBehaviour
             Vector3 leftRayDirection = Quaternion.Euler(0, -90, 0) * rayDirection;
             Vector3 rightRayDirection = Quaternion.Euler(0, 90, 0) * rayDirection;
 
-            Vector3 direction = hit.point - raypoint.transform.position;
-            Vector3 twoThirdsPoint = raypoint.transform.position + (direction * 9f / 10f);
+            Vector3 direction = hit.point - steerRayPoint.position;
+            Vector3 twoThirdsPoint = steerRayPoint.position + (direction * 9f / 10f);
 
             Ray leftRay = new Ray(twoThirdsPoint, leftRayDirection);
             Ray rightRay = new Ray(twoThirdsPoint, rightRayDirection);
@@ -222,14 +249,14 @@ public class AIcarJune : MonoBehaviour
             if (Physics.Raycast(leftRay, out leftHit, currentRayLength / 2, detectedLayer))
             {
                 leftRayDistance = leftHit.distance;
-                Debug.DrawRay(leftRay.origin, leftRay.direction * leftRayDistance, Color.blue);
             }
 
             if (Physics.Raycast(rightRay, out rightHit, currentRayLength / 2, detectedLayer))
             {
                 rightRayDistance = rightHit.distance;
-                Debug.DrawRay(rightRay.origin, rightRay.direction * rightRayDistance, Color.green);
             }
+            Debug.DrawRay(leftRay.origin, leftRay.direction * leftRayDistance, Color.blue);
+            Debug.DrawRay(rightRay.origin, rightRay.direction * rightRayDistance, Color.green);
 
             if (leftRayDistance > rightRayDistance)
             {
@@ -244,57 +271,136 @@ public class AIcarJune : MonoBehaviour
         }
         else
         {
-            gasInput = 1;
 
-            Vector3 leftwallrayDirection = Vector3.forward;
-            Vector3 rightwallrayDirection = Vector3.forward;
 
-            Ray leftray = new Ray(LeftRayPoint.transform.position, Quaternion.Euler(0, -45, 0) * leftwallrayDirection);
-            Ray rightray = new Ray(RightRayPoint.transform.position, Quaternion.Euler(0, 45, 0) * rightwallrayDirection);
+            Ray leftray = new Ray(LeftRayPoint.transform.position, Quaternion.Euler(0, -45, 0) * LeftRayPoint.transform.forward);
+            Ray rightray = new Ray(RightRayPoint.transform.position, Quaternion.Euler(0, 45, 0) * RightRayPoint.transform.forward);
 
             RaycastHit leftwallhit;
             RaycastHit rightwallhit;
 
-            float leftDis = 0;
-            float rightDis = 0;
             float rayDis = 1;
 
             if (Physics.Raycast(leftray, out leftwallhit, rayDis, detectedLayer))
             {
-                leftDis = leftwallhit.distance;
-                autoHandle = Mathf.Lerp(autoHandle, 400, 0.08f);
+                if (leftwallhit.distance > 0)
+                {
+
+                    autoHandle = Mathf.Lerp(autoHandle, 180, 0.04f); 
+                    print("왼");
+                }      
             }
-            else if (Physics.Raycast(rightray, out rightwallhit, rayDis, detectedLayer))
+         
+
+            if (Physics.Raycast(rightray, out rightwallhit, rayDis, detectedLayer))
             {
-                rightDis = rightwallhit.distance;
-                autoHandle = Mathf.Lerp(autoHandle, -400, 0.08f);
+                if(rightwallhit.distance>0)
+                {
+                    autoHandle = Mathf.Lerp(autoHandle, -180, 0.04f); 
+                    print("오른");
+                }
             }
-            else
-            {
-                rightDis = 0;
-                autoHandle = Mathf.Lerp(autoHandle, 0, 0.1f);
-            }
+            autoHandle = Mathf.Lerp(autoHandle, 0, 0.1f);
 
             // 레이를 시각적으로 보여주기 위한 디버깅용 코드
             Debug.DrawRay(LeftRayPoint.transform.position, Quaternion.Euler(0, -45, 0) * LeftRayPoint.transform.forward * (rayDis), Color.red);
             Debug.DrawRay(RightRayPoint.transform.position, Quaternion.Euler(0, 45, 0) * RightRayPoint.transform.forward * (rayDis), Color.red);
         }
 
+        Autogas();
     }
 
-    public float WallAngel(RaycastHit hit, Vector3 rayDirection)
+    [SerializeField] AnimationCurve GasCurve;
+    [SerializeField] float GasRayLength;
+    public void Autogas()
     {
-        // 레이가 히트했을 때 표면의 노멀 벡터를 얻습니다.
-        Vector3 surfaceNormal = hit.normal;
+        float gas = playerRB.velocity.magnitude * GasRayLength;
+
+        RaycastHit leftHit;
+        RaycastHit rightHit;
+        Ray leftray = new Ray(LeftRayPoint.transform.position, LeftRayPoint.transform.forward);
+        Ray rightray = new Ray(RightRayPoint.transform.position, RightRayPoint.transform.forward);
+        Debug.DrawRay(LeftRayPoint.transform.position, LeftRayPoint.transform.forward * (gas + 2), Color.black);
+        Debug.DrawRay(RightRayPoint.transform.position, RightRayPoint.transform.forward * (gas + 2), Color.black);
+        float leftDistance = 0;
+        float rightDistance = 0;
+
+        if (Physics.Raycast(leftray, out leftHit, (gas + 2), detectedLayer))
+        {
+            leftDistance = leftHit.distance;
+
+        }
+        if (Physics.Raycast(rightray, out rightHit, (gas + 2), detectedLayer))
+        {
+            rightDistance = rightHit.distance;
 
 
-        // y축을 제외한 수평 기준의 노멀 벡터를 얻습니다.
-        Vector3 horizontalNormal = new Vector3(surfaceNormal.x, 0, surfaceNormal.z).normalized;
+        }
 
+        Vector3 shortRayHitPoint;
+        Vector3 longRayHitPoint;
 
-        // 수평 기준으로 노멀 벡터와의 각도를 구합니다.
-        float angle = Vector3.SignedAngle(rayDirection, horizontalNormal, Vector3.up);
-        return angle;
+        if (leftDistance < rightDistance)
+        {
+            shortRayHitPoint = leftray.origin + LeftRayPoint.transform.forward * leftDistance;
+            longRayHitPoint = rightray.origin + RightRayPoint.transform.forward * rightDistance;
+        }
+        else if (rightDistance < leftDistance)
+        {
+            shortRayHitPoint = rightray.origin + RightRayPoint.transform.forward * rightDistance;
+            longRayHitPoint = leftray.origin + LeftRayPoint.transform.forward * leftDistance;
+        }
+        else
+        {
+            shortRayHitPoint = Vector3.zero;
+            longRayHitPoint = Vector3.zero;
+        }
+        if (shortRayHitPoint != Vector3.zero && longRayHitPoint != Vector3.zero)
+        {
+            Vector3 directionVector = (longRayHitPoint - shortRayHitPoint).normalized;
+            float angle = Vector3.Angle(directionVector, LeftRayPoint.transform.forward);
+           // Debug.Log(GasCurve.Evaluate(angle));
+            gasInput = GasCurve.Evaluate(angle);
+
+        }
+        else
+        {
+            gasInput = Mathf.Lerp(gasInput, 1, 0.1f);
+        }
+        if (playerRB.velocity.magnitude * raySensitive > gas)
+        {
+
+        }
+
+        Debug.DrawLine(shortRayHitPoint, longRayHitPoint, Color.red);
+        BrakeTrigger();
+    }
+
+    public float brakeDistance = 5.0f; // 브레이크를 시작할 거리
+    public float brakeSensitive;
+
+    private float currentSpeed; // 현재 속도
+    public void BrakeTrigger()
+    {
+        brakeDistance = playerRB.velocity.magnitude;
+        currentSpeed = playerRB.velocity.magnitude;
+        RaycastHit brakeRayHit;
+
+        Ray brakeRay = new Ray(steerRayPoint.position, steerRayPoint.forward);
+
+        if (Physics.Raycast(brakeRay, out brakeRayHit))
+        {
+            // 벽까지의 남은 거리 계산
+            float distanceToWall = brakeRayHit.distance;
+
+            // 브레이크 시작 거리보다 가까우면 브레이크 입력
+            if (distanceToWall + brakeSensitive < brakeDistance && currentSpeed > 0)
+            {
+                gasInput = Mathf.Lerp(gasInput , -1 , 0.4f);
+            }
+
+        }
+
     }
 
     public void GetInput() //인풋 값 받기
@@ -599,68 +705,6 @@ public class AIcarJune : MonoBehaviour
             currentGear = 1;
         }
     }
-    //manual
-    private void ManualGear()
-    {
-        // 변속이 너무 빠르게 일어나지 않도록 지연 시간을 확인
-        if (Time.time - lastShift > shiftDelay)
-        {
-            // 상승 변속
-            if (Input.GetKey(KeyCode.E))
-            {
-                // 1기어에서 단순히 회전 중인 경우 상승 변속하지 않음
-                // 또는 1기어에서 15km/h 이상 이동 중인 경우에만 상승 변속합니다.
-                if (Mathf.RoundToInt(currentGear) < gearRatiosArray.Length)
-                {
-                    // 마지막 변속 시간을 기록합니다.
-                    lastGear = Mathf.RoundToInt(currentGear);
-                    // 상승 변속할 기어를 설정합니다.
-                    targetGear = lastGear + 1;
-                    // 마지막 변속 시간을 기록하고, 변속 중임을 표시합니다.
-                    lastShift = Time.time;
-                    shifting = true;
-                }
-            }
-            // 하락 변속
-            else if (Input.GetKey(KeyCode.Q))
-            {
-                if (Mathf.RoundToInt(currentGear) > 1)
-                {
-
-                    // 마지막 변속 시간을 기록합니다.
-                    lastGear = Mathf.RoundToInt(currentGear);
-                    // 하락 변속할 기어를 설정합니다.
-                    targetGear = lastGear - 1;
-                    // 마지막 변속 시간을 기록하고, 변속 중임을 표시합니다.
-                    lastShift = Time.time;
-                    shifting = true;
-                }
-
-            }
-        }
-
-        // 변속 중인 경우
-        if (shifting)
-        {
-            // 시간에 따른 보간값을 계산하여 현재 기어를 조정합니다.
-            float lerpVal = (Time.time - lastShift) / shiftTime;
-            currentGear = Mathf.Lerp(lastGear, targetGear, lerpVal);
-            // 보간이 완료되면 변속 중 상태를 해제합니다.
-            if (lerpVal >= 1f)
-                shifting = false;
-        }
-
-        // 기어 범위를 벗어나지 않도록 클램핑합니다.
-        if (currentGear >= gearRatiosArray.Length)
-        {
-            currentGear = gearRatiosArray.Length - 1;
-        }
-        else if (currentGear < 1)
-        {
-            currentGear = 1;
-        }
-    }
-
 
 
     private void friction() //마찰 계산
