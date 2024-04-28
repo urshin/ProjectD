@@ -1,8 +1,10 @@
+using DG.Tweening.Core.Easing;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Unity.Burst.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -151,8 +153,9 @@ public class AITestJune : MonoBehaviour
 
     [SerializeField] float frontDetectedSensitive; // 속력에 따른 앞 거리 배율
     [SerializeField] float frontDetectedMinSensitive; // 최소 감지
-    [SerializeField] float curruntRayVelocity; // 속력에 따른 앞 거리 감지
     [SerializeField] float steeringDetectedSensitive; // 속력에 따른 앞 거리 감지
+    [SerializeField] float brakeSensitive;
+    [SerializeField] float brakeMinDistance;
 
     //각 레이 시작 지점
     [SerializeField] Transform frontMiddleRaySP;
@@ -162,187 +165,147 @@ public class AITestJune : MonoBehaviour
     [SerializeField] Transform WallRightRaySP;
 
     [SerializeField] AnimationCurve AISteerCurve;
-    [SerializeField] AnimationCurve AIGassCurve;
+
+
+
     public void AIupdate()
     {
-        curruntRayVelocity = (playerRB.velocity.magnitude * frontDetectedSensitive) + frontDetectedMinSensitive;
         AIGas();
-        AIBrake();
         AISteering();
         //AIWallCheck();
     }
+    [Range(-540, 540)] public float wheelAngle = 0;
     public void AIGas() //파란색
     {
+
+        float slopeAngle = (Vector3.SignedAngle(transform.forward.normalized, Vector3.up, transform.forward.normalized) - 90) * -1f;
+        RaycastHit frontHit;
+
+        float frontDistance = 0;
+
+        Ray front = new Ray(frontMiddleRaySP.position, Quaternion.Euler(0, wheelAngle, 0) *frontMiddleRaySP.forward);
+
+
+        Debug.DrawRay(frontMiddleRaySP.position - new Vector3(0, 1, 0), Quaternion.Euler(0, wheelAngle, 0) * frontMiddleRaySP.forward*1000, Color.blue);
+        // 왼쪽과 오른쪽 레이를 쏘아 충돌을 검출합니다.
+
+        if (Physics.Raycast(front, out frontHit))
+        {
+            frontDistance = frontHit.distance;
+        }
+        float angle = 0;
+
+        // 가장 가까운 벽의 법선 벡터를 계산합니다.
+        Vector3 wallNormal = frontHit.normal;
+        Vector3 horizontalNormal = new Vector3(wallNormal.x, 0, wallNormal.z).normalized;
+
+
+        // 벽의 법선 벡터와 차량 전면 방향 벡터 사이의 각도를 계산합니다.
+        angle = Vector3.Angle(horizontalNormal, frontMiddleRaySP.forward);
+      
+        if (frontDistance*brakeSensitive +brakeMinDistance < playerRB.velocity.magnitude)
+        {
+            gasInput = Mathf.Lerp(gasInput, -1, 0.06f);
+        }
+        else if(frontDistance  < playerRB.velocity.magnitude)
+        {
+            gasInput = Mathf.Lerp(gasInput, 0, 0.1f);
+        }    
+        else
+        {
+            gasInput = Mathf.Lerp(gasInput,1,0.1f);
+        }
+    }
+
+
+    public void AISteering()
+    {
+
         RaycastHit leftHit;
         RaycastHit rightHit;
         float leftDistance = 0;
         float rightDistance = 0;
         Ray leftFront = new Ray(frontLeftRaySP.position, frontLeftRaySP.forward);
         Ray rightFront = new Ray(frontRightleRaySP.position, frontRightleRaySP.forward);
-        Debug.DrawRay(frontLeftRaySP.position - new Vector3(0, 1, 0), frontLeftRaySP.forward * curruntRayVelocity, Color.blue);
-        Debug.DrawRay(frontRightleRaySP.position - new Vector3(0, 1, 0), frontRightleRaySP.forward * curruntRayVelocity, Color.blue);
         // 왼쪽과 오른쪽 레이를 쏘아 충돌을 검출합니다.
-        if (Physics.Raycast(leftFront, out leftHit, curruntRayVelocity))
+        if (Physics.Raycast(leftFront, out leftHit, (playerRB.velocity.magnitude*frontDetectedSensitive) + steeringDetectedSensitive))
         {
             leftDistance = leftHit.distance;
         }
-        if (Physics.Raycast(rightFront, out rightHit, curruntRayVelocity))
+        if (Physics.Raycast(rightFront, out rightHit, (playerRB.velocity.magnitude * frontDetectedSensitive) + steeringDetectedSensitive))
         {
             rightDistance = rightHit.distance;
         }
 
-        // 만약 두 레이의 거리가 다르다면
-        if (leftDistance != rightDistance)
+
+
+        RaycastHit frontHit;
+
+        float frontDistance = 0;
+
+        Ray front = new Ray(frontMiddleRaySP.position, frontMiddleRaySP.forward);
+        if (Physics.Raycast(front, out frontHit, (playerRB.velocity.magnitude * frontDetectedSensitive) + steeringDetectedSensitive+2))
         {
-            // 가장 가까운 벽에 대한 충돌 정보를 저장합니다.
-            RaycastHit closestHit = leftDistance < rightDistance ? leftHit : rightHit;
-
-            // 가장 가까운 벽의 법선 벡터를 계산합니다.
-            Vector3 wallNormal = closestHit.normal;
-            Vector3 horizontalNormal = new Vector3(wallNormal.x, 0, wallNormal.z).normalized;
-
-
-            // 벽의 법선 벡터와 차량 전면 방향 벡터 사이의 각도를 계산합니다.
-            float angle = Vector3.Angle(horizontalNormal, frontMiddleRaySP.forward);
-
-       // Debug.Log(Vector3.SignedAngle(transform.forward.normalized, Vector3.up, transform.forward.normalized));
-        float slopeAngle = (Vector3.SignedAngle(transform.forward.normalized, Vector3.up, transform.forward.normalized) - 90) * -1f;
-      
-           
-            if (playerRB.velocity.magnitude > 15 && angle>180-45 )
-            {
-                if (slopeAngle > 0)
-                {
-                    gasInput = Mathf.Lerp(gasInput, -1-slopeAngle/10, 0.1f);
-                }
-                else
-                {
-
-                gasInput = Mathf.Lerp(gasInput, -1, 0.1f);
-                }
-            }
-            else
-            {
-                gasInput = Mathf.Lerp(gasInput, -0, 0.1f);
-
-            }
+            frontDistance = frontHit.distance;
         }
         else
         {
-            gasInput = Mathf.Lerp(gasInput, 1, 0.1f);
-        }
-
-
-      
-
-    }
-    public void AIBrake() //빨간색
-    {
-
-    }
-    public void AISteering()
-    {
-        RaycastHit leftHit;
-        RaycastHit rightHit;
-        float leftDistance=0 ;
-        float rightDistance=0;
-       Ray leftFront = new Ray(frontLeftRaySP.position, frontLeftRaySP.forward);
-      Ray  rightFront = new Ray(frontRightleRaySP.position, frontRightleRaySP.forward);
-        // 왼쪽과 오른쪽 레이를 쏘아 충돌을 검출합니다.
-        if (Physics.Raycast(leftFront, out leftHit, (curruntRayVelocity + steeringDetectedSensitive)))
-        {
-            leftDistance = leftHit.distance;
-        }
-        if (Physics.Raycast(rightFront, out rightHit, (curruntRayVelocity + steeringDetectedSensitive)))
-        {
-            rightDistance = rightHit.distance;
-        }
-   
-        // 왼쪽과 오른쪽 레이의 거리를 저장합니다.
-
-        // 만약 두 레이의 거리가 다르다면
-        if (leftDistance != rightDistance)
-        {
-            // 가장 가까운 벽에 대한 충돌 정보를 저장합니다.
-            RaycastHit closestHit = leftDistance < rightDistance ? leftHit : rightHit;
-
-            // 가장 가까운 벽의 법선 벡터를 계산합니다.
-            Vector3 wallNormal = closestHit.normal;
-            Vector3 horizontalNormal = new Vector3(wallNormal.x, 0, wallNormal.z).normalized;
-
-            
-            // 벽의 법선 벡터와 차량 전면 방향 벡터 사이의 각도를 계산합니다.
-            float angle = Vector3.Angle(horizontalNormal, frontMiddleRaySP.forward);
-
-            // 디버그 로그를 통해 벽의 각도를 출력합니다.
-            //Debug.Log("벽의 각도: " + angle);
-
-            // 왼쪽과 오른쪽 레이 중 어느 쪽이 더 가까운지에 따라 조향값을 계산합니다.
-            // 가까운 쪽의 레이에 대한 조향값은 양수 또는 음수가 될 수 있습니다.
-            float steerAmount = leftDistance < rightDistance ? AISteerCurve.Evaluate(angle) : -AISteerCurve.Evaluate(angle);
-
-            Transform tempPotision = leftDistance < rightDistance ? frontLeftRaySP : frontRightleRaySP;
-            Debug.DrawRay(tempPotision.position, tempPotision.forward * (curruntRayVelocity - steeringDetectedSensitive), Color.black);
-            // 현재 조향값을 부드럽게 변경하기 위해 Lerp 함수를 사용합니다.
-            autoHandle = Mathf.Lerp(autoHandle, steerAmount, 0.09f);
-        }
-        else
-        {
-            // 두 레이의 거리가 같을 경우에는 조향값을 0으로 설정하여 직진합니다.
-            // autoHandle = Mathf.Lerp(autoHandle, 0, 0.3f);
             AIWallCheck();
         }
+        float angle = 0;
+
+        // 가장 가까운 벽의 법선 벡터를 계산합니다.
+        Vector3 wallNormal = frontHit.normal;
+        Vector3 horizontalNormal = new Vector3(wallNormal.x, 0, wallNormal.z).normalized;
+        angle = Vector3.Angle(horizontalNormal, frontMiddleRaySP.forward);
+        if (leftDistance != rightDistance)
+        {
+            float steerAmount = leftDistance < rightDistance ? AISteerCurve.Evaluate(angle) : -AISteerCurve.Evaluate(angle);
+            autoHandle = Mathf.Lerp(autoHandle, steerAmount, 0.08f);
+        }
+        else
+        {
+            AIWallCheck();
+        }
+
+        
     }
     public void AIWallCheck() //흰색
     {
+        float wallAngle =20;
         RaycastHit leftHit;
         RaycastHit rightHit;
         float leftDistance = 0;
         float rightDistance = 0;
-        Ray leftFront = new Ray(wallLeftRaySP.position, Quaternion.Euler(0, -60, 0) * wallLeftRaySP.forward);
-        Ray rightFront = new Ray(WallRightRaySP.position, Quaternion.Euler(0, 60, 0) * WallRightRaySP.forward);
+        Ray leftFront = new Ray(wallLeftRaySP.position, Quaternion.Euler(0, -wallAngle + wheelAngle, 0) * wallLeftRaySP.forward);
+        Ray rightFront = new Ray(WallRightRaySP.position, Quaternion.Euler(0, wallAngle + wheelAngle, 0) * WallRightRaySP.forward);
+        Debug.DrawRay(wallLeftRaySP.position, Quaternion.Euler(0, -wallAngle + wheelAngle, 0) * wallLeftRaySP.forward*100, Color.white);
+        Debug.DrawRay(WallRightRaySP.position, Quaternion.Euler(0, wallAngle + wheelAngle, 0) * wallLeftRaySP.forward * 100, Color.white);
+
         // 왼쪽과 오른쪽 레이를 쏘아 충돌을 검출합니다.
-        if (Physics.Raycast(leftFront, out leftHit, 30))
+        if (Physics.Raycast(leftFront, out leftHit))
         {
             leftDistance = leftHit.distance;
         }
-        if (Physics.Raycast(rightFront, out rightHit, 30))
+        if (Physics.Raycast(rightFront, out rightHit))
         {
             rightDistance = rightHit.distance;
         }
-       
-        // 왼쪽과 오른쪽 레이의 거리를 저장합니다.
 
-        // 만약 두 레이의 거리가 다르다면
-        if (leftDistance != rightDistance)
+        if(leftDistance> rightDistance)
         {
-            // 가장 가까운 벽에 대한 충돌 정보를 저장합니다.
-            RaycastHit closestHit = leftDistance < rightDistance ? leftHit : rightHit;
+            autoHandle = Mathf.Lerp(autoHandle, -180, 0.08f);
 
-            // 가장 가까운 벽의 법선 벡터를 계산합니다.
-            Vector3 wallNormal = closestHit.normal;
-            Vector3 horizontalNormal = new Vector3(wallNormal.x, 0, wallNormal.z).normalized;
-
-
-            // 벽의 법선 벡터와 차량 전면 방향 벡터 사이의 각도를 계산합니다.
-            float angle = Vector3.Angle(horizontalNormal, frontMiddleRaySP.forward);
-
-            // 왼쪽과 오른쪽 레이 중 어느 쪽이 더 가까운지에 따라 조향값을 계산합니다.
-            // 가까운 쪽의 레이에 대한 조향값은 양수 또는 음수가 될 수 있습니다.
-            float steerAmount = leftDistance < rightDistance ? AISteerCurve.Evaluate(angle) : -AISteerCurve.Evaluate(angle);
-           // print(steerAmount);
-
-            // 현재 조향값을 부드럽게 변경하기 위해 Lerp 함수를 사용합니다.
-            autoHandle = Mathf.Lerp(autoHandle, steerAmount, 0.1f);
+        }
+        else if(rightDistance> leftDistance)
+        {
+            autoHandle = Mathf.Lerp(autoHandle, 180, 0.08f);
         }
         else
         {
-            // 두 레이의 거리가 같을 경우에는 조향값을 0으로 설정하여 직진합니다.
-            autoHandle = Mathf.Lerp(autoHandle, 0, 0.3f);
+            autoHandle = Mathf.Lerp(autoHandle, 0, 0.08f);
         }
-            Transform tempPotision = leftDistance < rightDistance ? frontLeftRaySP : frontRightleRaySP;
-            Vector3 direction = leftDistance < rightDistance ? Quaternion.Euler(0, -60, 0) * wallLeftRaySP.forward : Quaternion.Euler(0, 60, 0) * WallRightRaySP.forward;
-            Debug.DrawRay(tempPotision.position, direction *30, Color.white);
+
     }
 
     public void GetInput() //인풋 값 받기
@@ -355,10 +318,6 @@ public class AITestJune : MonoBehaviour
 
     void InitializedSetting()
     {
-
-
-
-
 
         //무게 중심 초기화
         playerRB = gameObject.GetComponent<Rigidbody>();
@@ -469,7 +428,7 @@ public class AITestJune : MonoBehaviour
         // }
         steeringAngle = Mathf.Clamp(steeringAngle, -90f, 90f);
 
-
+        wheelAngle = autoHandle * maxSteerAngle / (1080.0f / 2);
 
         //스티어링 바퀴에만 적용
         foreach (var wheel in wheels)
@@ -552,9 +511,9 @@ public class AITestJune : MonoBehaviour
         // float gearRatio = gearRatiosCurve.Evaluate(currentGear); //이거 써보고 안되면 위에꺼로 써보기
         float gearRatio = gearRatiosArray[(int)currentGear]; //이거 써보고 안되면 위에꺼로 써보기
         WheelRPMCalculate(); //휠 RPM 계산
-        //wheelRPM = wheelRPM < 0 ? 0 : wheelRPM; //휠 음수 가는거 막기
+                             //wheelRPM = wheelRPM < 0 ? 0 : wheelRPM; //휠 음수 가는거 막기
         currentRPM = Mathf.Lerp(currentRPM, minRPM + (wheelRPM * finalDriveRatio * gearRatio), Time.fixedDeltaTime * RPMSmoothness); //2있는 곳은 나중에 수치로 변환 시켜보기
-        //currentRPM = minRPM + (wheelRPM * finalDriveRatio * gearRatio);
+                                                                                                                                     //currentRPM = minRPM + (wheelRPM * finalDriveRatio * gearRatio);
         if (currentRPM > maxRPM - 200)
         {
             currentRPM = maxRPM - Random.Range(0, 200); //최대 RPM 제한
