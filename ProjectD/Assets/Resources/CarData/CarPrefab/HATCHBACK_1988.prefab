@@ -3349,6 +3349,7 @@ GameObject:
   - component: {fileID: 7982468714963761459}
   - component: {fileID: 8228960963381336663}
   - component: {fileID: 6997554398325993303}
+  - component: {fileID: 1985784941416560348}
   m_Layer: 8
   m_Name: HATCHBACK_1988
   m_TagString: Untagged
@@ -3516,24 +3517,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wheels:
   - wheelGameObject: {fileID: 2821778156729167818}
+    smoke: {fileID: 0}
     wheelCollider: {fileID: 8854919520675767154}
     IsMoter: 0
     IsSteering: 1
     brakeBias: 0
     isGrounded: 0
   - wheelGameObject: {fileID: 4358044816217549970}
+    smoke: {fileID: 0}
     wheelCollider: {fileID: 6547119627835176478}
     IsMoter: 0
     IsSteering: 1
     brakeBias: 0
     isGrounded: 0
   - wheelGameObject: {fileID: 3667685781293854443}
+    smoke: {fileID: 0}
     wheelCollider: {fileID: 7076520714310223646}
     IsMoter: 0
     IsSteering: 0
     brakeBias: 0
     isGrounded: 0
   - wheelGameObject: {fileID: 1649063837477309283}
+    smoke: {fileID: 0}
     wheelCollider: {fileID: 5371976134050603853}
     IsMoter: 0
     IsSteering: 0
@@ -3643,6 +3648,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cinemachineStateDrivenCamera: {fileID: 6463091544184746078}
   cinemachineAnimator: {fileID: 8910261906533659353}
+--- !u!114 &1985784941416560348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7828178021706671826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff24bd0dbed5acb46b74d11618689d31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  smoke: []
+  smokePrefab: {fileID: 4969641942327939751, guid: d5f95f5b21b9506429333da8f2244e88, type: 3}
+  slipAllowance: 0.2
 --- !u!1 &8051562459732623552
 GameObject:
   m_ObjectHideFlags: 0

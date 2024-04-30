@@ -891,6 +891,7 @@ GameObject:
   - component: {fileID: 8387296042614024347}
   - component: {fileID: 6155302036406427366}
   - component: {fileID: 5010998563627024337}
+  - component: {fileID: -2472173524000986309}
   m_Layer: 8
   m_Name: Bolide
   m_TagString: Untagged
@@ -1086,24 +1087,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wheels:
   - wheelGameObject: {fileID: 1625283267709330910}
+    smoke: {fileID: 0}
     wheelCollider: {fileID: 5494637501065465887}
     IsMoter: 0
     IsSteering: 1
     brakeBias: 0
     isGrounded: 0
   - wheelGameObject: {fileID: 5176863401390023553}
+    smoke: {fileID: 0}
     wheelCollider: {fileID: 401760427141055094}
     IsMoter: 0
     IsSteering: 1
     brakeBias: 0
     isGrounded: 0
   - wheelGameObject: {fileID: 8861659184789463719}
+    smoke: {fileID: 0}
     wheelCollider: {fileID: 2833363920216837123}
     IsMoter: 0
     IsSteering: 0
     brakeBias: 0
     isGrounded: 0
   - wheelGameObject: {fileID: 6569262304494310810}
+    smoke: {fileID: 0}
     wheelCollider: {fileID: 8328844301425247558}
     IsMoter: 0
     IsSteering: 0
@@ -1199,6 +1204,21 @@ MonoBehaviour:
   steeringInput: 0
   speed: 0
   racingWheel: {fileID: 0}
+--- !u!114 &-2472173524000986309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1316595053414373807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff24bd0dbed5acb46b74d11618689d31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  smoke: []
+  smokePrefab: {fileID: 4969641942327939751, guid: d5f95f5b21b9506429333da8f2244e88, type: 3}
+  slipAllowance: 0.2
 --- !u!1 &1325279443921162488
 GameObject:
   m_ObjectHideFlags: 0

@@ -1573,6 +1573,7 @@ GameObject:
   - component: {fileID: 7509332139888393839}
   - component: {fileID: 2970291958367525172}
   - component: {fileID: 350823371365473175}
+  - component: {fileID: 6109363208394748787}
   m_Layer: 8
   m_Name: SEDAN
   m_TagString: Untagged
@@ -1737,24 +1738,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wheels:
   - wheelGameObject: {fileID: 6247646166247090781}
+    smoke: {fileID: 0}
     wheelCollider: {fileID: 4293844993663723734}
     IsMoter: 0
     IsSteering: 1
     brakeBias: 0
     isGrounded: 0
   - wheelGameObject: {fileID: 6677043623790662447}
+    smoke: {fileID: 0}
     wheelCollider: {fileID: 6549969626509900907}
     IsMoter: 0
     IsSteering: 1
     brakeBias: 0
     isGrounded: 0
   - wheelGameObject: {fileID: 554626514158435013}
+    smoke: {fileID: 0}
     wheelCollider: {fileID: 3948512310931726893}
     IsMoter: 0
     IsSteering: 0
     brakeBias: 0
     isGrounded: 0
   - wheelGameObject: {fileID: 1619049184560002160}
+    smoke: {fileID: 0}
     wheelCollider: {fileID: 4325461424900781741}
     IsMoter: 0
     IsSteering: 0
@@ -1864,6 +1869,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cinemachineStateDrivenCamera: {fileID: 0}
   cinemachineAnimator: {fileID: 0}
+--- !u!114 &6109363208394748787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3417426162676978922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff24bd0dbed5acb46b74d11618689d31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  smoke: []
+  smokePrefab: {fileID: 4969641942327939751, guid: d5f95f5b21b9506429333da8f2244e88, type: 3}
+  slipAllowance: 0.2
 --- !u!1 &3575705565228404865
 GameObject:
   m_ObjectHideFlags: 0

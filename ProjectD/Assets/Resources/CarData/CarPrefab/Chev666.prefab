@@ -2907,6 +2907,7 @@ GameObject:
   - component: {fileID: 6645428847639891970}
   - component: {fileID: 933598998648717326}
   - component: {fileID: 841866091509247813}
+  - component: {fileID: 6523496567011718499}
   m_Layer: 8
   m_Name: Chev666
   m_TagString: Untagged
@@ -2952,24 +2953,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wheels:
   - wheelGameObject: {fileID: 5772309718569785509}
+    smoke: {fileID: 0}
     wheelCollider: {fileID: 6835796186971846958}
     IsMoter: 0
     IsSteering: 1
     brakeBias: 0
     isGrounded: 0
   - wheelGameObject: {fileID: 7570929494627474221}
+    smoke: {fileID: 0}
     wheelCollider: {fileID: 7661834082185204507}
     IsMoter: 0
     IsSteering: 1
     brakeBias: 0
     isGrounded: 0
   - wheelGameObject: {fileID: 7215626405770713452}
+    smoke: {fileID: 0}
     wheelCollider: {fileID: 1552517045367648913}
     IsMoter: 0
     IsSteering: 0
     brakeBias: 0
     isGrounded: 0
   - wheelGameObject: {fileID: 788903854122336786}
+    smoke: {fileID: 0}
     wheelCollider: {fileID: 2668630106316021765}
     IsMoter: 0
     IsSteering: 0
@@ -3127,6 +3132,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cinemachineStateDrivenCamera: {fileID: 5221944745088963784}
   cinemachineAnimator: {fileID: 3981345517261551077}
+--- !u!114 &6523496567011718499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7602906427494286304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff24bd0dbed5acb46b74d11618689d31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  smoke: []
+  smokePrefab: {fileID: 4969641942327939751, guid: d5f95f5b21b9506429333da8f2244e88, type: 3}
+  slipAllowance: 0.2
 --- !u!1 &7616227264133086277
 GameObject:
   m_ObjectHideFlags: 0

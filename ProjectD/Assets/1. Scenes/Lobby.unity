@@ -13935,11 +13935,11 @@ MonoBehaviour:
   mapImage: []
   carDatas: []
   skyBoxs:
-  - {fileID: 2100000, guid: eac2ef371405749e0bd050b4c3272f16, type: 2}
-  - {fileID: 2100000, guid: 01f4eb1c73693428d923f1520032e7f9, type: 2}
-  - {fileID: 2100000, guid: c82a334cf5a5e47978749c210cee72a7, type: 2}
-  - {fileID: 2100000, guid: cdbb40e11399e4a17882ada20a1b896a, type: 2}
-  - {fileID: 2100000, guid: 51b74d7bad397457d883c5940f7664d8, type: 2}
+  - {fileID: 2100000, guid: 33a0ed444057f464087211edc89bbb55, type: 2}
+  - {fileID: 2100000, guid: 4721441b7a4511b4381a61f152b4b466, type: 2}
+  - {fileID: 2100000, guid: 87965c9b4b0a8f44ead587bf203876e9, type: 2}
+  - {fileID: 2100000, guid: 00a2ce3f9a3082c44a11ed606d167f29, type: 2}
+  - {fileID: 2100000, guid: 7d24d6d9bb8235444a36969959eb9469, type: 2}
   jsonFolderPath: Resources/CarInformation
   carData:
     name: 
@@ -18855,6 +18855,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1928518077}
   - component: {fileID: 1928518076}
+  - component: {fileID: 1928518078}
   m_Layer: 0
   m_Name: MapShowCam
   m_TagString: Untagged
@@ -18928,6 +18929,50 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 52.656, y: -180, z: 0}
+--- !u!114 &1928518078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1928518074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
+  m_TaaSettings:
+    quality: 3
+    frameInfluence: 0.1
+    jitterScale: 1
+    mipBias: 0
+    varianceClampScale: 0.9
+    contrastAdaptiveSharpening: 0
 --- !u!1 &1940392770
 GameObject:
   m_ObjectHideFlags: 0
