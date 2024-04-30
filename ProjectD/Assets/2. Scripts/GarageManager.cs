@@ -94,16 +94,17 @@ public class GarageManager : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         
-        switch(GameManager.Instance.mapWeatherState)
-        {
-            case MapWeatherState.Autumn: weather = "Autumn"; break;
-            case MapWeatherState.Summer: weather = "Summer"; break;
-            case MapWeatherState.Winter: weather = "Winter"; break;
+        //switch(GameManager.Instance.mapWeatherState)
+        //{
+        //    case MapWeatherState.Autumn: weather = "Autumn"; break;
+        //    case MapWeatherState.Summer: weather = "Summer"; break;
+        //    case MapWeatherState.Winter: weather = "Winter"; break;
 
-        }
+        //}
 
 
-         SceneManager.LoadScene(weather + "_"+GameManager.Instance.Map);
+        // SceneManager.LoadScene(weather + "_"+GameManager.Instance.Map);
+         SceneManager.LoadScene("InGame");
     }
     // Update is called once per frame
     void Update()

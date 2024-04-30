@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using static System.Net.WebRequestMethods;
 
 public class InGameManager : MonoBehaviour
 {
@@ -9,6 +12,7 @@ public class InGameManager : MonoBehaviour
     [SerializeField] Camera cam;
     Transform playerSpawnPos;
     Transform enemySpawnPos;
+    [SerializeField] List<GameObject> Maps = new List<GameObject>();
 
     private void Start()
     {
@@ -22,6 +26,7 @@ public class InGameManager : MonoBehaviour
 
     public void InitGame(bool isReverse)
     {
+        MapSelection();
         // 아래 코드 동작을 위해 맵 프리팹의 첫 자식으로 GameObjects, 그 첫 자식으로 SpawnPoints, 그 아래 자식에
         // 순서대로 정방향 플레이어, 정방향 적, 역방향 플레이어, 역방향 적 스폰 포인트 지점을 만들어 둬야 한다
         GameObject map = GameObject.FindGameObjectWithTag("Map");
@@ -55,8 +60,9 @@ public class InGameManager : MonoBehaviour
 
         // +AI 스폰 필요
         int carCount = DataManager.Instance.garageCarPrefab.Count;
-        Instantiate(DataManager.Instance.garageCarPrefab[Random.Range(0, carCount)], enemySpawnPos.position, enemySpawnPos.rotation);
+        Instantiate(DataManager.Instance.garageCarPrefab[UnityEngine.Random.Range(0, carCount)], enemySpawnPos.position, enemySpawnPos.rotation);
 
+        
         SpawnCar();
     }
     
@@ -108,6 +114,41 @@ public class InGameManager : MonoBehaviour
 
     }
 
+    public void MapSelection()
+    {
+        //맵 false로 초기화
+        foreach(var map in Maps)
+        {
+            for(int i = 0; i<3 ; i++)
+            {
+                map.transform.GetChild(i).gameObject.SetActive(false);
+            }
+        }
 
+
+
+        Material timeMaterial = null;
+        // skybox 변수에 GameManager의 mapTimeState를 문자열로 저장
+        string skybox = GameManager.Instance.mapTimeState.ToString().Replace("_","");
+        foreach (Material sky in DataManager.Instance.skyBoxs)
+        {
+            if (sky.name.Contains(skybox, StringComparison.OrdinalIgnoreCase))
+            {
+                timeMaterial = sky;
+            }
+        }
+        RenderSettings.skybox = timeMaterial;
+
+        //선택 된 게임 맵 true
+        int weather = 0;
+        switch (GameManager.Instance.mapWeatherState)
+        {
+            case MapWeatherState.Autumn: weather =0; break;
+            case MapWeatherState.Summer: weather = 1; break;
+            case MapWeatherState.Winter: weather = 2; break;
+
+        }
+        Maps[GameManager.Instance.Map-4].transform.GetChild(weather).gameObject.SetActive(true);
+    }
 
 }
