@@ -36,7 +36,10 @@ public class CarController : MonoBehaviour
         public bool isGrounded;
     }
 
-
+    public float RigidSpeed
+    {
+        get { return playerRB.velocity.magnitude; }
+    }
 
     //»Ÿ ∏ÆΩ∫∆Æ
     public List<Wheel> wheels;
