@@ -14,7 +14,6 @@ public class CinemachinController : MonoBehaviour
     void Start()
     {
         cinemachineStateDrivenCamera = gameObject.GetComponent<CinemachineStateDrivenCamera>();
-
     }
 
 

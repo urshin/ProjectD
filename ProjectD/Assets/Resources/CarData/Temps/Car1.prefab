@@ -15135,9 +15135,12 @@ MonoBehaviour:
   DownForceValue: 0
   downforce: 1
   airDragCoeff: 0.015
+  smoke: []
+  smokePrefab: {fileID: 4969641942327939751, guid: d5f95f5b21b9506429333da8f2244e88, type: 3}
   slipAngle: 0
   steeringInput: 0
   speed: 0
+  slipAllowance: 0.2
   racingWheel: {fileID: 5946561797446997777}
 --- !u!1 &9129140551620494615
 GameObject:

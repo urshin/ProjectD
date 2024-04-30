@@ -109,35 +109,42 @@ public class CarController : MonoBehaviour
     public float downforce;
     public float airDragCoeff; // °ø±âÀúÇ× 
 
+    [SerializeField] List<ParticleSystem> smoke;
+    [SerializeField] GameObject smokePrefab;
+
+    bool initialized;
 
     private void OnEnable()
     {
         InitializedSetting();
-
     }
     private void Update()
     {
-        AnimationUpdate();
+        if (initialized)
+        {
+            AnimationUpdate();
+            ParticleEffect();
+        }
     }
     private void FixedUpdate()
     {
-        addDownForce();
-        ApplySteering();
-        ApplyTorque();
-        friction();
-        CheckingIsGrounded();//¶¥Ã¼Å©
-
-        if (transmission == Transmission.Auto_Transmission)
+        if (initialized)
         {
-            AutoGear();
+            addDownForce();
+            ApplySteering();
+            ApplyTorque();
+            friction();
+            CheckingIsGrounded();//¶¥Ã¼Å©
+
+            if (transmission == Transmission.Auto_Transmission)
+            {
+                AutoGear();
+            }
+            else if (transmission == Transmission.Manual_Transmission)
+            {
+                ManualGear();
+            }
         }
-        else if (transmission == Transmission.Manual_Transmission)
-        {
-            ManualGear();
-        }
-
-
-
         //DriftControl();
     }
 
@@ -149,7 +156,10 @@ public class CarController : MonoBehaviour
         playerRB = gameObject.GetComponent<Rigidbody>();
         playerRB.centerOfMass = centerofmassObject.transform.localPosition;
         centerofmass = playerRB.centerOfMass;
+    }
 
+    public void InitializeIngame()
+    {
         ApplyMotorWork(); //Àü·û ÈÄ·û Á¤ÇÏ±â
         foreach (var wheel in wheels)
         {
@@ -163,6 +173,13 @@ public class CarController : MonoBehaviour
         {
             gearRatiosCurve.AddKey(i, gearRatiosArray[i]);
         }
+
+        for (int i = 0; i < wheels.Count; i++)
+        {
+            smoke.Add(Instantiate(smokePrefab, wheels[i].wheelCollider.transform.position, Quaternion.identity, wheels[i].wheelCollider.transform).GetComponent<ParticleSystem>());
+        }
+
+        initialized = true;
     }
 
     void ApplyMotorWork()
@@ -471,7 +488,6 @@ public class CarController : MonoBehaviour
     }
 
 
-
     private void friction() //¸¶Âû °è»ê
     {
 
@@ -499,22 +515,30 @@ public class CarController : MonoBehaviour
                 sidewaysFriction.extremumValue = (handBrake) ? 0.35f : Mathf.Lerp(forwardFriction.extremumValue, 2, Time.fixedDeltaTime * 3);
                 wheels[i].wheelCollider.sidewaysFriction = sidewaysFriction;
 
-
-
                 sum += Mathf.Abs(hit.sidewaysSlip);
-
             }
-
-
             //wheelSlip[i] = Mathf.Abs(hit.forwardSlip) + Mathf.Abs(hit.sidewaysSlip);
             sidewaysSlip[i] = Mathf.Abs(hit.sidewaysSlip);
-
-
         }
-
         sum /= wheels.Count - 2;
-
     }
+
+
+    [SerializeField] float slipAllowance = 0.2f;
+    void ParticleEffect()           // Update()
+    {
+        WheelHit[] wheelHits = new WheelHit[4];
+        for (int i = 0; i < wheels.Count; i++)
+        {
+            wheels[i].wheelCollider.GetGroundHit(out wheelHits[i]);
+            if (Mathf.Abs(wheelHits[i].sidewaysSlip) + Mathf.Abs(wheelHits[i].forwardSlip) > slipAllowance)
+            {
+                //print(Mathf.Abs(wheelHits.sidewaysSlip) + Mathf.Abs(wheelHits.forwardSlip));
+                smoke[i].Emit(1);
+            }
+        }
+    }
+
 
     [SerializeField] GameObject racingWheel;
     void AnimationUpdate()
@@ -531,7 +555,6 @@ public class CarController : MonoBehaviour
             visualWheel.transform.rotation = rotation;
 
         }
-
         //racingWheel.transform.rotation = Quaternion.Euler(0, 0, steerSlider.value);
     }
 }

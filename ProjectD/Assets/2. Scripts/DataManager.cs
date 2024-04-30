@@ -77,6 +77,18 @@ public class DataManager : MonoBehaviour
     public void UpdateCarData(TextAsset text)
     {
         carData = JsonUtility.FromJson<CarData>(text.ToString());
+        Debug.Log(text.ToString());
+    }
+    public void UpdateCarData(string carName)
+    {
+        // 이거론 작동 안됨....
+        foreach(TextAsset text in textAsset)
+        {
+            if(text.name == carName)
+            {
+                carData = JsonUtility.FromJson<CarData>(text.ToString());
+            }
+        }
     }
 
     [System.Serializable]

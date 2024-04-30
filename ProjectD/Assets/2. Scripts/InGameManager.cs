@@ -10,6 +10,7 @@ public class InGameManager : MonoBehaviour
 {
 
     [SerializeField] GameObject playerCar;
+    [SerializeField] GameObject enemyCar;
     [SerializeField] Camera cam;
     Transform playerSpawnPos;
     Transform enemySpawnPos;
@@ -57,20 +58,22 @@ public class InGameManager : MonoBehaviour
 
 
         // +AI 스폰 필요
-        //int carCount = DataManager.Instance.garageCarPrefab.Count;
+        int carCount = DataManager.Instance.garageCarPrefab.Count;
         //Instantiate(DataManager.Instance.garageCarPrefab[UnityEngine.Random.Range(0, carCount)], enemySpawnPos.position, enemySpawnPos.rotation);
-        GameObject tempEnemy = Instantiate(Resources.Load("CarData\\Temps\\Enemy") as GameObject, enemySpawnPos.position, enemySpawnPos.rotation);
-        GameObject go = Instantiate(Resources.Load("CarData\\Temps\\Car1"/* + GameManager.Instance.carName*/) as GameObject, tempEnemy.transform);
-        go.GetComponent<CinemachinController>().enabled = false;
+        enemyCar = Instantiate(Resources.Load("CarData\\Temps\\Enemy") as GameObject, enemySpawnPos.position, enemySpawnPos.rotation);
+        //GameObject go = Instantiate(Resources.Load("CarData\\Temps\\" + GameManager.Instance.carName) as GameObject, enemyCar.transform);
+        GameObject go = Instantiate(DataManager.Instance.garageCarPrefab[UnityEngine.Random.Range(0, carCount)], enemyCar.transform);
+        //go.GetComponent<CinemachinController>().enabled = false;
 
         playerCar = Instantiate(Resources.Load("CarData\\Temps\\Player") as GameObject, playerSpawnPos.position, playerSpawnPos.rotation);
-        Instantiate(Resources.Load("CarData\\Temps\\Car1"/* + GameManager.Instance.carName*/) as GameObject, playerCar.transform);
+        Instantiate(Resources.Load("CarData\\GarageCar\\" + GameManager.Instance.carName) as GameObject, playerCar.transform);
+        //Instantiate(Resources.Load("CarData\\Temps\\Car1") as GameObject, playerCar.transform);
 
-        SpawnCar(playerCar.GetComponentInChildren<CarController>());
-        SpawnCar(tempEnemy.GetComponentInChildren<CarController>());
+        SpawnCar(playerCar.GetComponentInChildren<CarController>(), false);
+        SpawnCar(enemyCar.GetComponentInChildren<CarController>(), true);
     }
     
-    public void SpawnCar(CarController controller)
+    public void SpawnCar(CarController controller, bool isAI)
     {
         //var controller = playerCar.GetComponentInChildren<FinalCarController_June>();
         //var controller = playerCar.GetComponentInChildren<CarController>();
@@ -84,6 +87,11 @@ public class InGameManager : MonoBehaviour
             case "Auto":
                 controller.transmission = Transmission.Auto_Transmission;
                 break;
+        }
+        if (isAI)
+        {
+            controller.transmission = Transmission.Auto_Transmission;
+            DataManager.Instance.UpdateCarData(controller.gameObject.name);
         }
 
         switch (DataManager.Instance.carData.Engine.WheelWork)
@@ -112,6 +120,8 @@ public class InGameManager : MonoBehaviour
         controller.DownForceValue = DataManager.Instance.carData.Environment.DownForceValue;
         controller.downforce = DataManager.Instance.carData.Environment.DownForce;
         controller.airDragCoeff = DataManager.Instance.carData.Environment.AirDragCoeff;
+
+        controller.InitializeIngame();
     }
 
     public void MapSelection()
