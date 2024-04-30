@@ -51,7 +51,7 @@ public class CarController : MonoBehaviour
 
     [Header("Handling")]
     //핸들링
-    public float steerValue;
+    [Range(-540, 540)] public float steerValue;
     [Range(10, 90)] public float maxSteerAngle; //최대 각도
     public float sensitivity; //마우스 감도 
     [SerializeField] bool handBrake = false;

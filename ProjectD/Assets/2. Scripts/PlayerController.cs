@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     private float mouseX;
     private float gasInput;
     Camera cam;
-    public Slider steerSlider;
+    [Range(-540, 540)] public float steerSlider;
     [Range(10, 90)] public float maxSteerAngle; //최대 각도
     public float sensitivity; //마우스 감도 
     [SerializeField] bool handBrake = false;
@@ -65,14 +65,14 @@ public class PlayerController : MonoBehaviour
         {
             if (mouseX != 0)
             {
-                steerSlider.value += mouseX * sensitivity;
+                steerSlider += mouseX * sensitivity;
             }
 
         }
         else
         {
-            steerSlider.value = Mathf.Lerp(steerSlider.value, 0, Time.fixedDeltaTime * resetSteerAngleSpeed);
+            steerSlider = Mathf.Lerp(steerSlider, 0, Time.fixedDeltaTime * resetSteerAngleSpeed);
         }
-        carController.steerValue = steerSlider.value;
+        carController.steerValue = steerSlider;
     }
 }
