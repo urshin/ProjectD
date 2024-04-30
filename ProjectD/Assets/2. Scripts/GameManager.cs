@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviour
     public MapTimeState mapTimeState;
 
     public int Map;
+    public bool isReverse;
+
     private void Start()
     {
         gameMode = GameMode.None;

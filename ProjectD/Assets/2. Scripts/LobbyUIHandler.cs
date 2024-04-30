@@ -31,6 +31,8 @@ public class LobbyUIHandler : MonoBehaviour
     [SerializeField] GameObject logocar;
     [SerializeField] GameObject startCar;
     [SerializeField] GameObject[] maps;
+
+    [SerializeField] GameObject isReverse;
     public LobbyState lobbystate;
 
     // Start is called before the first frame update
@@ -194,6 +196,20 @@ public class LobbyUIHandler : MonoBehaviour
     
 
         }
+    }
+
+    public void OnClickReverseButton()
+    {
+        GameManager.Instance.isReverse = !GameManager.Instance.isReverse;
+        if (GameManager.Instance.isReverse)
+        {
+            isReverse.GetComponent<Image>().color = Color.white;
+        }
+        else
+        {
+            isReverse.GetComponent<Image>().color = Color.gray;
+        }
+        
     }
 
     public void OnClickSelectCar()

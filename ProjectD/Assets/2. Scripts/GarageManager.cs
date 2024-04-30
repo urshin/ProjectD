@@ -68,7 +68,7 @@ public class GarageManager : MonoBehaviour
 
         foreach (var a in DataManager.Instance.textAsset)
         {
-           if(a.name == name)
+            if(a.name == name)
             {
                 carTextAsset = a;
             }
