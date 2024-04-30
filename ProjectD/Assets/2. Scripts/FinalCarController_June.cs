@@ -24,7 +24,6 @@ public class FinalCarController_June : MonoBehaviour
     public class Wheel
     {
         public GameObject wheelGameObject; //휠 게임 오브젝트
-        public ParticleSystem smoke;
         public WheelCollider wheelCollider; //휠 콜라이더
         public bool IsMoter; // 모터 힘 받는지
         public bool IsSteering; //스티어인지
