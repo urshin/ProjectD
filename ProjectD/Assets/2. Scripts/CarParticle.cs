@@ -30,6 +30,11 @@ public class CarParticle : MonoBehaviour
             {
                 //print(Mathf.Abs(wheelHits.sidewaysSlip) + Mathf.Abs(wheelHits.forwardSlip));
                 smoke[i].Emit(1);
+                GetComponent<CarAudio>().isSkid = true;
+            }
+            else
+            {
+                GetComponent<CarAudio>().isSkid = false;
             }
         }
     }
