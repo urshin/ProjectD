@@ -5,69 +5,163 @@ using UnityEngine.Audio;
 
 public class CarAudio : MonoBehaviour
 {
-    FinalCarController_June CC;
-    [Range(1300, 8000)] public float engineValue;
-    [SerializeField] float range;
+    FinalCarController_June CC; // FinalCarController_June 스크립트에 대한 참조
+    [SerializeField] float range; // 범위 조절 변수
 
+    // 타이어 슬립 관련 변수
     public bool isSkid = false;
     public float tireSlipAmount;
 
-    [SerializeField] AudioMixer audioMixer;
-    [SerializeField] AudioSource engineSourse;
-    [SerializeField] AudioSource WheelSourse;
-    [SerializeField] AudioClip hightOn;
-    [SerializeField] AudioClip hightOff;
-    [SerializeField] AudioClip MedOn;
-    [SerializeField] AudioClip MedOff;
-    [SerializeField] AudioClip LowOn;
-    [SerializeField] AudioClip LowOff;
-    [SerializeField] AudioClip maxRPM;
-    [SerializeField] AudioClip Idle;
-    [SerializeField] AudioClip skid;
+    [SerializeField] AudioMixer audioMixer; // AudioMixer에 대한 참조
+    [SerializeField] AudioSource engineSourse; // 엔진 사운드 AudioSource
+    [SerializeField] AudioSource WheelSourse; // 타이어 사운드 AudioSource
+    [SerializeField] AudioClip skid; // 슬립 사운드 클립
+    //eq
+    public SEF_Equalizer eq; // SEF_Equalizer 컴포넌트에 대한 참조
 
-  
+    // FinalCarController_June 및 cc 변수
+    public FinalCarController_June cc;
 
+    // 엔진 시작 및 로드 변수
+    [Range(0, 1)] public float startOffValue = 0.35f;
+    public float Load;
+    public float loadLerpSpeed = 15;
 
-    private float lowRpm;
-    private float highRpm;
+    // 엔진 사운드 클립 변수
+    public AudioClip lowAccelClip;
+    public AudioClip lowDecelClip;
+    public AudioClip highAccelClip;
+    public AudioClip highDecelClip;
+    [Header("Tubro Sound")]
+    public AudioClip Turbo; // 터보 사운드 클립
+    [Range(0, 2)] public float turboVolume; // 터보 볼륨 조절 변수
+
+    // 피치 관련 변수
+    [Header("Pitch")]
+    [Range(0.5f, 1)] public float Pitch = 1f;
+    [Range(.5f, 3)] public float lowPitchMin = 1f;
+    [Range(2, 7)] public float lowPitchMax = 6f;
+    [Range(0, 1)] public float highPitchMultiplier = 0.25f;
+    [Range(0, 1)] public float pitchMultiplier = 1f;
+
+    private float accFade = 0;
+    private float acceleration;
+    private float maxRolloffDistance = 500;
+    [SerializeField] AudioSource m_LowAccel;
+    [SerializeField] AudioSource m_LowDecel;
+    [SerializeField] AudioSource m_HighAccel;
+    [SerializeField] AudioSource m_HighDecel;
+    [SerializeField] AudioSource m_Turbo;
 
     private void Start()
     {
+        // FinalCarController_June 및 AudioSource 설정
         CC = GetComponent<FinalCarController_June>();
-        lowRpm = (CC.maxRPM / 3) * 1;
-        highRpm = (CC.maxRPM / 3) * 2;
-        //engineSourse.clip = Idle;
-        //engineSourse.Play();
+        m_HighAccel = SetUpEngineAudioSource(m_HighAccel, highAccelClip);
+        m_LowAccel = SetUpEngineAudioSource(m_LowAccel, lowAccelClip);
+        m_LowDecel = SetUpEngineAudioSource(m_LowDecel, lowDecelClip);
+        m_HighDecel = SetUpEngineAudioSource(m_HighDecel, highDecelClip);
+        if (Turbo != null) m_Turbo = SetUpEngineAudioSource(m_Turbo, Turbo);
+
+        // EQ 컴포넌트 설정
+        eq = gameObject.AddComponent<SEF_Equalizer>();
+        cc = gameObject.GetComponent<FinalCarController_June>();
+
+        // lowPitchMax 설정
+        lowPitchMax = (cc.maxRPM / 1000) / 2;
     }
 
     private void FixedUpdate()
     {
-        // engineValue = CC.currentRPM;
+        // range 값 보간
         range = Mathf.Lerp(range, (CC.currentRPM * 2 / CC.maxRPM), 0.2f);
 
+        // 엔진 및 타이어 사운드 재생
         EngineSound();
         TireSound();
-        Test();
+
     }
 
-    void Test()
+    // EQ 필터링 함수
+    void filter()
     {
-
-
+        Load = accFade;
+        eq.midFreq = Mathf.Lerp(eq.midFreq, startOffValue + (Load / 1.5f), loadLerpSpeed * Time.deltaTime);
+        eq.highFreq = Mathf.Lerp(eq.highFreq, startOffValue + (Load / 1.5f), loadLerpSpeed * Time.deltaTime);
     }
+    // 엔진 사운드 조절 함수
 
     void EngineSound()
     {
-        engineSourse.pitch = 0.5f + 2.0f * (CC.currentRPM - CC.minRPM) / (CC.maxRPM - CC.minRPM);
+        // 가속도 및 피치 조절
+        // accFade 값 보간: 현재 가속도에 따라 accFade 값을 조절하여 부드러운 효과를 줍니다.
+        // 가속도가 크면 accFade는 1에 가깝고, 가속도가 작으면 0에 가까워집니다.
+        accFade = Mathf.Lerp(accFade, Mathf.Abs(acceleration), 15 * Time.deltaTime);
 
+        // 가속도 계산: 차량의 가스 입력(cc.gasInput)에 따라 가속도를 설정합니다.
+        // 가스 입력이 있으면 가속도는 1, 없으면 0이 됩니다.
+        //if (cc.gasInput > 0)
+        //    acceleration = 1;
+        //else
+        //    acceleration = 0;
 
+        acceleration = cc.currentRPM / cc.maxRPM;
+        // 피치 계산: 엔진 RPM을 기반으로 저음 피치와 고음 피치를 설정합니다.
+        float pitch = ULerp(lowPitchMin, lowPitchMax, cc.currentRPM / cc.maxRPM);
+        pitch = Mathf.Min(lowPitchMax, pitch);
+        m_LowAccel.pitch = pitch * pitchMultiplier; // 낮은 RPM 범위 내에서 엔진 소리 피치 설정
+        m_LowDecel.pitch = pitch * pitchMultiplier; // 낮은 RPM 범위 내에서 엔진 소리 피치 설정
+        m_HighAccel.pitch = pitch * highPitchMultiplier * pitchMultiplier; // 높은 RPM 범위 내에서 엔진 소리 피치 설정
+        m_HighDecel.pitch = pitch * highPitchMultiplier * pitchMultiplier; // 높은 RPM 범위 내에서 엔진 소리 피치 설정
 
+        // 각각의 Fade 값 계산: 엔진 소리의 볼륨을 조절하기 위한 Fade 값 계산
+        float decFade = 1 - accFade;
+        float highFade = Mathf.InverseLerp(0.2f, 0.8f, (cc.currentRPM / cc.maxRPM));
+        float lowFade = 1 - highFade;
+
+        // Fade 값 보간: 부드럽게 변하는 Fade 값을 위해 각 Fade 값을 제곱하여 보정합니다.
+        highFade = 1 - ((1 - highFade) * (1 - highFade));
+        lowFade = 1 - ((1 - lowFade) * (1 - lowFade));
+        decFade = 1 - ((1 - decFade) * (1 - decFade));
+
+        // 각 AudioSource의 볼륨 설정: 각 상황에 따라 엔진 소리의 볼륨을 조절합니다.
+        m_LowAccel.volume = (lowFade * accFade)/2+0.4f; // 낮은 RPM 범위 내에서 가속 중일 때의 볼륨
+        m_LowDecel.volume = (lowFade * decFade)/2+0.4f; // 낮은 RPM 범위 내에서 감속 중일 때의 볼륨
+        m_HighAccel.volume = Mathf.Lerp(m_HighAccel.volume, highFade * accFade, Time.deltaTime * 5); // 높은 RPM 범위 내에서 가속 중일 때의 볼륨
+        m_HighDecel.volume = Mathf.Lerp(m_HighDecel.volume, highFade * decFade-0.3f, Time.deltaTime * 5); // 높은 RPM 범위 내에서 감속 중일 때의 볼륨
+        // EQ 필터링
+        filter();
     }
+
+    // 엔진 사운드 AudioSource 설정 함수
+    private AudioSource SetUpEngineAudioSource(AudioSource source, AudioClip clip)
+    {
+        source.clip = clip;
+        source.volume = 0;
+        source.spatialBlend = 1;
+        source.loop = true;
+        source.dopplerLevel = 0;
+        source.time = Random.Range(0f, clip.length);
+        source.Play();
+        source.minDistance = 5;
+        source.maxDistance = maxRolloffDistance;
+        return source;
+    }
+
+    // 선형 보간 함수
+    private float ULerp(float from, float to, float value)
+    {
+        return (1.0f - value) * from + value * to;
+    }
+
+  
+
+    // 타이어 사운드 조절 함수
     public void TireSound()
     {
         if (WheelSourse.clip == null)
             WheelSourse.clip = skid;
-        WheelSourse.volume = 0.2f+tireSlipAmount/3;
+        WheelSourse.volume = 0.5f + tireSlipAmount / 3;
         if (isSkid)
         {
             WheelSourse.enabled = true;
@@ -75,206 +169,6 @@ public class CarAudio : MonoBehaviour
         else
         {
             WheelSourse.enabled = false;
-
-        }
-
-
-    }
-
-    AudioSource source;
-    AudioSource source2;
-    bool useAudioSource2 = false;
-
-    [Tooltip("Sample of an engine going from low rpm to high")]
-    [SerializeField] AudioClip clip = null;
-
-    [Tooltip("Percent of possible RPM")]
-    [Range(0.0f, 1.0f)][SerializeField] float rev = 0;
-
-    [Tooltip("Randomness to break up repetition when not accelerating")]
-    [SerializeField] float variance = 0.05f;//Should be kept very low
-
-    [Tooltip("How long is a single grain in milli seconds")]
-    [SerializeField] float grainTime = 300.0f;//Will lead to wonky behaviour if < deltaTime
-
-    [Tooltip("How long is a crossfade")]
-    [SerializeField] float envelopeTime = 50.0f;//Will lead to wonky behaviour if > grainTime / 2
-
-    [Tooltip("How small does a sample need to be to count as a good cur point to avoid clipping")]
-    [SerializeField] float clipMargin = 0.1f;//Should also be kept low
-
-    //Data buffers of each grain
-    float[][] grains;
-
-    //Schedule of upcoming grains
-    LinkedList<int> grainSchedule = new LinkedList<int>();
-    int currentGrain = 0;
-
-    //Time used to determine when to play next sound
-    double lastPlayTime = AudioSettings.dspTime;
-    double lastPlayDuration = 0;
-
-    void Awake()
-    {
-        //source = gameObject.GetComponent<AudioSource>();
-        source = gameObject.AddComponent<AudioSource>();
-        source2 = gameObject.AddComponent<AudioSource>();
-
-        if (clip == null)
-            Debug.LogWarning("The input audio clip of " + gameObject.name + " is null. "
-                + "This will likely result in an error. Please assign a clip in the inspector");
-
-        if (envelopeTime > grainTime)
-        {
-            envelopeTime = grainTime / 2.0f;
-            Debug.LogWarning("The envelope size was higer than half the grainTime and has been adjusted");
-        }
-
-        generateGrains();
-    }
-
-    private void Update()
-    {
-        //Just cycles through throttle for debug
-        //rev = 1.0f - Mathf.Abs(Mathf.Sin(Time.time / 5.0f));
-        rev = CC.currentRPM / CC.maxRPM;
-        scheduleGrains();
-
-        playScheduled();
-    }
-
-    /// <summary>Use this to set engine RPM as percent of total</summary>
-    public void setRev(float rev)
-    {
-        this.rev = Mathf.Clamp(rev, 0.0f, 1.0f);
-    }
-
-    /// <summary>Cuts the given clip into grains of ca. grainTime and attempts to avoid clipping</summary>
-    void generateGrains()
-    {
-        //Load Audio Clip
-        int samples = clip.samples;
-        float[] data = new float[samples];
-        clip.GetData(data, 0);
-
-        //Find nice seperation points between grains to avoid clicking
-        //int grainSize = (int)(grainTime * clip.samples / clip.length / 1000.0f);
-        int grainSize = (int)((double)grainTime / 1000.0 * clip.frequency);
-        LinkedList<int> grainIndices = new LinkedList<int>();
-
-        int envelopeSize = (int)((double)envelopeTime / 1000.0 * clip.frequency);
-
-        source.clip = AudioClip.Create("grain", (int)(grainSize * 2.0f), 1, clip.frequency, false);
-        source2.clip = AudioClip.Create("grain2", (int)(grainSize * 2.0f), 1, clip.frequency, false);
-
-        grainIndices.AddLast(0);
-        for (int index = grainSize; index < samples; index += grainSize)
-        {
-            for (int r = 0; r < grainSize / 2; r++)
-            {
-                //Which sample am I looking at (besides the pre determined break point)
-                int right = index - r;
-
-                //How loud is the sample?
-                if (Mathf.Abs(data[r]) < clipMargin)
-                {
-                    index = right;
-                    break;
-                }
-            }
-
-            //Try to avoid clicking by doing a mini fade out
-            data[index] = 0;
-            if (index + 1 < samples) data[index + 1] *= 0.5f;
-            if (index > 0) data[index - 1] *= 0.5f;
-
-            //Keep track of cut time
-            grainIndices.AddLast(index);
-        }
-
-
-        //Copy corresponding clips into nice seperated arrays
-        grains = new float[grainIndices.Count][];
-        LinkedListNode<int> node = grainIndices.First;
-        for (int i = 0; i < grainIndices.Count; i++)
-        {
-            LinkedListNode<int> next = node.Next;
-
-            //Which interval to copy for this grain
-            int index = node.Value;
-            int nextIndex;
-
-            if (next == null)//Is it the last grain
-            {
-                nextIndex = samples;//Last grain takes all remaining data
-
-                if (nextIndex - index <= (grainSize + envelopeSize) / 2)
-                    index = node.Previous.Value;//Avoid an incredibly short last grain
-            }
-            else
-                nextIndex = next.Value;
-
-
-            //The actual copying
-            grains[i] = new float[nextIndex - index];
-
-            for (int sampleNumber = 0, runningIndex = index; runningIndex < nextIndex; runningIndex++, sampleNumber++)
-            {
-                //Crossfade
-                float fadeIn = Mathf.Clamp((float)sampleNumber / (float)envelopeSize, 0.0f, 1.0f);
-                float fadeOut = Mathf.Clamp((float)(sampleNumber - grains[i].Length) / -(float)envelopeSize, 0.0f, 1.0f);
-                float envMul = fadeIn * fadeOut;
-                if (float.IsNaN(envMul) || float.IsInfinity(envMul)) envMul = 1.0f;
-                if (envelopeTime == 0) envMul = 1.0f;
-
-                grains[i][sampleNumber] = data[runningIndex] * envMul;
-            }
-
-            node = next;
         }
     }
-
-    /// <summary>Schedules some grains to be played in the near future</summary>
-    void scheduleGrains()
-    {
-        //Do I not have enough grains to make it to atleast the next frame?
-        while (grainSchedule.Count < System.Math.Max(1, (2 * Time.deltaTime / (grainTime / 1000.0))))
-        {
-            //Selected wanted grain
-            //(with some randomness so it doesnt get hung up on a single grain)
-            int grainIndex = (int)(grains.Length * (rev + (Random.value * 2.0f - 1.0f) * variance));
-            grainIndex = Mathf.Clamp(grainIndex, 0, grains.Length - 1);
-
-            //Schedule to play soon
-            grainSchedule.AddLast(grainIndex);
-        }
-    }
-
-    /// <summary>Tells the audio system to play the next grain as soon as the previous finishes</summary>
-    void playScheduled()
-    {
-        //Am I close to finish playing the current grain?
-        if (AudioSettings.dspTime >= lastPlayTime + lastPlayDuration * 0.75 - (double)envelopeTime / 1000.0)
-        {
-            //Find next in line
-            int first = grainSchedule.First.Value;
-            grainSchedule.RemoveFirst();
-
-            //schedule to play next
-            double duration = (double)grains[currentGrain].Length / clip.frequency;
-            double playTime = lastPlayTime + lastPlayDuration - (double)envelopeTime / 1000.0 - 0.1;
-
-            //Need to use this weird scheduled method as the audio thread if faster than Update
-            AudioSource useSource = (useAudioSource2) ? source2 : source;
-            useSource.clip.SetData(grains[first], 0);
-            useSource.PlayScheduled(playTime);
-
-            //keep track, so you can schedule the next one
-            lastPlayDuration = duration;
-            lastPlayTime = playTime;
-            currentGrain = first;
-            useAudioSource2 = !useAudioSource2;//Flip sources, so loading doesnt interfere with playing the other
-        }
-    }
-
 }
