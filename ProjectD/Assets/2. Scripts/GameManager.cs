@@ -26,6 +26,9 @@ public class GameManager : MonoBehaviour
     public int Map;
     public bool isReverse;
 
+
+    public bool isAutoCounter = true;
+
     private void Start()
     {
         gameMode = GameMode.None;

@@ -190,19 +190,23 @@ public class FinalCarController_June : MonoBehaviour
     {
 
         canvas = GetComponentInChildren<Canvas>();
-        //steerSlider = GameObject.Find("steerSlider").GetComponent<Slider>();
         steerSlider = canvas.GetComponentInChildren<Slider>();
         speedText = GameObject.Find("speedText").GetComponent<TextMeshProUGUI>();
-       // gearText = GameObject.Find("gearText").GetComponent<TextMeshProUGUI>();
-        //gearratiostext = GameObject.Find("gearratiostext").GetComponent<TextMeshProUGUI>();
-       // torqueCurvetext = GameObject.Find("torqueCurvetext").GetComponent<TextMeshProUGUI>();
-        //wheelRPMtext = GameObject.Find("wheelRPMtext").GetComponent<TextMeshProUGUI>();
-
         niddle = GameObject.Find("niddle").GetComponent<RectTransform>();
         TarcometerRPM = GameObject.Find("TarcometerRPM").GetComponent<TextMeshProUGUI>();
         TarcometerGear = GameObject.Find("TarcometerGear").GetComponent<TextMeshProUGUI>();
 
 
+        //if(!GameManager.Instance.isAutoCounter)
+        //{
+        //    autoCounter = false;
+
+        //}
+        //else
+        //{
+        //    autoCounter = true;
+
+        //}
         //무게 중심 초기화
         playerRB = gameObject.GetComponent<Rigidbody>();
         playerRB.centerOfMass = centerofmassObject.transform.localPosition;
@@ -293,7 +297,7 @@ public class FinalCarController_June : MonoBehaviour
             steerSlider.value = Mathf.Lerp(steerSlider.value, 0, Time.fixedDeltaTime * resetSteerAngleSpeed);
         }
     }
-    [SerializeField] float slipAngle;
+    public float slipAngle;
     [SerializeField] float steeringInput;
     [SerializeField] float speed;
     public void ApplySteering()//fixedUpdate

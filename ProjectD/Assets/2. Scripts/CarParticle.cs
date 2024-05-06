@@ -26,6 +26,7 @@ public class CarParticle : MonoBehaviour
         for(int i = 0;i < carController.wheels.Count;i++)
         {
             carController.wheels[i].wheelCollider.GetGroundHit(out wheelHits[i]);
+            GetComponent<CarAudio>().tireSlipAmount = Mathf.Abs(wheelHits[i].sidewaysSlip) + Mathf.Abs(wheelHits[i].forwardSlip);
             if (Mathf.Abs(wheelHits[i].sidewaysSlip) + Mathf.Abs(wheelHits[i].forwardSlip) > slipAllowance)
             {
                 //print(Mathf.Abs(wheelHits.sidewaysSlip) + Mathf.Abs(wheelHits.forwardSlip));
