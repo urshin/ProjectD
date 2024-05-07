@@ -10,11 +10,12 @@ public class GoalChecker : MonoBehaviour
     {
         if(isReverse == GameManager.Instance.isReverse)
         {
-            if (other.transform.CompareTag("Player"))
+            // 충돌 감지는 차량이 하지만 태그는 그 상위인 플레이어 컨트롤러 또는 AI 컨트롤러에 달려있기 때문에 부모에게서 검사
+            if (other.transform.parent.CompareTag("Player"))
             {
                 Debug.Log("Player Win");
             }
-            else if (other.transform.CompareTag("Enemy"))
+            else if (other.transform.parent.CompareTag("Enemy"))
             {
                 Debug.Log("Enemy Win");
             }

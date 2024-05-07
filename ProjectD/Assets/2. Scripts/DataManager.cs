@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using System.IO;
 using UnityEditor;
+using UnityEngine.SceneManagement;
 
 public class DataManager : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class DataManager : MonoBehaviour
     public List<CarData> carDatas = new List<CarData>();
     public List<Material> skyBoxs = new List<Material>();
 
+    Dictionary<string, CarData> datas;
 
     private void Start()
     {
@@ -67,6 +69,7 @@ public class DataManager : MonoBehaviour
 
     public string jsonFolderPath = "Resources/CarInformation";
     [SerializeField] public CarData carData;
+    public CarData enemyData;
     public TextAsset[] textAsset;
     public void ParsingcarDatas()
     {
@@ -79,17 +82,38 @@ public class DataManager : MonoBehaviour
         carData = JsonUtility.FromJson<CarData>(text.ToString());
         Debug.Log(text.ToString());
     }
+
+    /// <summary>
+    /// AI 차량의 데이터를 바꿀 때 사용할 예정
+    /// </summary>
+    /// <param name="carName">차량 프리팹의 이름, 차량 프리팹과 Json파일의 이름이 같아야 한다</param>
     public void UpdateCarData(string carName)
     {
-        // 이거론 작동 안됨....
+        // 생성된 차량은 뒤에 (Clone) 이 붙어 나오기 때문에 7글자를 지운 것으로 검색해야 한다
+        carName = carName.Substring(0, carName.Length - 7);
         foreach(TextAsset text in textAsset)
         {
             if(text.name == carName)
             {
-                carData = JsonUtility.FromJson<CarData>(text.ToString());
+                enemyData = JsonUtility.FromJson<CarData>(text.ToString());
             }
         }
     }
+
+
+    IEnumerator RestartIngame()
+    {
+        SceneManager.LoadScene("InGame");
+
+        // 차량 정보는 이미 저장돼있으나 리스타트 플래그 세워야함
+
+        yield return new WaitForEndOfFrame();
+    }
+
+
+
+
+
 
     [System.Serializable]
     public class CarData
