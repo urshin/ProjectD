@@ -252,6 +252,8 @@ public class LobbyUIHandler : MonoBehaviour
             case LobbyState.SelectGameMode:
                 HideAllPanel();
                 mainPanel.SetActive(true);
+                lobbystate = LobbyState.Main;
+
                 break;
             case LobbyState.StroyMode:
                 HideAllPanel();
@@ -266,6 +268,13 @@ public class LobbyUIHandler : MonoBehaviour
             case LobbyState.Option:
                 HideAllPanel();
                 mainPanel.SetActive(true);
+                lobbystate = LobbyState.Main;
+
+                break;
+            case LobbyState.MapSelect:
+                HideAllPanel();
+                startGamePanel.SetActive(true);
+                lobbystate = LobbyState.SelectGameMode;
                 break;
         }
     }

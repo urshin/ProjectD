@@ -16,7 +16,8 @@ public class GarageManager : MonoBehaviour
     [SerializeField] GameObject currentCar;
     [SerializeField] int carIndex = 0;
     [SerializeField] int carIndexMax;
-    [SerializeField] TextMeshProUGUI carInfoText;
+    [SerializeField] TextMeshProUGUI carInfoTextLeft;
+    [SerializeField] TextMeshProUGUI carInfoTextRight;
     public TextAsset carTextAsset;
     // Start is called before the first frame update
     void Start()
@@ -66,16 +67,41 @@ public class GarageManager : MonoBehaviour
     {
         //carInfoText.text =
 
-        foreach (var a in DataManager.Instance.textAsset)
+        //foreach (var a in DataManager.Instance.textAsset)
+        //{
+        //    if(a.name == name)
+        //    {
+        //        carTextAsset = a;
+        //    }
+
+        //}
+
+        //carInfoText.text = carTextAsset.ToString();
+
+
+        carInfoTextLeft.text = "";
+        carInfoTextLeft.text += "NAME" + "\n";
+        carInfoTextLeft.text += "STEER ANGLE" + "\n";
+        carInfoTextLeft.text += "TRANSMISSION" + "\n";
+        carInfoTextLeft.text += "DRIVING SYSTEM" + "\n";
+        carInfoTextLeft.text += "MAX RPM" + "\n";
+        carInfoTextLeft.text += "MAX MOTOR POWER" + "\n";
+        carInfoTextLeft.text += "GEAR RATIO" + "\n";
+
+        carInfoTextRight.text = "";
+        carInfoTextRight.text += DataManager.Instance.carDictionary[name].name + "\n";
+        carInfoTextRight.text += DataManager.Instance.carDictionary[name].Handling.MaxSteerAngle + "\n";
+        carInfoTextRight.text += DataManager.Instance.carDictionary[name].Engine.Transmission + "\n";
+        carInfoTextRight.text += DataManager.Instance.carDictionary[name].Engine.WheelWork + "\n";
+        carInfoTextRight.text += DataManager.Instance.carDictionary[name].Engine.MaxRPM + "\n";
+        carInfoTextRight.text += DataManager.Instance.carDictionary[name].Engine.MaxMotorTorque + "\n";
+        foreach (var a in DataManager.Instance.carDictionary[name].Gear.GearRatios)
         {
-            if(a.name == name)
-            {
-                carTextAsset = a;
-            }
-            
+
+        carInfoTextRight.text += a + "\t";
         }
 
-        carInfoText.text = carTextAsset.ToString();
+        
 
     }
 
@@ -106,7 +132,16 @@ public class GarageManager : MonoBehaviour
         // SceneManager.LoadScene(weather + "_"+GameManager.Instance.Map);
          SceneManager.LoadScene("InGame");
     }
-    // Update is called once per frame
+
+
+
+    public void OnclickBackToMain()
+    {
+        SceneManager.LoadScene("Lobby");
+    }
+
+
+
     void Update()
     {
         //if (Input.GetMouseButtonDown(0))
