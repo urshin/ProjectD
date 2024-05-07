@@ -1,0 +1,179 @@
+{
+  "name": "car1",
+  "Handling": {
+    "MaxSteerAngle": 30
+  },
+  "Engine": {
+    "Transmission": "Manual",
+    "WheelWork": "REAR",
+    "MinRPM": 1300,
+    "MaxRPM": 7000,
+    "MaxMotorTorque": 340,
+    "MaxBrakeTorque": 5000,
+    "RPMSmoothness": 100
+  },
+  "Gear": {
+    "FinalGearRatio": 3.7,
+    "GearRatios": [
+      4,
+      2.3,
+      1.5,
+      1.2,
+      1,
+      0.7
+    ],
+    "ReverseRatio": 3.3,
+    "ShiftUp": 0.9,
+    "ShiftDown": 0.6,
+    "ShiftDelay": 1
+  },
+  "Environment": {
+    "DownForceValue": 5,
+    "DownForce": 1,
+    "AirDragCoeff": 0.015
+  }
+}
+
+{
+  "name": "Bolide",
+  "Handling": {
+    "MaxSteerAngle": 40
+  },
+  "Engine": {
+    "Transmission": "Manual",
+    "WheelWork": "AWD",
+    "MinRPM": 1000,
+    "MaxRPM": 6000,
+    "MaxMotorTorque": 240,
+    "MaxBrakeTorque": 5000,
+    "RPMSmoothness": 100
+  },
+  "Gear": {
+    "FinalGearRatio": 3.7,
+    "GearRatios": [
+      4,
+      2.3,
+      1.5,
+      1.2,
+      1,
+      0.7
+    ],
+    "ReverseRatio": 3.3,
+    "ShiftUp": 0.9,
+    "ShiftDown": 0.6,
+    "ShiftDelay": 1
+  },
+  "Environment": {
+    "DownForceValue": 5,
+    "DownForce": 1,
+    "AirDragCoeff": 0.015
+  }
+}
+
+{
+  "name": "Chev666",
+  "Handling": {
+    "MaxSteerAngle": 40
+  },
+  "Engine": {
+    "Transmission": "Manual",
+    "WheelWork": "REAR",
+    "MinRPM": 1300,
+    "MaxRPM": 7000,
+    "MaxMotorTorque": 340,
+    "MaxBrakeTorque": 5000,
+    "RPMSmoothness": 100
+  },
+  "Gear": {
+    "FinalGearRatio": 3.7,
+    "GearRatios": [
+      4,
+      2.3,
+      1.5,
+      1.2,
+      1,
+      0.7
+    ],
+    "ReverseRatio": 3.3,
+    "ShiftUp": 0.9,
+    "ShiftDown": 0.6,
+    "ShiftDelay": 1
+  },
+  "Environment": {
+    "DownForceValue": 5,
+    "DownForce": 1,
+    "AirDragCoeff": 0.015
+  }
+}
+
+{
+  "name": "HATCHBACK_1988",
+  "Handling": {
+    "MaxSteerAngle": 40
+  },
+  "Engine": {
+    "Transmission": "Auto",
+    "WheelWork": "Front",
+    "MinRPM": 1100,
+    "MaxRPM": 8000,
+    "MaxMotorTorque": 240,
+    "MaxBrakeTorque": 5000,
+    "RPMSmoothness": 100
+  },
+  "Gear": {
+    "FinalGearRatio": 3.7,
+    "GearRatios": [
+      4,
+      2.3,
+      1.5,
+      1.2,
+      1,
+      0.7
+    ],
+    "ReverseRatio": 3.3,
+    "ShiftUp": 0.9,
+    "ShiftDown": 0.6,
+    "ShiftDelay": 1
+  },
+  "Environment": {
+    "DownForceValue": 5,
+    "DownForce": 1,
+    "AirDragCoeff": 0.015
+  }
+}
+
+{
+  "name": "SEDAN",
+  "Handling": {
+    "MaxSteerAngle": 40
+  },
+  "Engine": {
+    "Transmission": "Auto",
+    "WheelWork": "AWD",
+    "MinRPM": 1300,
+    "MaxRPM": 8000,
+    "MaxMotorTorque": 276,
+    "MaxBrakeTorque": 5000,
+    "RPMSmoothness": 100
+  },
+  "Gear": {
+    "FinalGearRatio": 3.7,
+    "GearRatios": [
+      4,
+      2.3,
+      1.5,
+      1.2,
+      1,
+      0.7
+    ],
+    "ReverseRatio": 3.3,
+    "ShiftUp": 0.9,
+    "ShiftDown": 0.6,
+    "ShiftDelay": 1
+  },
+  "Environment": {
+    "DownForceValue": 5,
+    "DownForce": 1,
+    "AirDragCoeff": 0.015
+  }
+}

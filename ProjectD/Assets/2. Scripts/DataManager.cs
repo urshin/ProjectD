@@ -110,11 +110,50 @@ public class DataManager : MonoBehaviour
         yield return new WaitForEndOfFrame();
     }
 
+    public void OnEnable()
+    {
+        CardataInitialize();
+    }
 
+    public List<CarData> cardataList = new List<CarData>();  
+    CarData carsingle = new CarData();  
+    [SerializeField] TextAsset textAsset2;
+    public Dictionary<string, CarData> carDictionary = new Dictionary<string, CarData>();
+    public void CardataInitialize()
+    {
+        string filePath = "CarData/CarInformation/carDatas";
+        textAsset2 = Resources.Load<TextAsset>(filePath);
+        string tempCarJson = "";
+        if (textAsset2 != null)
+        {
+            string[] lines = textAsset2.text.Split('\n');
+            foreach (string line in lines)
+            {
+                if (!string.IsNullOrWhiteSpace(line)) //공백x
+                {
+                    tempCarJson += line;
+                }
+                else                
+                {
+                    carsingle = JsonUtility.FromJson<CarData>(tempCarJson);
+                    cardataList.Add(carsingle);
+                    carDictionary.Add(carsingle.name, carsingle);
+                    tempCarJson = ""; //초기화
+                   
+                }
+            }
+        }
 
-
-
-
+    }
+    public string carname;
+    private void Update()
+    {
+        //디버깅용
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            print(carDictionary[carname].name + "\n" + carDictionary[carname].Engine.Transmission);
+        }
+    }
     [System.Serializable]
     public class CarData
     {
