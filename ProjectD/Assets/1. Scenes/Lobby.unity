@@ -14806,6 +14806,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd8b33b4d9f89e64e92b7249d28bec34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerCar: 0
+  enemyCar: 0
   garageCarPrefab: []
   InGameCarPrefab: []
   mapImage: []
@@ -14817,30 +14819,8 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 00a2ce3f9a3082c44a11ed606d167f29, type: 2}
   - {fileID: 2100000, guid: 7d24d6d9bb8235444a36969959eb9469, type: 2}
   jsonFolderPath: Resources/CarInformation
-  carData:
-    name: 
-    Handling:
-      MaxSteerAngle: 0
-    Engine:
-      Transmission: 
-      WheelWork: 
-      MinRPM: 0
-      MaxRPM: 0
-      MaxMotorTorque: 0
-      MaxBrakeTorque: 0
-      RPMSmoothness: 0
-    Gear:
-      FinalGearRatio: 0
-      GearRatios: []
-      ReverseRatio: 0
-      ShiftUp: 0
-      ShiftDown: 0
-      ShiftDelay: 0
-    Environment:
-      DownForceValue: 0
-      DownForce: 0
-      AirDragCoeff: 0
   enemyData:
+    index: 0
     name: 
     Handling:
       MaxSteerAngle: 0
@@ -20620,6 +20600,50 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1959964816}
   m_Mesh: {fileID: -7024841548182010944, guid: 848f684cb0cc14d40acb31d47d765c97, type: 3}
+--- !u!1 &1970849550
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1970849551}
+  - component: {fileID: 1970849552}
+  m_Layer: 0
+  m_Name: SceneControlManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1970849551
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1970849550}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1970849552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1970849550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b5741ff92151284fb5c7a623e539d42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1976673174
 GameObject:
   m_ObjectHideFlags: 0

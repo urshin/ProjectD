@@ -1,4 +1,5 @@
 {
+  "index": 0,
   "name": "car1",
   "Handling": {
     "MaxSteerAngle": 30
@@ -35,6 +36,7 @@
 }
 
 {
+  "index": 1,
   "name": "Bolide",
   "Handling": {
     "MaxSteerAngle": 40
@@ -71,6 +73,7 @@
 }
 
 {
+  "index": 2,
   "name": "Chev666",
   "Handling": {
     "MaxSteerAngle": 40
@@ -107,6 +110,7 @@
 }
 
 {
+  "index": 3,
   "name": "HATCHBACK_1988",
   "Handling": {
     "MaxSteerAngle": 40
@@ -143,6 +147,7 @@
 }
 
 {
+  "index": 4,
   "name": "SEDAN",
   "Handling": {
     "MaxSteerAngle": 40

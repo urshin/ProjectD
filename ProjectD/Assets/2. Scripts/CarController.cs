@@ -116,7 +116,7 @@ public class CarController : MonoBehaviour
 
     private void OnEnable()
     {
-        InitializedSetting();
+        //InitializedSetting();
     }
     private void Update()
     {
@@ -150,12 +150,56 @@ public class CarController : MonoBehaviour
 
 
 
-    void InitializedSetting()
+    public void InitializeSetting(int index, bool isAi)
     {
         //무게 중심 초기화
         playerRB = gameObject.GetComponent<Rigidbody>();
         playerRB.centerOfMass = centerofmassObject.transform.localPosition;
         centerofmass = playerRB.centerOfMass;
+
+        maxSteerAngle = DataManager.Instance.carDictionary[index].Handling.MaxSteerAngle;
+
+        switch (DataManager.Instance.carDictionary[index].Engine.Transmission)
+        {
+            case "Manual":
+                transmission = Transmission.Manual_Transmission;
+                break;
+            case "Auto":
+                transmission = Transmission.Auto_Transmission;
+                break;
+        }
+        if (isAi)
+        {
+            transmission = Transmission.Auto_Transmission;
+        }
+
+        switch (DataManager.Instance.carDictionary[index].Engine.WheelWork)
+        {
+            case "FRONT":
+                wheelWork = WheelWork.FRONT;
+                break;
+            case "REAR":
+                wheelWork = WheelWork.REAR;
+                break;
+            case "AWD":
+                wheelWork = WheelWork.AWD;
+                break;
+        }
+
+        minRPM = DataManager.Instance.carDictionary[index].Engine.MinRPM;
+        maxRPM = DataManager.Instance.carDictionary[index].Engine.MaxRPM;
+        maxMotorTorque = DataManager.Instance.carDictionary[index].Engine.MaxMotorTorque;
+        maxBrakeTorque = DataManager.Instance.carDictionary[index].Engine.MaxBrakeTorque;
+        RPMSmoothness = DataManager.Instance.carDictionary[index].Engine.RPMSmoothness;
+        finalDriveRatio = DataManager.Instance.carDictionary[index].Gear.FinalGearRatio;
+        gearRatiosArray = DataManager.Instance.carDictionary[index].Gear.GearRatios;
+        reverseRatio = DataManager.Instance.carDictionary[index].Gear.ReverseRatio;
+        shiftUp = DataManager.Instance.carDictionary[index].Gear.ShiftUp;
+        shiftDown = DataManager.Instance.carDictionary[index].Gear.ShiftDown;
+        shiftDelay = DataManager.Instance.carDictionary[index].Gear.ShiftDelay;
+        DownForceValue = DataManager.Instance.carDictionary[index].Environment.DownForceValue;
+        downforce = DataManager.Instance.carDictionary[index].Environment.DownForce;
+        airDragCoeff = DataManager.Instance.carDictionary[index].Environment.AirDragCoeff;
     }
 
     public void InitializeIngame()

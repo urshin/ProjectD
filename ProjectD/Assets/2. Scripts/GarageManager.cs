@@ -10,6 +10,11 @@ using UnityEngine.SceneManagement;
 
 public class GarageManager : MonoBehaviour
 {
+    static GarageManager uniqueInstance;
+    public static GarageManager instace
+    {
+        get { return uniqueInstance; }
+    }
 
     [SerializeField] GameObject startBlackPanel;
     [SerializeField] GameObject carSpawnPosition;
@@ -18,8 +23,13 @@ public class GarageManager : MonoBehaviour
     [SerializeField] int carIndexMax;
     [SerializeField] TextMeshProUGUI carInfoTextLeft;
     [SerializeField] TextMeshProUGUI carInfoTextRight;
-    public TextAsset carTextAsset;
+    //public TextAsset carTextAsset;
     // Start is called before the first frame update
+    private void Awake()
+    {
+        uniqueInstance = this;
+    }
+
     void Start()
     {
         DOTween.Init(); // 닷 트윈 초기화
@@ -38,20 +48,20 @@ public class GarageManager : MonoBehaviour
         DespawnCar();
         carIndex += direction;
         // carIndex가 범위를 초과하면 0 또는 carIndexMax로 조정
-        if (carIndex < 1)
+        if (carIndex < 0)
         {
             carIndex = carIndexMax;
         }
         else if (carIndex > carIndexMax)
         {
-            carIndex = 1;
+            carIndex = 0;
         }
-        currentCar = DataManager.Instance.garageCarPrefab[carIndex-1];
+        currentCar = DataManager.Instance.garageCarPrefab[carIndex];
         GameObject car = Instantiate(currentCar, carSpawnPosition.transform);
         car.transform.SetParent(carSpawnPosition.transform);
         GameManager.Instance.carName = currentCar.name;
         UpdateCarInfoPanel(currentCar.name);
-        DataManager.Instance.UpdateCarData(carTextAsset);
+        //DataManager.Instance.UpdateCarData(carTextAsset);
     }
 
     public void DespawnCar()
@@ -89,16 +99,15 @@ public class GarageManager : MonoBehaviour
         carInfoTextLeft.text += "GEAR RATIO" + "\n";
 
         carInfoTextRight.text = "";
-        carInfoTextRight.text += DataManager.Instance.carDictionary[name].name + "\n";
-        carInfoTextRight.text += DataManager.Instance.carDictionary[name].Handling.MaxSteerAngle + "\n";
-        carInfoTextRight.text += DataManager.Instance.carDictionary[name].Engine.Transmission + "\n";
-        carInfoTextRight.text += DataManager.Instance.carDictionary[name].Engine.WheelWork + "\n";
-        carInfoTextRight.text += DataManager.Instance.carDictionary[name].Engine.MaxRPM + "\n";
-        carInfoTextRight.text += DataManager.Instance.carDictionary[name].Engine.MaxMotorTorque + "\n";
-        foreach (var a in DataManager.Instance.carDictionary[name].Gear.GearRatios)
+        carInfoTextRight.text += DataManager.Instance.carDictionary[carIndex].name + "\n";
+        carInfoTextRight.text += DataManager.Instance.carDictionary[carIndex].Handling.MaxSteerAngle + "\n";
+        carInfoTextRight.text += DataManager.Instance.carDictionary[carIndex].Engine.Transmission + "\n";
+        carInfoTextRight.text += DataManager.Instance.carDictionary[carIndex].Engine.WheelWork + "\n";
+        carInfoTextRight.text += DataManager.Instance.carDictionary[carIndex].Engine.MaxRPM + "\n";
+        carInfoTextRight.text += DataManager.Instance.carDictionary[carIndex].Engine.MaxMotorTorque + "\n";
+        foreach (var a in DataManager.Instance.carDictionary[carIndex].Gear.GearRatios)
         {
-
-        carInfoTextRight.text += a + "\t";
+            carInfoTextRight.text += a + "\t";
         }
 
         
@@ -112,7 +121,14 @@ public class GarageManager : MonoBehaviour
     }
     public void OnClickStartGame()
     {
-        StartCoroutine(StartGame(1));
+        int carCount = DataManager.Instance.garageCarPrefab.Count;
+        // 랜덤한 인덱스의 차량을 상대 차량으로 설정
+        DataManager.Instance.playerCar = carIndex;
+        DataManager.Instance.enemyCar = Random.Range(0, carCount);
+
+        SceneControlManager.Instance.StartIngameScene(carIndex, DataManager.Instance.enemyCar);
+
+        //StartCoroutine(StartGame(1));
     }
 
     private string weather;

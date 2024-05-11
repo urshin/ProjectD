@@ -562,7 +562,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 16
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &551254908
 PrefabInstance:
@@ -748,7 +748,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 18
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &614006931
 GameObject:
@@ -853,7 +853,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 19
+  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &618193988
 GameObject:
@@ -2189,7 +2189,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 17
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1498719317
 MonoBehaviour:
@@ -2211,106 +2211,6 @@ MonoBehaviour:
   Map: 5
   isReverse: 0
   isAutoCounter: 1
---- !u!1 &1544846113
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1544846114}
-  - component: {fileID: 1544846115}
-  m_Layer: 0
-  m_Name: DataManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1544846114
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1544846113}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 15
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1544846115
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1544846113}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd8b33b4d9f89e64e92b7249d28bec34, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  garageCarPrefab: []
-  InGameCarPrefab: []
-  mapImage: []
-  carDatas: []
-  skyBoxs: []
-  jsonFolderPath: Resources/CarInformation
-  carData:
-    name: 
-    Handling:
-      MaxSteerAngle: 0
-    Engine:
-      Transmission: 
-      WheelWork: 
-      MinRPM: 0
-      MaxRPM: 0
-      MaxMotorTorque: 0
-      MaxBrakeTorque: 0
-      RPMSmoothness: 0
-    Gear:
-      FinalGearRatio: 0
-      GearRatios: []
-      ReverseRatio: 0
-      ShiftUp: 0
-      ShiftDown: 0
-      ShiftDelay: 0
-    Environment:
-      DownForceValue: 0
-      DownForce: 0
-      AirDragCoeff: 0
-  enemyData:
-    name: 
-    Handling:
-      MaxSteerAngle: 0
-    Engine:
-      Transmission: 
-      WheelWork: 
-      MinRPM: 0
-      MaxRPM: 0
-      MaxMotorTorque: 0
-      MaxBrakeTorque: 0
-      RPMSmoothness: 0
-    Gear:
-      FinalGearRatio: 0
-      GearRatios: []
-      ReverseRatio: 0
-      ShiftUp: 0
-      ShiftDown: 0
-      ShiftDelay: 0
-    Environment:
-      DownForceValue: 0
-      DownForce: 0
-      AirDragCoeff: 0
-  textAsset: []
-  cardataList: []
-  textAsset2: {fileID: 0}
-  carname: 
 --- !u!1 &1567473938
 GameObject:
   m_ObjectHideFlags: 0
@@ -2548,7 +2448,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 20
+  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &1858935630
 GameObject:
@@ -2835,7 +2735,6 @@ MonoBehaviour:
   carIndexMax: 0
   carInfoTextLeft: {fileID: 255350580}
   carInfoTextRight: {fileID: 618193990}
-  carTextAsset: {fileID: 0}
 --- !u!1 &2102573711
 GameObject:
   m_ObjectHideFlags: 0

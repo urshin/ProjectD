@@ -18,6 +18,9 @@ public class DataManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    public int playerCar;
+    public int enemyCar;
+
     public List<GameObject> garageCarPrefab = new List<GameObject>();
     public List<GameObject> InGameCarPrefab = new List<GameObject>();
     public List<Sprite> mapImage = new List<Sprite>();
@@ -68,7 +71,7 @@ public class DataManager : MonoBehaviour
 
 
     public string jsonFolderPath = "Resources/CarInformation";
-    [SerializeField] public CarData carData;
+    //[SerializeField] public CarData carData;
     public CarData enemyData;
     public TextAsset[] textAsset;
     public void ParsingcarDatas()
@@ -79,7 +82,7 @@ public class DataManager : MonoBehaviour
 
     public void UpdateCarData(TextAsset text)
     {
-        carData = JsonUtility.FromJson<CarData>(text.ToString());
+        //carData = JsonUtility.FromJson<CarData>(text.ToString());
         Debug.Log(text.ToString());
     }
 
@@ -118,7 +121,7 @@ public class DataManager : MonoBehaviour
     public List<CarData> cardataList = new List<CarData>();  
     CarData carsingle = new CarData();  
     [SerializeField] TextAsset textAsset2;
-    public Dictionary<string, CarData> carDictionary = new Dictionary<string, CarData>();
+    public Dictionary<int, CarData> carDictionary = new Dictionary<int, CarData>();
     public void CardataInitialize()
     {
         string filePath = "CarData/CarInformation/carDatas";
@@ -137,9 +140,8 @@ public class DataManager : MonoBehaviour
                 {
                     carsingle = JsonUtility.FromJson<CarData>(tempCarJson);
                     cardataList.Add(carsingle);
-                    carDictionary.Add(carsingle.name, carsingle);
+                    carDictionary.Add(carsingle.index, carsingle);
                     tempCarJson = ""; //초기화
-                   
                 }
             }
         }
@@ -151,12 +153,13 @@ public class DataManager : MonoBehaviour
         //디버깅용
         if(Input.GetKeyDown(KeyCode.P))
         {
-            print(carDictionary[carname].name + "\n" + carDictionary[carname].Engine.Transmission);
+            //print(carDictionary[carname].name + "\n" + carDictionary[carname].Engine.Transmission);
         }
     }
     [System.Serializable]
     public class CarData
     {
+        public int index;
         public string name;
         public HandlingData Handling;
         public EngineData Engine;
