@@ -8,6 +8,8 @@ public class CarParticle : MonoBehaviour
     [SerializeField] List< ParticleSystem> smoke;
     [SerializeField] GameObject smokePrefab1;
     [SerializeField] GameObject smokePrefab2;
+    [SerializeField] GameObject collisionParticle;
+    [SerializeField] Collider[] carBodyCollier;
 
     private void OnEnable()
     {
@@ -40,5 +42,34 @@ public class CarParticle : MonoBehaviour
                 GetComponent<CarAudio>().isSkid = false;
             }
         }
+
+
+        
+
+
     }
+  
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("웅라ㅡㅇㅁㄴ아ㅣ;럼ㄴㅇ;ㅣㅏ럼ㄴ;ㅣㅏㅇ");
+        ContactPoint contact = collision.contacts[0];
+        Quaternion rotation = Quaternion.FromToRotation(Vector3.up, contact.normal);
+        ParticleSystem particle = Instantiate(collisionParticle, contact.point, rotation).GetComponent<ParticleSystem>();
+        // 파티클 크기를 설정할 변수
+        float particleSize = carController.KPH / 10;
+
+        // 파티클 시스템의 startSize 속성을 사용하여 크기 설정
+        ParticleSystem.MainModule mainModule = particle.main;
+        mainModule.startSize = particleSize;
+
+        particle.Emit(5);
+        // 생성된 파티클을 일정 시간 후에 파괴
+        Destroy(particle, 1.0f);
+
+    }
+    private void OnCollisionStay(Collision collision)
+    {
+        Debug.Log("드르르르르륵");
+    }
+
 }
