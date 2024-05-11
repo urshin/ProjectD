@@ -48,13 +48,8 @@ public class FinalCarController_June : MonoBehaviour
     [Header("About UI")]
     // 스티어링 슬라이더
     [SerializeField] Canvas canvas;
-    public Slider steerSlider;
+    [Range(-540, 540)] public float steerSlider;
     public TextMeshProUGUI speedText;
-    //public TextMeshProUGUI gearText;
-    //public TextMeshProUGUI gearratiostext;
-    //public TextMeshProUGUI torqueCurvetext;
-    //public TextMeshProUGUI wheelRPMtext;
-
     [SerializeField] Transform niddle;
     [SerializeField] TextMeshProUGUI TarcometerRPM;
     [SerializeField] TextMeshProUGUI TarcometerGear;
@@ -64,7 +59,7 @@ public class FinalCarController_June : MonoBehaviour
     public bool autoCounter;
     [Range(10, 90)] public float maxSteerAngle; //최대 각도
     public float sensitivity; //마우스 감도 
-    [SerializeField] bool handBrake = false;
+    public bool handBrake = false;
     public float handBrakeSleepAmout = 0.55f;
     public float resetSteerAngleSpeed = 100f; //스티어 앵글 각도 초기화 시간
 
@@ -166,15 +161,15 @@ public class FinalCarController_June : MonoBehaviour
 
     void UIupdate()
     {
-        speedText.text = "Km/H : " + KPH;
+        //speedText.text = "Km/H : " + KPH;
         //gearText.text = "Gear : " + currentGear;
         ////gearratiostext.text =
         //torqueCurvetext.text = "Torque : " + torqueCurve.Evaluate(currentRPM / maxRPM);
         //wheelRPMtext.text = "WheelRPM : " + wheelRPM;
 
-        niddle.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(0, -250, currentRPM / maxRPM));
-        TarcometerRPM.text = currentRPM.ToString("0,000") + "rpm";
-        TarcometerGear.text = Mathf.RoundToInt(currentGear).ToString();
+       // niddle.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(0, -250, currentRPM / maxRPM));
+        //TarcometerRPM.text = currentRPM.ToString("0,000") + "rpm";
+       // TarcometerGear.text = Mathf.RoundToInt(currentGear).ToString();
 
 
     }
@@ -189,12 +184,12 @@ public class FinalCarController_June : MonoBehaviour
     void InitializedSetting()
     {
 
-        canvas = GetComponentInChildren<Canvas>();
-        steerSlider = canvas.GetComponentInChildren<Slider>();
-        speedText = GameObject.Find("speedText").GetComponent<TextMeshProUGUI>();
-        niddle = GameObject.Find("niddle").GetComponent<RectTransform>();
-        TarcometerRPM = GameObject.Find("TarcometerRPM").GetComponent<TextMeshProUGUI>();
-        TarcometerGear = GameObject.Find("TarcometerGear").GetComponent<TextMeshProUGUI>();
+        //canvas = GetComponentInChildren<Canvas>();
+        //steerSlider = canvas.GetComponentInChildren<Slider>();
+        //speedText = GameObject.Find("speedText").GetComponent<TextMeshProUGUI>();
+        //niddle = GameObject.Find("niddle").GetComponent<RectTransform>();
+        //TarcometerRPM = GameObject.Find("TarcometerRPM").GetComponent<TextMeshProUGUI>();
+        //TarcometerGear = GameObject.Find("TarcometerGear").GetComponent<TextMeshProUGUI>();
 
 
         //if(!GameManager.Instance.isAutoCounter)
@@ -288,13 +283,13 @@ public class FinalCarController_June : MonoBehaviour
         {
             if (mouseX != 0)
             {
-                steerSlider.value += mouseX * sensitivity;
+                steerSlider += mouseX * sensitivity;
             }
 
         }
         else
         {
-            steerSlider.value = Mathf.Lerp(steerSlider.value, 0, Time.fixedDeltaTime * resetSteerAngleSpeed);
+            steerSlider = Mathf.Lerp(steerSlider, 0, Time.fixedDeltaTime * resetSteerAngleSpeed);
         }
     }
     public float slipAngle;
@@ -309,7 +304,7 @@ public class FinalCarController_June : MonoBehaviour
         //미끌어지는 각
         slipAngle = Vector3.Angle(transform.forward, playerRB.velocity - transform.forward);
         
-        float steeringAngle = steerSlider.value * maxSteerAngle / (1080.0f / 2);
+        float steeringAngle = steerSlider * maxSteerAngle / (1080.0f / 2);
        
         if(autoCounter)
         {
@@ -408,7 +403,7 @@ public class FinalCarController_June : MonoBehaviour
         WheelRPMCalculate(); //휠 RPM 계산
         //wheelRPM = wheelRPM < 0 ? 0 : wheelRPM; //휠 음수 가는거 막기
         currentRPM = Mathf.Lerp(currentRPM, minRPM + (wheelRPM * finalDriveRatio * gearRatio), Time.fixedDeltaTime * RPMSmoothness); //2있는 곳은 나중에 수치로 변환 시켜보기
-        test.text = (minRPM + ( finalDriveRatio * gearRatio)).ToString();
+        //test.text = (minRPM + ( finalDriveRatio * gearRatio)).ToString();
         if (currentRPM > maxRPM - 200)
         {
             currentRPM = maxRPM - Random.Range(0, 200); //최대 RPM 제한
@@ -624,11 +619,11 @@ public class FinalCarController_June : MonoBehaviour
             float x = 0;
            
             // 조향 슬라이더 값에 따라 x 값을 설정합니다.
-            if (steerSlider.value > 0)
+            if (steerSlider > 0)
             {
                 x = 1;
             }
-            else if (steerSlider.value < 0)
+            else if (steerSlider < 0)
             {
                 x = -1;
             }
