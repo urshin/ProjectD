@@ -6,9 +6,11 @@ using UnityEngine;
 public class CinemachinController : MonoBehaviour
 {
     [SerializeField] CinemachineStateDrivenCamera cinemachineStateDrivenCamera;
+   
     int cameraNum = 1;
     int MaxCamera;
     [SerializeField] Animator cinemachineAnimator;
+    public bool isTurbo = false;
 
     // Start is called before the first frame update
     void Start()
@@ -20,26 +22,48 @@ public class CinemachinController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.C))
         {
             cameraNum++;
-            if(cameraNum > 3)
+            if (cameraNum > 3)
             {
                 cameraNum = 1;
             }
         }
+        
+        if (isTurbo)
+        {
+            if (cameraNum == 1)
+            {
+                cinemachineAnimator.Play("Turbo1");
+            }
+            if (cameraNum == 2)
+            {
+                cinemachineAnimator.Play("Turbo2");
+            }
+            if (cameraNum == 3)
+            {
+                cinemachineAnimator.Play("Turbo3");
+            }
 
-        if (cameraNum == 1)
-        {
-            cinemachineAnimator.Play("1stView");
         }
-        if (cameraNum == 2)
+        else
         {
-            cinemachineAnimator.Play("3rdVeiw");
+            if (cameraNum == 1)
+            {
+                cinemachineAnimator.Play("1stView");
+            }
+            if (cameraNum == 2)
+            {
+                cinemachineAnimator.Play("3rdVeiw");
+            }
+            if (cameraNum == 3)
+            {
+                cinemachineAnimator.Play("GroundView");
+            }
+
         }
-        if (cameraNum == 3)
-        {
-            cinemachineAnimator.Play("GroundView");
-        }
+
     }
+
 }

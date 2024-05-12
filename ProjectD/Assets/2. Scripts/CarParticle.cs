@@ -10,11 +10,12 @@ public class CarParticle : MonoBehaviour
     [SerializeField] GameObject smokePrefab2;
     [SerializeField] GameObject collisionParticle;
     [SerializeField] Collider[] carBodyCollier;
+    [SerializeField] float slipAllowance;
 
     private void OnEnable()
     {
         carController = gameObject.GetComponent<FinalCarController_June>();
-
+        slipAllowance= carController.slipAllowance;
         for (int i = 0; i < carController.wheels.Count; i++)
         {
         smoke.Add( Instantiate(smokePrefab1, carController.wheels[i].wheelCollider.transform.position, Quaternion.identity, carController.wheels[i].wheelCollider.transform).GetComponent<ParticleSystem>()) ;
@@ -22,7 +23,6 @@ public class CarParticle : MonoBehaviour
         }
 
     }
-       [SerializeField] float slipAllowance = 0.2f;
     private void Update()
     {
         WheelHit[] wheelHits = new WheelHit[4];
@@ -51,7 +51,7 @@ public class CarParticle : MonoBehaviour
   
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("錠塭天仄仃中嬴太;歲中仄;太凶歲中;太凶仄");
+        //Debug.Log("錠塭天仄仃中嬴太;歲中仄;太凶歲中;太凶仄");
         ContactPoint contact = collision.contacts[0];
         Quaternion rotation = Quaternion.FromToRotation(Vector3.up, contact.normal);
         ParticleSystem particle = Instantiate(collisionParticle, contact.point, rotation).GetComponent<ParticleSystem>();
@@ -69,7 +69,7 @@ public class CarParticle : MonoBehaviour
     }
     private void OnCollisionStay(Collision collision)
     {
-        Debug.Log("萄腦腦腦腦舅");
+       // Debug.Log("萄腦腦腦腦舅");
     }
 
 }

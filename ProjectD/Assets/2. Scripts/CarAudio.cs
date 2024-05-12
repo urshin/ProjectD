@@ -5,15 +5,12 @@ using UnityEngine.Audio;
 
 public class CarAudio : MonoBehaviour
 {
-    FinalCarController_June CC; // FinalCarController_June 스크립트에 대한 참조
-    [SerializeField] float range; // 범위 조절 변수
 
     // 타이어 슬립 관련 변수
     public bool isSkid = false;
     public float tireSlipAmount;
 
     [SerializeField] AudioMixer audioMixer; // AudioMixer에 대한 참조
-    [SerializeField] AudioSource engineSourse; // 엔진 사운드 AudioSource
     [SerializeField] AudioSource WheelSourse; // 타이어 사운드 AudioSource
     [SerializeField] AudioClip skid; // 슬립 사운드 클립
     //eq
@@ -32,6 +29,7 @@ public class CarAudio : MonoBehaviour
     public AudioClip lowDecelClip;
     public AudioClip highAccelClip;
     public AudioClip highDecelClip;
+
     [Header("Tubro Sound")]
     public AudioClip Turbo; // 터보 사운드 클립
     [Range(0, 2)] public float turboVolume; // 터보 볼륨 조절 변수
@@ -56,12 +54,11 @@ public class CarAudio : MonoBehaviour
     private void Start()
     {
         // FinalCarController_June 및 AudioSource 설정
-        CC = GetComponent<FinalCarController_June>();
         m_HighAccel = SetUpEngineAudioSource(m_HighAccel, highAccelClip);
         m_LowAccel = SetUpEngineAudioSource(m_LowAccel, lowAccelClip);
         m_LowDecel = SetUpEngineAudioSource(m_LowDecel, lowDecelClip);
         m_HighDecel = SetUpEngineAudioSource(m_HighDecel, highDecelClip);
-        if (Turbo != null) m_Turbo = SetUpEngineAudioSource(m_Turbo, Turbo);
+        //if (Turbo != null) m_Turbo = SetUpEngineAudioSource(m_Turbo, Turbo);
 
         // EQ 컴포넌트 설정
         eq = gameObject.AddComponent<SEF_Equalizer>();
@@ -73,9 +70,7 @@ public class CarAudio : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // range 값 보간
-        range = Mathf.Lerp(range, (CC.currentRPM * 2 / CC.maxRPM), 0.2f);
-
+ 
         // 엔진 및 타이어 사운드 재생
         EngineSound();
         TireSound();
@@ -170,5 +165,11 @@ public class CarAudio : MonoBehaviour
         {
             WheelSourse.enabled = false;
         }
+    }
+    
+    public void TurboOn()
+    {
+        m_Turbo.volume = 0.5f;
+        m_Turbo.Play();
     }
 }

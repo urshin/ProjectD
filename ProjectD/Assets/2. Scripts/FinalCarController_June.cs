@@ -154,7 +154,7 @@ public class FinalCarController_June : MonoBehaviour
             ManualGear();
         }
 
-
+        Boosting();
 
         //DriftControl();
     }
@@ -167,9 +167,9 @@ public class FinalCarController_June : MonoBehaviour
         //torqueCurvetext.text = "Torque : " + torqueCurve.Evaluate(currentRPM / maxRPM);
         //wheelRPMtext.text = "WheelRPM : " + wheelRPM;
 
-       // niddle.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(0, -250, currentRPM / maxRPM));
+        // niddle.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(0, -250, currentRPM / maxRPM));
         //TarcometerRPM.text = currentRPM.ToString("0,000") + "rpm";
-       // TarcometerGear.text = Mathf.RoundToInt(currentGear).ToString();
+        // TarcometerGear.text = Mathf.RoundToInt(currentGear).ToString();
 
 
     }
@@ -224,7 +224,40 @@ public class FinalCarController_June : MonoBehaviour
         cam = Camera.main;
         cam.GetComponent<CamController_June>().player = gameObject.transform;
     }
+    //드리프트 부스트!!!
+    public float slipAllowance = 0.2f;
+    public float driftTime;
+    public float _driftAngle;
+    
+    void Boosting()
+    {
+        Vector3 driftValue = transform.InverseTransformVector(playerRB.velocity);
+        _driftAngle = (Mathf.Atan2(driftValue.x, driftValue.z) * Mathf.Rad2Deg);
 
+        if (Mathf.Abs(_driftAngle) > 10 && playerRB.velocity.magnitude > 5)
+        {
+            //print("드리프트중!!!!!");
+            driftTime += Time.fixedDeltaTime;
+        }
+
+        if (driftTime > 0 && Mathf.Abs(_driftAngle) < 10) // 이전에 드리프트를 시작했었다면
+        {
+            if(GetComponent<CarAudio>()!=null)
+            {
+            GetComponent<CarAudio>().TurboOn();
+
+            }
+            GetComponent<CinemachinController>().isTurbo = true;
+            //print("터보");
+            playerRB.AddForce(transform.forward * playerRB.velocity.magnitude * 2, ForceMode.Impulse);
+            driftTime = 0;
+        }
+        else
+        {
+            GetComponent<CinemachinController>().isTurbo = false;
+        }
+
+    }
     void ApplyMotorWork()
     {
         switch (wheelWork)
@@ -303,17 +336,17 @@ public class FinalCarController_June : MonoBehaviour
 
         //미끌어지는 각
         slipAngle = Vector3.Angle(transform.forward, playerRB.velocity - transform.forward);
-        
+
         float steeringAngle = steerSlider * maxSteerAngle / (1080.0f / 2);
-       
-        if(autoCounter)
+
+        if (autoCounter)
         {
 
-        if (slipAngle < 120f)
-        {
-            steeringAngle += Vector3.SignedAngle(transform.forward, playerRB.velocity + transform.forward, Vector3.up);
-        }
-        steeringAngle = Mathf.Clamp(steeringAngle, -90f, 90f);
+            if (slipAngle < 120f)
+            {
+                steeringAngle += Vector3.SignedAngle(transform.forward, playerRB.velocity + transform.forward, Vector3.up);
+            }
+            steeringAngle = Mathf.Clamp(steeringAngle, -90f, 90f);
         }
 
 
@@ -346,7 +379,7 @@ public class FinalCarController_June : MonoBehaviour
                 wheel.wheelCollider.brakeTorque = 0f;
             }
         }
-        else if (gasInput <= -1 && wheelRPM <=0)
+        else if (gasInput <= -1 && wheelRPM <= 0)
         {
             float torquePerWheel = -torqueCurve.Evaluate(currentRPM / maxRPM) * reverseRatio * finalDriveRatio * maxMotorTorque;
             foreach (var wheel in wheels)
@@ -374,10 +407,12 @@ public class FinalCarController_June : MonoBehaviour
         }
         //Debug.Log(gasInput);
 
+
         //Debug.Log(playerRB.velocity.magnitude);
         if (Input.GetKey(KeyCode.Space)) //핸드 브레이크
         {
             handBrake = true;
+
             foreach (var wheel in wheels)
             {
                 if (wheel.wheelCollider.name == "RR" || wheel.wheelCollider.name == "RL")
@@ -408,7 +443,7 @@ public class FinalCarController_June : MonoBehaviour
         {
             currentRPM = maxRPM - Random.Range(0, 200); //최대 RPM 제한
             totalMotorTorque = 0; //토크에 0을 줌으로써 일정 속도로 유지 되게
-        } 
+        }
         else
         {
 
@@ -617,7 +652,7 @@ public class FinalCarController_June : MonoBehaviour
             WheelHit wheelHit;
             wheels[i].wheelCollider.GetGroundHit(out wheelHit);
             float x = 0;
-           
+
             // 조향 슬라이더 값에 따라 x 값을 설정합니다.
             if (steerSlider > 0)
             {
