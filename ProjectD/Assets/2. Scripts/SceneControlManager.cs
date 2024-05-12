@@ -18,12 +18,6 @@ public class SceneControlManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    private void Start()
-    {
-        StartLobbyScene();
-    }
-
-
     public void StartLobbyScene()
     {
         StartCoroutine(LoadLobbyScene());
@@ -31,6 +25,7 @@ public class SceneControlManager : MonoBehaviour
 
     IEnumerator LoadLobbyScene()
     {
+        SoundManager.instance.PlayBGM(0);
         AsyncOperation ao;
         ao = SceneManager.LoadSceneAsync("Lobby");
         while (!ao.isDone)
@@ -47,6 +42,7 @@ public class SceneControlManager : MonoBehaviour
 
     IEnumerator LoadGarageScene()
     {
+        SoundManager.instance.PlayBGM(1);
         AsyncOperation ao;
         ao = SceneManager.LoadSceneAsync("GarageScene1");
         while(!ao.isDone)
@@ -65,6 +61,8 @@ public class SceneControlManager : MonoBehaviour
 
     IEnumerator LoadIngameScene(int playerCarIndex, int enemyCarIndex)
     {
+        SoundManager.instance.PlayBGM(Random.Range(2, DataManager.Instance.bgmDictionary.Count));
+
         AsyncOperation ao;
 
         ao = SceneManager.LoadSceneAsync("InGame");

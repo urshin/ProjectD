@@ -116,6 +116,9 @@ public class DataManager : MonoBehaviour
     public void OnEnable()
     {
         CardataInitialize();
+        SoundDataInitialize();
+        SoundManager.instance.InitSoundData();
+        SceneControlManager.Instance.StartLobbyScene();
     }
 
     public List<CarData> cardataList = new List<CarData>();  
@@ -145,8 +148,33 @@ public class DataManager : MonoBehaviour
                 }
             }
         }
-
     }
+
+    // 현재는 bgm 테이블이 인덱스와 곡명만 저장되므로 밸류 값이 string이지만 테이블에 내용이 추가된다면 클래스를 선언하여 저장해야 한다
+    public Dictionary<int, string> bgmDictionary = new Dictionary<int, string>();
+    public void SoundDataInitialize()
+    {
+        TextAsset textAsset = Resources.Load<TextAsset>("Sound/BGM/BGMTable");
+        string tempSoundJson = "";
+        if (textAsset != null)
+        {
+            string[] lines = textAsset.text.Split('\n');
+            foreach (string line in lines)
+            {
+                if (!string.IsNullOrWhiteSpace(line)) //공백x
+                {
+                    tempSoundJson += line;
+                }
+                else
+                {
+                    BgmData bgmData = JsonUtility.FromJson<BgmData>(tempSoundJson);
+                    bgmDictionary.Add(bgmData.index, bgmData.name);
+                    tempSoundJson = ""; //초기화
+                }
+            }
+        }
+    }
+
     public string carname;
     private void Update()
     {
@@ -156,6 +184,14 @@ public class DataManager : MonoBehaviour
             //print(carDictionary[carname].name + "\n" + carDictionary[carname].Engine.Transmission);
         }
     }
+    [System.Serializable]
+    public class BgmData
+    {
+        public int index;
+        public string name;
+    }
+
+
     [System.Serializable]
     public class CarData
     {
