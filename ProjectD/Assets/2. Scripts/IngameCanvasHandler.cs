@@ -9,6 +9,8 @@ public class IngameCanvasHandler : MonoBehaviour
     [SerializeField] FinalCarController_June cc;
     [SerializeField] TextMeshProUGUI lap;
     [SerializeField] TextMeshProUGUI timeSpen;
+    [SerializeField] TextMeshProUGUI RPMTMP;
+    [SerializeField] TextMeshProUGUI gearTMP;
     [SerializeField] Slider gas;
     [SerializeField] Slider brake;
     [SerializeField] Slider gage;
@@ -35,7 +37,8 @@ public class IngameCanvasHandler : MonoBehaviour
         seconds = Mathf.FloorToInt(timer % 60f);
         milliseconds = Mathf.FloorToInt((timer * 100f) % 100f);
         timeSpen.text = "Time : " + minutes.ToString() + ":\t" + seconds.ToString() + ":\t" + milliseconds.ToString();
-
+        RPMTMP.text = cc.currentRPM.ToString();
+        gearTMP.text = ((int)cc.currentGear).ToString();
         gas.value = cc.gasInput;
         brake.value = -1 * cc.gasInput;
         gage.value = cc.currentRPM / cc.maxRPM;

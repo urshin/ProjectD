@@ -346,7 +346,7 @@ public class FinalCarController_June : MonoBehaviour
                 wheel.wheelCollider.brakeTorque = 0f;
             }
         }
-        else if (gasInput <= -1 && wheelRPM <0)
+        else if (gasInput <= -1 && wheelRPM <=0)
         {
             float torquePerWheel = -torqueCurve.Evaluate(currentRPM / maxRPM) * reverseRatio * finalDriveRatio * maxMotorTorque;
             foreach (var wheel in wheels)
@@ -464,7 +464,7 @@ public class FinalCarController_June : MonoBehaviour
                 }
             }
             // 하락 변속
-            else if (currentRPM / maxRPM < shiftDown && Mathf.RoundToInt(currentGear) > 1)
+            else if (currentRPM / maxRPM < shiftDown && Mathf.RoundToInt(currentGear) > 0)
             {
                 // 마지막 변속 시간을 기록합니다.
                 lastGear = Mathf.RoundToInt(currentGear);
