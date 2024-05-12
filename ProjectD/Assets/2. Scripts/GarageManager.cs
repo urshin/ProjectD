@@ -153,7 +153,8 @@ public class GarageManager : MonoBehaviour
 
     public void OnclickBackToMain()
     {
-        SceneManager.LoadScene("Lobby");
+        SceneControlManager.Instance.StartLobbyScene();
+        //SceneManager.LoadScene("Lobby");
     }
 
 

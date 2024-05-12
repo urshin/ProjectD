@@ -47,6 +47,22 @@ public class PlayerController : MonoBehaviour
         mouseX = Input.GetAxis("Mouse X");
         gasInput = Input.GetAxis("Vertical");
         carController.accel = gasInput;
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            carController.handBrake = true;
+        }
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            carController.handBrake = false;
+        }
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            carController.downShift = true;
+        }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            carController.upShift = true;
+        }
     }
     void InitializedSetting()
     {

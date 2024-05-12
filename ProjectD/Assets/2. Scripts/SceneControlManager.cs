@@ -18,10 +18,15 @@ public class SceneControlManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    private void Start()
+    {
+        StartLobbyScene();
+    }
+
 
     public void StartLobbyScene()
     {
-        LoadLobbyScene();
+        StartCoroutine(LoadLobbyScene());
     }
 
     IEnumerator LoadLobbyScene()

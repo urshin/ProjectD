@@ -92,6 +92,11 @@ public class InGameManager : MonoBehaviour
 
         SpawnCar(playerCar.GetComponentInChildren<CarController>(), playerCarIndex, false);
         SpawnCar(enemyCar.GetComponentInChildren<CarController>(), enemyCarIndex, true);
+
+        IngameCanvasHandler.Instance.InitUI();
+        go = Resources.Load("MapData\\Minimap") as GameObject;
+        Instantiate(go).GetComponent<Minimap>().InitialzeMiniMap(GameManager.Instance.Map - 4, playerCar.transform.GetChild(0).gameObject, enemyCar.transform.GetChild(0).gameObject);
+
     }
     
     public void SpawnCar(CarController controller, int index, bool isAI)

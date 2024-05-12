@@ -1738,41 +1738,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wheels:
   - wheelGameObject: {fileID: 6247646166247090781}
-    smoke: {fileID: 0}
     wheelCollider: {fileID: 4293844993663723734}
     IsMoter: 0
     IsSteering: 1
-    brakeBias: 0
+    brakeBias: 0.5
     isGrounded: 0
   - wheelGameObject: {fileID: 6677043623790662447}
-    smoke: {fileID: 0}
     wheelCollider: {fileID: 6549969626509900907}
     IsMoter: 0
     IsSteering: 1
-    brakeBias: 0
+    brakeBias: 0.5
     isGrounded: 0
   - wheelGameObject: {fileID: 554626514158435013}
-    smoke: {fileID: 0}
     wheelCollider: {fileID: 3948512310931726893}
     IsMoter: 0
     IsSteering: 0
-    brakeBias: 0
+    brakeBias: 0.5
     isGrounded: 0
   - wheelGameObject: {fileID: 1619049184560002160}
-    smoke: {fileID: 0}
     wheelCollider: {fileID: 4325461424900781741}
     IsMoter: 0
     IsSteering: 0
-    brakeBias: 0
+    brakeBias: 0.5
     isGrounded: 0
   centerofmassObject: {fileID: 6725818249253137939}
   centerofmass: {x: 0, y: 0, z: 0}
   canvas: {fileID: 8343865566256233447, guid: ecb4ae0f13344ca4ca08f6ee95342b6c, type: 3}
-  steerSlider: {fileID: 0}
+  steerSlider: 0
   speedText: {fileID: 0}
   niddle: {fileID: 0}
   TarcometerRPM: {fileID: 0}
   TarcometerGear: {fileID: 0}
+  autoCounter: 0
   maxSteerAngle: 0
   sensitivity: 50
   handBrake: 0
@@ -1844,6 +1841,7 @@ MonoBehaviour:
   shiftDown: 0
   shiftDelay: 1
   currentGear: 0
+  gearRatio: 0
   KPH: 0
   LockWheel: 0
   Friction: 0.92
@@ -1851,9 +1849,16 @@ MonoBehaviour:
   downforce: 0
   airDragCoeff: 0
   cam: {fileID: 0}
+  gasInput: 0
+  slipAllowance: 0.2
+  driftTime: 0
+  _driftAngle: 0
   slipAngle: 0
   steeringInput: 0
   speed: 0
+  test: {fileID: 0}
+  driftFactor: 0
+  handBrakeFrictionMultiplier: 2
   racingWheel: {fileID: 0}
 --- !u!114 &350823371365473175
 MonoBehaviour:
@@ -1869,6 +1874,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cinemachineStateDrivenCamera: {fileID: 0}
   cinemachineAnimator: {fileID: 0}
+  isTurbo: 0
 --- !u!114 &6109363208394748787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1882,7 +1888,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   smoke: []
-  smokePrefab: {fileID: 4969641942327939751, guid: d5f95f5b21b9506429333da8f2244e88, type: 3}
+  smokePrefab1: {fileID: 0}
+  smokePrefab2: {fileID: 0}
+  collisionParticle: {fileID: 0}
+  carBodyCollier: []
   slipAllowance: 0.2
 --- !u!1 &3575705565228404865
 GameObject:

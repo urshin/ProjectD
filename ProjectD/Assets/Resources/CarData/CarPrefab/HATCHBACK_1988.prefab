@@ -3523,30 +3523,30 @@ MonoBehaviour:
     wheelCollider: {fileID: 8854919520675767154}
     IsMoter: 0
     IsSteering: 1
-    brakeBias: 0
+    brakeBias: 0.5
     isGrounded: 0
   - wheelGameObject: {fileID: 4358044816217549970}
     wheelCollider: {fileID: 6547119627835176478}
     IsMoter: 0
     IsSteering: 1
-    brakeBias: 0
+    brakeBias: 0.5
     isGrounded: 0
   - wheelGameObject: {fileID: 3667685781293854443}
     wheelCollider: {fileID: 7076520714310223646}
     IsMoter: 0
     IsSteering: 0
-    brakeBias: 0
+    brakeBias: 0.5
     isGrounded: 0
   - wheelGameObject: {fileID: 1649063837477309283}
     wheelCollider: {fileID: 5371976134050603853}
     IsMoter: 0
     IsSteering: 0
-    brakeBias: 0
+    brakeBias: 0.5
     isGrounded: 0
   centerofmassObject: {fileID: 5453733118351041401}
   centerofmass: {x: 0, y: 0, z: 0}
   canvas: {fileID: 8343865566256233447, guid: ecb4ae0f13344ca4ca08f6ee95342b6c, type: 3}
-  steerSlider: {fileID: 0}
+  steerSlider: 0
   speedText: {fileID: 0}
   niddle: {fileID: 0}
   TarcometerRPM: {fileID: 0}
@@ -3632,6 +3632,9 @@ MonoBehaviour:
   airDragCoeff: 0
   cam: {fileID: 0}
   gasInput: 0
+  slipAllowance: 0.2
+  driftTime: 0
+  _driftAngle: 0
   slipAngle: 0
   steeringInput: 0
   speed: 0
@@ -3653,6 +3656,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cinemachineStateDrivenCamera: {fileID: 6463091544184746078}
   cinemachineAnimator: {fileID: 8910261906533659353}
+  isTurbo: 0
 --- !u!114 &1985784941416560348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3666,7 +3670,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   smoke: []
-  smokePrefab: {fileID: 4969641942327939751, guid: d5f95f5b21b9506429333da8f2244e88, type: 3}
+  smokePrefab1: {fileID: 0}
+  smokePrefab2: {fileID: 0}
+  collisionParticle: {fileID: 0}
+  carBodyCollier: []
   slipAllowance: 0.2
 --- !u!1 &8051562459732623552
 GameObject:

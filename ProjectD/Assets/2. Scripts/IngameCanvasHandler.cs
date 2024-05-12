@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class IngameCanvasHandler : MonoBehaviour
 {
+    public static IngameCanvasHandler Instance;
+
     [SerializeField] FinalCarController_June cc;
     [SerializeField] TextMeshProUGUI lap;
     [SerializeField] TextMeshProUGUI timeSpen;
@@ -16,40 +18,51 @@ public class IngameCanvasHandler : MonoBehaviour
     [SerializeField] Slider gage;
     [SerializeField] Image ABS;
 
+    CarController playerCarController;
+
+    bool initialized;
     private float timer = 0f; // 타이머 변수 초기화
     private int minutes; // 분
     private int seconds; // 초
     private int milliseconds; // 밀리초
-    private void OnEnable()
+
+    private void Awake()
     {
-        if (cc == null)
-        {
-            //나중에 인게임 매니저에서 정보 가져오기
-        }
+        Instance = this;
+        initialized = false;
+    }
+
+    public void InitUI()
+    {
+        playerCarController = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<CarController>();
+        initialized = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        timer += Time.fixedDeltaTime;
-        // 시간을 분, 초, 밀리초로 변환
-        minutes = Mathf.FloorToInt(timer / 60f);
-        seconds = Mathf.FloorToInt(timer % 60f);
-        milliseconds = Mathf.FloorToInt((timer * 100f) % 100f);
-        timeSpen.text = "Time : " + minutes.ToString() + ":\t" + seconds.ToString() + ":\t" + milliseconds.ToString();
-        RPMTMP.text = cc.currentRPM.ToString();
-        gearTMP.text = ((int)cc.currentGear).ToString();
-        gas.value = cc.gasInput;
-        brake.value = -1 * cc.gasInput;
-        gage.value = cc.currentRPM / cc.maxRPM;
+        if(initialized)
+        {
+            timer += Time.fixedDeltaTime;
+            // 시간을 분, 초, 밀리초로 변환
+            minutes = Mathf.FloorToInt(timer / 60f);
+            seconds = Mathf.FloorToInt(timer % 60f);
+            milliseconds = Mathf.FloorToInt((timer * 100f) % 100f);
+            timeSpen.text = "Time : " + minutes.ToString() + ":\t" + seconds.ToString() + ":\t" + milliseconds.ToString();
+            RPMTMP.text = playerCarController.currentRPM.ToString();
+            gearTMP.text = ((int)playerCarController.currentGear).ToString();
+            gas.value = playerCarController.accel;
+            brake.value = -1 * playerCarController.accel;
+            gage.value = playerCarController.currentRPM / playerCarController.maxRPM;
 
-        if (cc.handBrake)
-        {
-            ABS.color = Color.yellow;
-        }
-        else
-        {
-            ABS.color = Color.white;
+            if (playerCarController.handBrake)
+            {
+                ABS.color = Color.yellow;
+            }
+            else
+            {
+                ABS.color = Color.white;
+            }
         }
     }
 }

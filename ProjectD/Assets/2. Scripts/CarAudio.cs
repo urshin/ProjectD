@@ -17,7 +17,8 @@ public class CarAudio : MonoBehaviour
     public SEF_Equalizer eq; // SEF_Equalizer 컴포넌트에 대한 참조
 
     // FinalCarController_June 및 cc 변수
-    public FinalCarController_June cc;
+    //public FinalCarController_June cc;
+    public CarController cc;
 
     // 엔진 시작 및 로드 변수
     [Range(0, 1)] public float startOffValue = 0.35f;
@@ -62,7 +63,8 @@ public class CarAudio : MonoBehaviour
 
         // EQ 컴포넌트 설정
         eq = gameObject.AddComponent<SEF_Equalizer>();
-        cc = gameObject.GetComponent<FinalCarController_June>();
+        //cc = gameObject.GetComponent<FinalCarController_June>();
+        cc = gameObject.GetComponent<CarController>();
 
         // lowPitchMax 설정
         lowPitchMax = (cc.maxRPM / 1000) / 2;
@@ -70,11 +72,12 @@ public class CarAudio : MonoBehaviour
 
     private void FixedUpdate()
     {
- 
         // 엔진 및 타이어 사운드 재생
-        EngineSound();
+        if (cc.initialized)
+        {
+            EngineSound();
+        }
         TireSound();
-
     }
 
     // EQ 필터링 함수

@@ -57,7 +57,7 @@ public class CarController : MonoBehaviour
     [Range(-540, 540)] public float steerValue;
     [Range(10, 90)] public float maxSteerAngle; //최대 각도
     public float sensitivity; //마우스 감도 
-    [SerializeField] bool handBrake = false;
+    public bool handBrake = false;
     public float handBrakeSleepAmout = 0.55f;
     public float resetSteerAngleSpeed = 100f; //스티어 앵글 각도 초기화 시간
 
@@ -112,7 +112,7 @@ public class CarController : MonoBehaviour
     [SerializeField] List<ParticleSystem> smoke;
     [SerializeField] GameObject smokePrefab;
 
-    bool initialized;
+    public bool initialized;
 
     private void OnEnable()
     {
@@ -133,7 +133,8 @@ public class CarController : MonoBehaviour
             addDownForce();
             ApplySteering();
             ApplyTorque();
-            friction();
+            //friction();
+            AdjustTraction();
             CheckingIsGrounded();//땅체크
 
             if (transmission == Transmission.Auto_Transmission)
@@ -144,6 +145,8 @@ public class CarController : MonoBehaviour
             {
                 ManualGear();
             }
+
+            Boosting();
         }
         //DriftControl();
     }
@@ -326,7 +329,7 @@ public class CarController : MonoBehaviour
                 wheel.wheelCollider.brakeTorque = 0f;
             }
         }
-        else if (accel <= -0.5f && wheelRPM <= 0)
+        else if (accel <= -1 && wheelRPM <= 0)
         {
             float torquePerWheel = -torqueCurve.Evaluate(currentRPM / maxRPM) * reverseRatio * finalDriveRatio * maxMotorTorque;
             foreach (var wheel in wheels)
@@ -383,12 +386,8 @@ public class CarController : MonoBehaviour
         }
         else
         {
-
             totalMotorTorque = torqueCurve.Evaluate(currentRPM / maxRPM) * gearRatio * finalDriveRatio * maxMotorTorque; // maxMotorTorque있는 곳은 나중에 tractionControlAdjustedMaxTorque생각해보기
-
         }
-
-
     }
 
     private void WheelRPMCalculate()
@@ -414,6 +413,41 @@ public class CarController : MonoBehaviour
         }
     }
 
+
+    public float slipAllowance = 0.2f;
+    public float driftTime;
+    public float _driftAngle;
+
+    void Boosting()
+    {
+        Vector3 driftValue = transform.InverseTransformVector(playerRB.velocity);
+        _driftAngle = (Mathf.Atan2(driftValue.x, driftValue.z) * Mathf.Rad2Deg);
+
+        if (Mathf.Abs(_driftAngle) > 10 && playerRB.velocity.magnitude > 5)
+        {
+            //print("드리프트중!!!!!");
+            driftTime += Time.fixedDeltaTime;
+        }
+
+        if (driftTime > 0 && Mathf.Abs(_driftAngle) < 10) // 이전에 드리프트를 시작했었다면
+        {
+            if (GetComponent<CarAudio>() != null)
+            {
+                GetComponent<CarAudio>().TurboOn();
+
+            }
+            GetComponent<CinemachinController>().isTurbo = true;
+            //print("터보");
+            playerRB.AddForce(transform.forward * playerRB.velocity.magnitude * 2, ForceMode.Impulse);
+            driftTime = 0;
+        }
+        else
+        {
+            GetComponent<CinemachinController>().isTurbo = false;
+        }
+
+    }
+
     private void AutoGear()
     {
         // 변속이 너무 빠르게 일어나지 않도록 지연 시간을 확인
@@ -436,7 +470,7 @@ public class CarController : MonoBehaviour
                 }
             }
             // 하락 변속
-            else if (currentRPM / maxRPM < shiftDown && Mathf.RoundToInt(currentGear) > 1)
+            else if (currentRPM / maxRPM < shiftDown && Mathf.RoundToInt(currentGear) > 0)
             {
                 // 마지막 변속 시간을 기록합니다.
                 lastGear = Mathf.RoundToInt(currentGear);
@@ -466,17 +500,22 @@ public class CarController : MonoBehaviour
         }
         else if (currentGear < 1)
         {
-            currentGear = 1;
+            currentGear = 0;
         }
     }
+
+
     //manual
+    public bool upShift;
+    public bool downShift;
+
     private void ManualGear()
     {
         // 변속이 너무 빠르게 일어나지 않도록 지연 시간을 확인
         if (Time.time - lastShift > shiftDelay)
         {
             // 상승 변속
-            if (Input.GetKey(KeyCode.E))
+            if (upShift)
             {
                 // 1기어에서 단순히 회전 중인 경우 상승 변속하지 않음
                 // 또는 1기어에서 15km/h 이상 이동 중인 경우에만 상승 변속합니다.
@@ -489,10 +528,11 @@ public class CarController : MonoBehaviour
                     // 마지막 변속 시간을 기록하고, 변속 중임을 표시합니다.
                     lastShift = Time.time;
                     shifting = true;
+                    upShift = false;
                 }
             }
             // 하락 변속
-            else if (Input.GetKey(KeyCode.Q))
+            else if (downShift)
             {
                 if (Mathf.RoundToInt(currentGear) > 1)
                 {
@@ -504,6 +544,7 @@ public class CarController : MonoBehaviour
                     // 마지막 변속 시간을 기록하고, 변속 중임을 표시합니다.
                     lastShift = Time.time;
                     shifting = true;
+                    downShift = false;
                 }
 
             }
@@ -531,6 +572,79 @@ public class CarController : MonoBehaviour
         }
     }
 
+    [SerializeField] float driftFactor;
+    public float handBrakeFrictionMultiplier = 2f;
+    private void AdjustTraction()
+    {
+        // 드리프트 상태로 전환하는 데 걸리는 시간
+        float driftSmothFactor = .7f * Time.deltaTime;
+
+        if (handBrake)
+        {
+            // 드리프트 중에는 바퀴의 마찰력을 조정하여 미끄러짐을 유도합니다.
+            sidewaysFriction = wheels[0].wheelCollider.sidewaysFriction;
+            forwardFriction = wheels[0].wheelCollider.forwardFriction;
+
+            float velocity = 0;
+            // 마찰력을 부드럽게 증가시킵니다.
+            sidewaysFriction.extremumValue = sidewaysFriction.asymptoteValue = forwardFriction.extremumValue = forwardFriction.asymptoteValue =
+                Mathf.SmoothDamp(forwardFriction.asymptoteValue, driftFactor * handBrakeFrictionMultiplier, ref velocity, driftSmothFactor);
+
+            for (int i = 0; i < 4; i++)
+            {
+                wheels[i].wheelCollider.sidewaysFriction = sidewaysFriction;
+                wheels[i].wheelCollider.forwardFriction = forwardFriction;
+            }
+
+            // 전면 바퀴에 추가 그립을 제공하여 회전을 유지합니다.
+            sidewaysFriction.extremumValue = sidewaysFriction.asymptoteValue = forwardFriction.extremumValue = forwardFriction.asymptoteValue = 1.1f;
+            for (int i = 0; i < 2; i++)
+            {
+                wheels[i].wheelCollider.sidewaysFriction = sidewaysFriction;
+                wheels[i].wheelCollider.forwardFriction = forwardFriction;
+            }
+            // 드리프트 중에는 전진 방향으로 힘을 가합니다.
+            playerRB.AddForce(transform.forward * (KPH / 400) * 40000);
+        }
+        else
+        {
+            // 핸드브레이크가 해제되었을 때, 일반적인 주행에서의 마찰력을 설정합니다.
+            forwardFriction = wheels[0].wheelCollider.forwardFriction;
+            sidewaysFriction = wheels[0].wheelCollider.sidewaysFriction;
+
+            // 주행 중에는 전방 마찰력을 증가시켜 슬립을 제어합니다.
+            forwardFriction.extremumValue = forwardFriction.asymptoteValue = sidewaysFriction.extremumValue = sidewaysFriction.asymptoteValue =
+                ((KPH * handBrakeFrictionMultiplier) / 300) + 1;
+
+            for (int i = 0; i < 4; i++)
+            {
+                wheels[i].wheelCollider.forwardFriction = forwardFriction;
+                wheels[i].wheelCollider.sidewaysFriction = sidewaysFriction;
+            }
+        }
+
+        // 슬립 정도를 체크하여 드리프트를 제어합니다.
+        for (int i = 2; i < 4; i++)
+        {
+            WheelHit wheelHit;
+            wheels[i].wheelCollider.GetGroundHit(out wheelHit);
+            float x = 0;
+
+            // 조향 슬라이더 값에 따라 x 값을 설정합니다.
+            if (steerValue > 0)
+            {
+                x = 1;
+            }
+            else if (steerValue < 0)
+            {
+                x = -1;
+            }
+            // 슬립이 음수일 때는 우회전 중이므로 드리프트 팩터를 적용합니다.
+            if (wheelHit.sidewaysSlip < 0) driftFactor = (1 + -x) * Mathf.Abs(wheelHit.sidewaysSlip);
+            // 슬립이 양수일 때는 좌회전 중이므로 드리프트 팩터를 적용합니다.
+            if (wheelHit.sidewaysSlip > 0) driftFactor = (1 + x) * Mathf.Abs(wheelHit.sidewaysSlip);
+        }
+    }
 
     private void friction() //마찰 계산
     {
@@ -567,8 +681,6 @@ public class CarController : MonoBehaviour
         sum /= wheels.Count - 2;
     }
 
-
-    [SerializeField] float slipAllowance = 0.2f;
     void ParticleEffect()           // Update()
     {
         WheelHit[] wheelHits = new WheelHit[4];

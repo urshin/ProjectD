@@ -214,7 +214,8 @@ public class LobbyUIHandler : MonoBehaviour
 
     public void OnClickSelectCar()
     {
-        StartCoroutine(  GoToGarage(3));
+        SceneControlManager.Instance.StartGarageScene();
+        //StartCoroutine(  GoToGarage(3));
     }
     public void OnClickOptionBTN()
     {
