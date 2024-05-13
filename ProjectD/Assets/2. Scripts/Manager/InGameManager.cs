@@ -90,8 +90,8 @@ public class InGameManager : MonoBehaviour
         Instantiate(DataManager.Instance.garageCarPrefab[playerCarIndex], playerCar.transform);
         //Instantiate(Resources.Load("CarData\\Temps\\Car1") as GameObject, playerCar.transform);
 
-        SpawnCar(playerCar.GetComponentInChildren<CarController>(), playerCarIndex, false);
-        SpawnCar(enemyCar.GetComponentInChildren<CarController>(), enemyCarIndex, true);
+        SpawnCar(playerCar.GetComponentInChildren<CarController_>(), playerCarIndex, false);
+        SpawnCar(enemyCar.GetComponentInChildren<CarController_>(), enemyCarIndex, true);
 
         IngameCanvasHandler.Instance.InitUI();
         go = Resources.Load("MapData\\Minimap") as GameObject;
@@ -99,13 +99,13 @@ public class InGameManager : MonoBehaviour
 
     }
     
-    public void SpawnCar(CarController controller, int index, bool isAI)
+    public void SpawnCar(CarController_ controller, int index, bool isAI)
     {
         controller.InitializeSetting(index, isAI);
 
 
         //var controller = playerCar.GetComponentInChildren<FinalCarController_June>();
-        //var controller = playerCar.GetComponentInChildren<CarController>();
+        //var controller = playerCar.GetComponentInChildren<CarController_>();
         //controller.maxSteerAngle = DataManager.Instance.carData.Handling.MaxSteerAngle;
 
 

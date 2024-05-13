@@ -18,7 +18,7 @@ public class CarAudio : MonoBehaviour
 
     // FinalCarController_June 및 cc 변수
     //public FinalCarController_June cc;
-    public CarController cc;
+    public CarController_ cc;
 
     // 엔진 시작 및 로드 변수
     [Range(0, 1)] public float startOffValue = 0.35f;
@@ -64,7 +64,7 @@ public class CarAudio : MonoBehaviour
         // EQ 컴포넌트 설정
         eq = gameObject.AddComponent<SEF_Equalizer>();
         //cc = gameObject.GetComponent<FinalCarController_June>();
-        cc = gameObject.GetComponent<CarController>();
+        cc = gameObject.GetComponent<CarController_>();
 
         // lowPitchMax 설정
         lowPitchMax = (cc.maxRPM / 1000) / 2;

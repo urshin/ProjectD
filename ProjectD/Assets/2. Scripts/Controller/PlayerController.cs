@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     public float handBrakeSleepAmout = 0.55f;
     public float resetSteerAngleSpeed = 100f; //스티어 앵글 각도 초기화 시간
 
-    CarController carController;
+    CarController_ carController;
 
     private void Start()
     {
@@ -69,9 +69,9 @@ public class PlayerController : MonoBehaviour
         cam = Camera.main;
         //cam.GetComponent<CamController_June>().player = gameObject.transform;
 
-        // 자식으로 차량을 붙이고 그 차량의 CarController 클래스를 가져와야한다
+        // 자식으로 차량을 붙이고 그 차량의 CarController_ 클래스를 가져와야한다
         // 임시
-        carController = GetComponentInChildren<CarController>();
+        carController = GetComponentInChildren<CarController_>();
     }
 
     public void Steering()//fixedUpdate

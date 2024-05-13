@@ -21,7 +21,7 @@ public class AIController : MonoBehaviour
 
     [SerializeField] AnimationCurve AISteerCurve;
 
-    CarController carController;
+    CarController_ carController;
     float gasInput;
 
     private void Start()
@@ -40,7 +40,7 @@ public class AIController : MonoBehaviour
 
     public void InitializeSetting()
     {
-        carController = GetComponentInChildren<CarController>();
+        carController = GetComponentInChildren<CarController_>();
 
         frontMiddleRaySP = transform.GetChild(0).GetChild(4).GetChild(0).transform;
         frontLeftRaySP = transform.GetChild(0).GetChild(4).GetChild(1).transform;

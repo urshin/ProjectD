@@ -17,7 +17,7 @@ using UnityEngine.EventSystems;
         Auto_Transmission,
         Manual_Transmission,
     }
-public class CarController : MonoBehaviour
+public class CarController_ : MonoBehaviour
 {
     // 차량 프리팹에 심어질 스크립트
     // 차량의 거동에 필요한 연산이 실행됨

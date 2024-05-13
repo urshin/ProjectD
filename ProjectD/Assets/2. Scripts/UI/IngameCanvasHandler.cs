@@ -18,7 +18,7 @@ public class IngameCanvasHandler : MonoBehaviour
     [SerializeField] Slider gage;
     [SerializeField] Image ABS;
 
-    CarController playerCarController;
+    CarController_ playerCarController;
 
     bool initialized;
     private float timer = 0f; // 타이머 변수 초기화
@@ -39,7 +39,7 @@ public class IngameCanvasHandler : MonoBehaviour
 
     public void InitUI()
     {
-        playerCarController = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<CarController>();
+        playerCarController = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<CarController_>();
         timer = 0f;
         initialized = true;
     }
