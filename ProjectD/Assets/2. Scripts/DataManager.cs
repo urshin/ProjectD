@@ -31,21 +31,32 @@ public class DataManager : MonoBehaviour
 
     private void Start()
     {
+        CardataInitialize();
+        SoundDataInitialize();
+        ParsingcarDatas();
         ParsingGarageCar();
         ParsingInGameCar();
-        ParsingcarDatas();
         ParsingMapData();
+
+        SoundManager.instance.InitSoundData();
+        SceneControlManager.Instance.StartLobbyScene();
     }
 
 
     public void ParsingGarageCar()
     {
-        GameObject[] carPrefabs = Resources.LoadAll<GameObject>("CarData\\GarageCar\\");
+        //GameObject[] carPrefabs = Resources.LoadAll<GameObject>("CarData\\GarageCar\\");
 
-        // 로드된 프리팹을 garageCarPrefab 리스트에 추가
-        foreach (GameObject carPrefab in carPrefabs)
+        //// 로드된 프리팹을 garageCarPrefab 리스트에 추가
+        //foreach (GameObject carPrefab in carPrefabs)
+        //{
+        //    garageCarPrefab.Add(carPrefab);
+        //}
+
+        foreach(CarData car in carDictionary.Values)
         {
-            garageCarPrefab.Add(carPrefab);
+            // 순서를 맞추기 위함
+            garageCarPrefab.Add(Resources.Load<GameObject>("CarData\\GarageCar\\" + car.name));
         }
     }
     public void ParsingInGameCar()
@@ -111,14 +122,6 @@ public class DataManager : MonoBehaviour
         // 차량 정보는 이미 저장돼있으나 리스타트 플래그 세워야함
 
         yield return new WaitForEndOfFrame();
-    }
-
-    public void OnEnable()
-    {
-        CardataInitialize();
-        SoundDataInitialize();
-        SoundManager.instance.InitSoundData();
-        SceneControlManager.Instance.StartLobbyScene();
     }
 
     public List<CarData> cardataList = new List<CarData>();  

@@ -26,6 +26,11 @@ public class IngameCanvasHandler : MonoBehaviour
     private int seconds; // 초
     private int milliseconds; // 밀리초
 
+    public float lapTime
+    {
+        get { return timer; }
+    }
+
     private void Awake()
     {
         Instance = this;
@@ -35,6 +40,7 @@ public class IngameCanvasHandler : MonoBehaviour
     public void InitUI()
     {
         playerCarController = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<CarController>();
+        timer = 0f;
         initialized = true;
     }
 

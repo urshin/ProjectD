@@ -49,23 +49,36 @@ public class GarageManager : MonoBehaviour
         carIndexMax = DataManager.Instance.garageCarPrefab.Count;
         GameManager.Instance.gameState = GameState.Garage;
 
-        SpawnCar(1);
+        SpawnCar();
     }
 
-
-    public void SpawnCar(int direction)
+    public void SelectNextCar()
     {
-        DespawnCar();
-        carIndex += direction;
-        // carIndex가 범위를 초과하면 0 또는 carIndexMax로 조정
-        if (carIndex < 0)
-        {
-            carIndex = carIndexMax;
-        }
-        else if (carIndex > carIndexMax)
+        carIndex++;
+        if(carIndex >= DataManager.Instance.carDictionary.Count)
         {
             carIndex = 0;
         }
+
+        SpawnCar();
+    }
+    public void SelectPreviousCar()
+    {
+        carIndex--;
+        if(carIndex < 0)
+        {
+            carIndex = DataManager.Instance.carDictionary.Count - 1;
+        }
+
+        SpawnCar();
+    }
+
+
+
+    public void SpawnCar()
+    {
+        DespawnCar();
+        // carIndex가 범위를 초과하면 0 또는 carIndexMax로 조정
         currentCar = DataManager.Instance.garageCarPrefab[carIndex];
         GameObject car = Instantiate(currentCar, carSpawnPosition.transform);
         car.transform.SetParent(carSpawnPosition.transform);

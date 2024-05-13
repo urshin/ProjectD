@@ -225,6 +225,6 @@ public class InGameManager : MonoBehaviour
 
     public void OnGameEnd(bool isPlayerWin)
     {
-        gameEndUI.ActiveUI(isPlayerWin);
+        gameEndUI.ActiveUI(isPlayerWin, IngameCanvasHandler.Instance.lapTime);
     }
 }
