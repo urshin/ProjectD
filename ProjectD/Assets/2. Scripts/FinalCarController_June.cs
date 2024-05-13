@@ -222,7 +222,7 @@ public class FinalCarController_June : MonoBehaviour
         }
 
         cam = Camera.main;
-        cam.GetComponent<CamController_June>().player = gameObject.transform;
+        //cam.GetComponent<CamController_June>().player = gameObject.transform;
     }
     //드리프트 부스트!!!
     public float slipAllowance = 0.2f;
@@ -252,8 +252,10 @@ public class FinalCarController_June : MonoBehaviour
             playerRB.AddForce(transform.forward * playerRB.velocity.magnitude * 2, ForceMode.Impulse);
             driftTime = 0;
         }
+        
         else
         {
+           
             GetComponent<CinemachinController>().isTurbo = false;
         }
 

@@ -5,6 +5,8 @@ using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+public class CarController : MonoBehaviour
+{
 //public enum WheelWork //전,후,4륜
 //{
 //    FRONT,
@@ -17,8 +19,6 @@ using UnityEngine.EventSystems;
 //    Auto_Transmission,
 //    Manual_Transmission,
 //}
-public class CarController : MonoBehaviour
-{
     // 차량 프리팹에 심어질 스크립트
     // 차량의 거동에 필요한 연산이 실행됨
     // PlayerController 또는 AIController 스크립트에 의해 제어될 것
@@ -155,6 +155,7 @@ public class CarController : MonoBehaviour
 
     public void InitializeSetting(int index, bool isAi)
     {
+        
         //무게 중심 초기화
         playerRB = gameObject.GetComponent<Rigidbody>();
         playerRB.centerOfMass = centerofmassObject.transform.localPosition;
@@ -363,8 +364,11 @@ public class CarController : MonoBehaviour
             {
                 if (wheel.wheelCollider.name == "RR" || wheel.wheelCollider.name == "RL")
                 {
-                    wheel.wheelCollider.brakeTorque = Mathf.Infinity;
+                    // wheel.wheelCollider.brakeTorque = Mathf.Infinity;
                     //wheel.wheelCollider.motorTorque = 0f;
+
+                    wheel.wheelCollider.brakeTorque = maxBrakeTorque;
+                    wheel.wheelCollider.motorTorque = 0f;
                 }
             }
         }
