@@ -39,7 +39,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - RenderEffect
   - MiniMap
   - Ground
   m_SortingLayers:
