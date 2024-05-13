@@ -24,7 +24,18 @@ public class GarageManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI carInfoTextLeft;
     [SerializeField] TextMeshProUGUI carInfoTextRight;
     //public TextAsset carTextAsset;
-    // Start is called before the first frame update
+
+    [Space(10)]
+    [SerializeField] GameObject musicSelectBox;
+    [SerializeField] TextMeshProUGUI musicName;
+
+    bool MusicBoxOn = false;
+    int currentMusicIndex = 0;
+    int currentMusic = 0;
+    // 로비, 차고 음악을 제외한 후 랜덤 선택이라는 선택지를 더해서 -1
+    // 음악 잠김과 해제를 적용한다면 그 수를 저장하고있는 UserInfo를 통해 가진 음악 수를 가져와야 한다
+    int maxMusicCount;
+
     private void Awake()
     {
         uniqueInstance = this;
@@ -34,12 +45,11 @@ public class GarageManager : MonoBehaviour
     {
         DOTween.Init(); // 닷 트윈 초기화
         StartFadeBlackPanel(); //검은 패널 치우기
-
+        maxMusicCount = DataManager.Instance.bgmDictionary.Count - 1;
         carIndexMax = DataManager.Instance.garageCarPrefab.Count;
         GameManager.Instance.gameState = GameState.Garage;
 
         SpawnCar(1);
-
     }
 
 
@@ -126,7 +136,11 @@ public class GarageManager : MonoBehaviour
         DataManager.Instance.playerCar = carIndex;
         DataManager.Instance.enemyCar = Random.Range(0, carCount);
 
-        SceneControlManager.Instance.StartIngameScene(carIndex, DataManager.Instance.enemyCar);
+        if(currentMusic == 0)
+        {
+            currentMusic = Random.Range(1, maxMusicCount);
+        }
+        SceneControlManager.Instance.StartIngameScene(carIndex, DataManager.Instance.enemyCar, currentMusic + 1);
 
         //StartCoroutine(StartGame(1));
     }
@@ -150,13 +164,72 @@ public class GarageManager : MonoBehaviour
     }
 
 
-
     public void OnclickBackToMain()
     {
         SceneControlManager.Instance.StartLobbyScene();
         //SceneManager.LoadScene("Lobby");
     }
 
+    
+    public void OnClickMusicBox()
+    {
+        if (!MusicBoxOn)
+        {
+            musicSelectBox.GetComponent<RectTransform>().DOAnchorPosX(0, 0.3f);
+            MusicBoxOn = true;
+        }
+        else
+        {
+            musicSelectBox.GetComponent<RectTransform>().DOAnchorPosX(400f, 0.3f);
+            MusicBoxOn = false;
+        }
+    }
+
+    public void ClickNextMusic()
+    {
+        currentMusic++;
+        if(currentMusic >= maxMusicCount) 
+        {
+            currentMusic = 0;
+        }
+
+        if(currentMusic != 0)
+        {
+            musicName.text = DataManager.Instance.bgmDictionary[currentMusic + 1];
+            SoundManager.instance.BGMFadeIn();
+            SoundManager.instance.PlayBGM(currentMusic + 1);
+        }
+        else
+        {
+            // 0일때는 랜덤이 선택된 것으로 간주
+            musicName.text = "Random";
+            SoundManager.instance.BGMFadeIn();
+            SoundManager.instance.PlayBGM(1);
+        }
+
+    }
+    public void ClickPreviousMusic()
+    {
+        currentMusic--;
+        if (currentMusic < 0)
+        {
+            currentMusic = maxMusicCount - 1;
+        }
+
+        if (currentMusic != 0)
+        {
+            musicName.text = DataManager.Instance.bgmDictionary[currentMusic + 1];
+            SoundManager.instance.BGMFadeIn();
+            SoundManager.instance.PlayBGM(currentMusic + 1);
+        }
+        else
+        {
+            // 0일때는 랜덤이 선택된 것으로 간주
+            musicName.text = "Random";
+            SoundManager.instance.BGMFadeIn();
+            SoundManager.instance.PlayBGM(1);
+        }
+    }
 
 
     void Update()

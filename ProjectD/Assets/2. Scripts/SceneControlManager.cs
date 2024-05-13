@@ -54,14 +54,15 @@ public class SceneControlManager : MonoBehaviour
     }
 
 
-    public void StartIngameScene(int playerCarIndex, int enemyCarIndex)
+    public void StartIngameScene(int playerCarIndex, int enemyCarIndex, int bgmIndex)
     {
-        StartCoroutine(LoadIngameScene(playerCarIndex, enemyCarIndex));
+        StartCoroutine(LoadIngameScene(playerCarIndex, enemyCarIndex, bgmIndex));
     }
 
-    IEnumerator LoadIngameScene(int playerCarIndex, int enemyCarIndex)
+    IEnumerator LoadIngameScene(int playerCarIndex, int enemyCarIndex, int bgmIndex)
     {
-        SoundManager.instance.PlayBGM(Random.Range(2, DataManager.Instance.bgmDictionary.Count));
+        //SoundManager.instance.PlayBGM(Random.Range(2, DataManager.Instance.bgmDictionary.Count));
+        SoundManager.instance.PlayBGM(bgmIndex);
 
         AsyncOperation ao;
 

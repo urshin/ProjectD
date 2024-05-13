@@ -30,7 +30,7 @@ public class ResultUIHandler : MonoBehaviour
     public void OnRestartButtonClick()
     {
         //DataManager.Instance.
-        SceneControlManager.Instance.StartIngameScene(DataManager.Instance.playerCar, DataManager.Instance.enemyCar);
+        SceneControlManager.Instance.StartIngameScene(DataManager.Instance.playerCar, DataManager.Instance.enemyCar, SoundManager.instance.CurrentBgm);
     }
 
     public void OnToGarageButtonClick()

@@ -6,6 +6,7 @@ using TMPro;
 using AutoMoverPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Unity.VisualScripting;
 
 public class LobbyUIHandler : MonoBehaviour
 {
@@ -34,6 +35,10 @@ public class LobbyUIHandler : MonoBehaviour
 
     [SerializeField] GameObject isReverse;
     public LobbyState lobbystate;
+
+    [SerializeField] Slider mainVolume;
+    [SerializeField] Slider bgmVolume;
+    [SerializeField] Slider sfxVolume;
 
     // Start is called before the first frame update
     void Start()
@@ -127,9 +132,6 @@ public class LobbyUIHandler : MonoBehaviour
         mapSelectPanel.SetActive(true);
         lobbystate = LobbyState.VersusMode;
         MapSelect();
-
-
-
     }
     
     public void MapSelect()
@@ -281,4 +283,16 @@ public class LobbyUIHandler : MonoBehaviour
     }
 
     
+    public void SetGlobalVolume()
+    {
+        AudioListener.volume = mainVolume.value;
+    }
+    public void SetBGMVolume()
+    {
+        SoundManager.instance.SetBGMVolume(bgmVolume.value);
+    }
+    public void SetSFXVolume()
+    {
+        SoundManager.instance.SetSFXVolume(sfxVolume.value);
+    }
 }
