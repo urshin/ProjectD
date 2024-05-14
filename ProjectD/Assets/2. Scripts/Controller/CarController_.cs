@@ -123,7 +123,7 @@ public class CarController_ : MonoBehaviour
         if (initialized)
         {
             AnimationUpdate();
-            ParticleEffect();
+            //ParticleEffect();
         }
     }
     private void FixedUpdate()
@@ -157,9 +157,9 @@ public class CarController_ : MonoBehaviour
     {
         
         //무게 중심 초기화
-        playerRB = gameObject.GetComponent<Rigidbody>();
-        playerRB.centerOfMass = centerofmassObject.transform.localPosition;
-        centerofmass = playerRB.centerOfMass;
+        //playerRB = gameObject.GetComponent<Rigidbody>();
+        //playerRB.centerOfMass = centerofmassObject.transform.localPosition;
+        //centerofmass = playerRB.centerOfMass;
 
         maxSteerAngle = DataManager.Instance.carDictionary[index].Handling.MaxSteerAngle;
 
@@ -208,6 +208,9 @@ public class CarController_ : MonoBehaviour
 
     public void InitializeIngame()
     {
+        playerRB = gameObject.GetComponent<Rigidbody>();
+        playerRB.centerOfMass = centerofmassObject.transform.localPosition;
+        centerofmass = playerRB.centerOfMass;
         ApplyMotorWork(); //전륜 후륜 정하기
         foreach (var wheel in wheels)
         {
@@ -222,10 +225,10 @@ public class CarController_ : MonoBehaviour
             gearRatiosCurve.AddKey(i, gearRatiosArray[i]);
         }
 
-        for (int i = 0; i < wheels.Count; i++)
-        {
-            smoke.Add(Instantiate(smokePrefab, wheels[i].wheelCollider.transform.position, Quaternion.identity, wheels[i].wheelCollider.transform).GetComponent<ParticleSystem>());
-        }
+        //for (int i = 0; i < wheels.Count; i++)
+        //{
+        //    smoke.Add(Instantiate(smokePrefab, wheels[i].wheelCollider.transform.position, Quaternion.identity, wheels[i].wheelCollider.transform).GetComponent<ParticleSystem>());
+        //}
 
         initialized = true;
     }
@@ -420,7 +423,7 @@ public class CarController_ : MonoBehaviour
 
     public float slipAllowance = 0.2f;
     public float driftTime;
-    public float _driftAngle;
+    [Range(-90, 90)] public  float _driftAngle;
 
     void Boosting()
     {
@@ -429,7 +432,6 @@ public class CarController_ : MonoBehaviour
 
         if (Mathf.Abs(_driftAngle) > 10 && playerRB.velocity.magnitude > 5)
         {
-            //print("드리프트중!!!!!");
             driftTime += Time.fixedDeltaTime;
         }
 
@@ -441,7 +443,6 @@ public class CarController_ : MonoBehaviour
 
             }
             GetComponent<CinemachinController>().isTurbo = true;
-            //print("터보");
             playerRB.AddForce(transform.forward * playerRB.velocity.magnitude * 2, ForceMode.Impulse);
             driftTime = 0;
         }
@@ -685,19 +686,19 @@ public class CarController_ : MonoBehaviour
         sum /= wheels.Count - 2;
     }
 
-    void ParticleEffect()           // Update()
-    {
-        WheelHit[] wheelHits = new WheelHit[4];
-        for (int i = 0; i < wheels.Count; i++)
-        {
-            wheels[i].wheelCollider.GetGroundHit(out wheelHits[i]);
-            if (Mathf.Abs(wheelHits[i].sidewaysSlip) + Mathf.Abs(wheelHits[i].forwardSlip) > slipAllowance)
-            {
-                //print(Mathf.Abs(wheelHits.sidewaysSlip) + Mathf.Abs(wheelHits.forwardSlip));
-                smoke[i].Emit(1);
-            }
-        }
-    }
+    //void ParticleEffect()           // Update()
+    //{
+    //    WheelHit[] wheelHits = new WheelHit[4];
+    //    for (int i = 0; i < wheels.Count; i++)
+    //    {
+    //        wheels[i].wheelCollider.GetGroundHit(out wheelHits[i]);
+    //        if (Mathf.Abs(wheelHits[i].sidewaysSlip) + Mathf.Abs(wheelHits[i].forwardSlip) > slipAllowance)
+    //        {
+    //            //print(Mathf.Abs(wheelHits.sidewaysSlip) + Mathf.Abs(wheelHits.forwardSlip));
+    //            smoke[i].Emit(1);
+    //        }
+    //    }
+    //}
 
 
     [SerializeField] GameObject racingWheel;
