@@ -5,6 +5,16 @@ using System.Linq;
 using UnityEngine;
 using static System.Net.WebRequestMethods;
 
+public enum InGameState
+{
+    standBy,        // 초기화 되기 전 상태
+    initializing,     // 초기화 중 상태
+    ready,           // 초기화 완료 후 게임 시작 전 상태(레이스 시작 카운트다운 상태는 여기 속한다)
+    playing,         // 레이스가 시작되어 플레이 중 상태
+    pause,           // esc 등으로 인해 멈춘 상태
+    end              // 레이스가 끝난 상태
+}
+
 public class InGameManager : MonoBehaviour
 {
     static InGameManager uniqueInstance;
@@ -12,6 +22,8 @@ public class InGameManager : MonoBehaviour
     {
         get { return uniqueInstance; }
     }
+
+    
 
     [SerializeField] GameObject playerCar;
     [SerializeField] GameObject enemyCar;
@@ -21,6 +33,7 @@ public class InGameManager : MonoBehaviour
     [SerializeField] List<GameObject> Maps = new List<GameObject>();
 
     ResultUIHandler gameEndUI;
+    public InGameState currentState;
 
     private void Awake()
     {
@@ -29,6 +42,7 @@ public class InGameManager : MonoBehaviour
 
     private void Start()
     {
+        currentState = InGameState.standBy;
         if(Camera.main == null)
         {
             cam =Instantiate(Camera.main);
@@ -39,6 +53,7 @@ public class InGameManager : MonoBehaviour
 
     public void InitGame(int playerCarIndex, int enemyCarIndex)
     {
+        currentState = InGameState.initializing;
         if (Camera.main == null)
         {
             cam = Instantiate(Camera.main);
@@ -78,27 +93,42 @@ public class InGameManager : MonoBehaviour
 
         // +AI 스폰 필요
         //int carCount = DataManager.Instance.garageCarPrefab.Count;
-        enemyCar = Instantiate(Resources.Load("CarData\\Temps\\Enemy") as GameObject, enemySpawnPos.position, enemySpawnPos.rotation);
+        enemyCar = Instantiate(Resources.Load("CarData\\CarInformation\\Enemy") as GameObject, enemySpawnPos.position, enemySpawnPos.rotation);
         //Instantiate(DataManager.Instance.garageCarPrefab[UnityEngine.Random.Range(0, carCount)], enemySpawnPos.position, enemySpawnPos.rotation);
         //GameObject go = Instantiate(Resources.Load("CarData\\Temps\\" + GameManager.Instance.carName) as GameObject, enemyCar.transform);
         GameObject go = Instantiate(DataManager.Instance.garageCarPrefab[enemyCarIndex], enemyCar.transform);
         
         //go.GetComponent<CinemachinController>().enabled = false;
 
-        playerCar = Instantiate(Resources.Load("CarData\\Temps\\Player") as GameObject, playerSpawnPos.position, playerSpawnPos.rotation);
+        playerCar = Instantiate(Resources.Load("CarData\\CarInformation\\Player") as GameObject, playerSpawnPos.position, playerSpawnPos.rotation);
         //Instantiate(Resources.Load("CarData\\GarageCar\\" + GameManager.Instance.carName) as GameObject, playerCar.transform);
         Instantiate(DataManager.Instance.garageCarPrefab[playerCarIndex], playerCar.transform);
         //Instantiate(Resources.Load("CarData\\Temps\\Car1") as GameObject, playerCar.transform);
 
-        SpawnCar(playerCar.GetComponentInChildren<CarController_>(), playerCarIndex, false);
-        SpawnCar(enemyCar.GetComponentInChildren<CarController_>(), enemyCarIndex, true);
+        //SpawnCar(playerCar.GetComponentInChildren<CarController_>(), playerCarIndex, false);
+        //SpawnCar(enemyCar.GetComponentInChildren<CarController_>(), enemyCarIndex, true);
+        playerCar.GetComponentInChildren<CarController_>().InitializeSetting(playerCarIndex, false);
+        enemyCar.GetComponentInChildren<CarController_>().InitializeSetting(enemyCarIndex, true);
 
-        IngameCanvasHandler.Instance.InitUI();
-        go = Resources.Load("MapData\\Minimap") as GameObject;
-        Instantiate(go).GetComponent<Minimap>().InitialzeMiniMap(GameManager.Instance.Map - 4, playerCar.transform.GetChild(0).gameObject, enemyCar.transform.GetChild(0).gameObject);
+        //IngameCanvasHandler.Instance.InitUI();
+        //go = Resources.Load("MapData\\Minimap") as GameObject;
+        //Instantiate(go).GetComponent<Minimap>().InitialzeMiniMap(GameManager.Instance.Map - 4, playerCar.transform.GetChild(0).gameObject, enemyCar.transform.GetChild(0).gameObject);
+        currentState = InGameState.ready;
 
+        IngameCanvasHandler.Instance.StartCountDown();
     }
-    
+
+    public void StartGame()
+    {
+        IngameCanvasHandler.Instance.InitUI();
+        GameObject go = Resources.Load("MapData\\Minimap") as GameObject;
+        Instantiate(go).GetComponent<Minimap>().InitialzeMiniMap(GameManager.Instance.Map - 4, playerCar.transform.GetChild(0).gameObject, enemyCar.transform.GetChild(0).gameObject);
+        playerCar.GetComponentInChildren<CarController_>().InitializeIngame();
+        enemyCar.GetComponentInChildren<CarController_>().InitializeIngame();
+        currentState = InGameState.playing;
+    }
+
+
     public void SpawnCar(CarController_ controller, int index, bool isAI)
     {
         controller.InitializeSetting(index, isAI);

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -20,6 +21,8 @@ public class IngameCanvasHandler : MonoBehaviour
 
     CarController_ playerCarController;
 
+    [SerializeField] TextMeshProUGUI countdownNum;
+
     bool initialized;
     private float timer = 0f; // 타이머 변수 초기화
     private int minutes; // 분
@@ -35,10 +38,12 @@ public class IngameCanvasHandler : MonoBehaviour
     {
         Instance = this;
         initialized = false;
+        transform.GetChild(0).gameObject.SetActive(false);
     }
 
     public void InitUI()
     {
+        transform.GetChild(0).gameObject.SetActive(true);
         playerCarController = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<CarController_>();
         timer = 0f;
         initialized = true;
@@ -49,7 +54,7 @@ public class IngameCanvasHandler : MonoBehaviour
     {
         if(initialized)
         {
-            timer += Time.fixedDeltaTime;
+            timer += Time.deltaTime;
             // 시간을 분, 초, 밀리초로 변환
             minutes = Mathf.FloorToInt(timer / 60f);
             seconds = Mathf.FloorToInt(timer % 60f);
@@ -70,5 +75,37 @@ public class IngameCanvasHandler : MonoBehaviour
                 ABS.color = Color.white;
             }
         }
+        else
+        {
+            countdownNum.fontSize = countdownNum.rectTransform.rect.width;
+        }
+    }
+
+    public void StartCountDown()
+    {
+        // UI에서 카운트다운 되는것 표현
+        StartCoroutine(CountDown());
+    }
+
+    IEnumerator CountDown()
+    {
+        Vector2 origin = countdownNum.rectTransform.sizeDelta;
+
+        countdownNum.text = "3";
+        countdownNum.rectTransform.DOSizeDelta(new Vector2(50, 50), 0.95f);
+        yield return new WaitForSeconds(1);
+
+        countdownNum.text = "2";
+        countdownNum.rectTransform.sizeDelta = origin;
+        countdownNum.rectTransform.DOSizeDelta(new Vector2(50, 50), 0.95f);
+        yield return new WaitForSeconds(1);
+
+        countdownNum.text = "1";
+        countdownNum.rectTransform.sizeDelta = origin;
+        countdownNum.rectTransform.DOSizeDelta(new Vector2(50, 50), 0.95f);
+        yield return new WaitForSeconds(1);
+
+        countdownNum.gameObject.SetActive(false);
+        InGameManager.instance.StartGame();
     }
 }
