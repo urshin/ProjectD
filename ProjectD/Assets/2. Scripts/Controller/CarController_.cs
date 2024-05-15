@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -109,6 +110,7 @@ public class CarController_ : MonoBehaviour
     public float downforce;
     public float airDragCoeff; // 공기저항 
 
+    [Header("Effects")]
     [SerializeField] List<ParticleSystem> smoke;
     [SerializeField] GameObject smokePrefab;
 
@@ -204,6 +206,8 @@ public class CarController_ : MonoBehaviour
         DownForceValue = DataManager.Instance.carDictionary[index].Environment.DownForceValue;
         downforce = DataManager.Instance.carDictionary[index].Environment.DownForce;
         airDragCoeff = DataManager.Instance.carDictionary[index].Environment.AirDragCoeff;
+
+
     }
 
     public void InitializeIngame()
@@ -229,7 +233,6 @@ public class CarController_ : MonoBehaviour
         //{
         //    smoke.Add(Instantiate(smokePrefab, wheels[i].wheelCollider.transform.position, Quaternion.identity, wheels[i].wheelCollider.transform).GetComponent<ParticleSystem>());
         //}
-
         initialized = true;
     }
 
@@ -388,7 +391,7 @@ public class CarController_ : MonoBehaviour
         //currentRPM = minRPM + (wheelRPM * finalDriveRatio * gearRatio);
         if (currentRPM > maxRPM - 200)
         {
-            currentRPM = maxRPM - Random.Range(0, 200); //최대 RPM 제한
+            currentRPM = maxRPM -UnityEngine.Random.Range(0, 200); //최대 RPM 제한
             totalMotorTorque = 0; //토크에 0을 줌으로써 일정 속도로 유지 되게
         }
         else

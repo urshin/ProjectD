@@ -6916,15 +6916,15 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4574678567847374}
   - {fileID: 91637729944068075}
+  - {fileID: 4574678567847374}
   - {fileID: 4039089282683168}
   - {fileID: 4352242104498338}
   - {fileID: 4609804102691008}
   - {fileID: 4782078289648094}
   - {fileID: 4592082315834872}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1989587038924182
 GameObject:

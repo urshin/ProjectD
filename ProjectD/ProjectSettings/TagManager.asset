@@ -9,6 +9,7 @@ TagManager:
   - Map
   - Enemy
   - UI
+  - BodyCollider
   layers:
   - Default
   - TransparentFX

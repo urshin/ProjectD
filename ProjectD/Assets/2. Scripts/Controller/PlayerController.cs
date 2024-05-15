@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         InitializedSetting();
+        
     }
 
     private void Update()
