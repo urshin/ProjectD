@@ -39,7 +39,8 @@ public class DataManager : MonoBehaviour
         ParsingMapData();
 
         SoundManager.instance.InitSoundData();
-        SceneControlManager.Instance.StartLobbyScene();
+        UserInfoManager.instance.InitUserInfo();
+        //SceneControlManager.Instance.StartLobbyScene();
     }
 
 

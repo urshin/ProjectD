@@ -61,6 +61,7 @@ public class CarController_ : MonoBehaviour
     public bool handBrake = false;
     public float handBrakeSleepAmout = 0.55f;
     public float resetSteerAngleSpeed = 100f; //스티어 앵글 각도 초기화 시간
+    bool autoCounter;
 
     [Header("Engine")]
     public float accel;
@@ -155,7 +156,7 @@ public class CarController_ : MonoBehaviour
 
 
 
-    public void InitializeSetting(int index, bool isAi)
+    public void InitializeSetting(int index, bool isAi, bool isAutoCounter = true)
     {
         
         //무게 중심 초기화
@@ -164,6 +165,7 @@ public class CarController_ : MonoBehaviour
         //centerofmass = playerRB.centerOfMass;
 
         maxSteerAngle = DataManager.Instance.carDictionary[index].Handling.MaxSteerAngle;
+        autoCounter = isAutoCounter;
 
         switch (DataManager.Instance.carDictionary[index].Engine.Transmission)
         {
@@ -206,8 +208,6 @@ public class CarController_ : MonoBehaviour
         DownForceValue = DataManager.Instance.carDictionary[index].Environment.DownForceValue;
         downforce = DataManager.Instance.carDictionary[index].Environment.DownForce;
         airDragCoeff = DataManager.Instance.carDictionary[index].Environment.AirDragCoeff;
-
-
     }
 
     public void InitializeIngame()
@@ -300,9 +300,12 @@ public class CarController_ : MonoBehaviour
         //미끌어지는 각
         slipAngle = Vector3.Angle(transform.forward, playerRB.velocity - transform.forward);
         float steeringAngle = steerValue * maxSteerAngle / (1080.0f / 2);//steerSlider.value * maxSteerAngle / (1080.0f / 2);
-        if (slipAngle < 120f)
+        if (autoCounter)
         {
-            steeringAngle += Vector3.SignedAngle(transform.forward, playerRB.velocity + transform.forward, Vector3.up);
+            if (slipAngle < 120f)
+            {
+                steeringAngle += Vector3.SignedAngle(transform.forward, playerRB.velocity + transform.forward, Vector3.up);
+            }
         }
         steeringAngle = Mathf.Clamp(steeringAngle, -90f, 90f);
 

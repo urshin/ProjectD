@@ -107,8 +107,8 @@ public class InGameManager : MonoBehaviour
 
         //SpawnCar(playerCar.GetComponentInChildren<CarController_>(), playerCarIndex, false);
         //SpawnCar(enemyCar.GetComponentInChildren<CarController_>(), enemyCarIndex, true);
-        playerCar.GetComponentInChildren<CarController_>().InitializeSetting(playerCarIndex, false);
-        enemyCar.GetComponentInChildren<CarController_>().InitializeSetting(enemyCarIndex, true);
+        playerCar.GetComponentInChildren<CarController_>().InitializeSetting(playerCarIndex, false, UserInfoManager.instance.Option.autoCounter);
+        enemyCar.GetComponentInChildren<CarController_>().InitializeSetting(enemyCarIndex, true, true);
 
         //IngameCanvasHandler.Instance.InitUI();
         //go = Resources.Load("MapData\\Minimap") as GameObject;

@@ -73,6 +73,8 @@ public class PlayerController : MonoBehaviour
         // 자식으로 차량을 붙이고 그 차량의 CarController_ 클래스를 가져와야한다
         // 임시
         carController = GetComponentInChildren<CarController_>();
+        sensitivity = UserInfoManager.instance.Option.sensitivity;
+
     }
 
     public void Steering()//fixedUpdate

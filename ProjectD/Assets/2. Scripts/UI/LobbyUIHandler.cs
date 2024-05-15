@@ -36,28 +36,43 @@ public class LobbyUIHandler : MonoBehaviour
     [SerializeField] GameObject isReverse;
     public LobbyState lobbystate;
 
+    [SerializeField] TextMeshProUGUI sensitivityText;
+    [SerializeField] Slider sensitivity;
     [SerializeField] Slider mainVolume;
     [SerializeField] Slider bgmVolume;
     [SerializeField] Slider sfxVolume;
+    [SerializeField] Toggle autoCounter;
+    [SerializeField] Image autoCounterToggleImage;
 
-    // Start is called before the first frame update
+
     void Start()
     {
         InitializedRestart();
-
-
-
     }
 
     void InitializedRestart()
     {
-        HideAllPanel();
         lobbystate = LobbyState.Logo;
-        ShowingLogo();
         GameManager.Instance.gameState = GameState.Lobby;
         GameManager.Instance.Map = 4;
         GameManager.Instance.mapWeatherState = MapWeatherState.Autumn;
         GameManager.Instance.mapTimeState = MapTimeState.Cold_Night;
+
+        sensitivity.value = UserInfoManager.instance.Option.sensitivity;
+        mainVolume.value = UserInfoManager.instance.Option.mainVolume;
+        bgmVolume.value = UserInfoManager.instance.Option.bgmVolume;
+        sfxVolume.value = UserInfoManager.instance.Option.sfxVolume;
+        autoCounter.isOn = UserInfoManager.instance.Option.autoCounter;
+
+        SetSensitivity();
+        SetGlobalVolume();
+        SetBGMVolume();
+        SetSFXVolume();
+        SetAutoCounter();
+
+        HideAllPanel();
+
+        ShowingLogo();
     }
 
 
@@ -283,6 +298,10 @@ public class LobbyUIHandler : MonoBehaviour
     }
 
     
+    public void SetSensitivity()
+    {
+        sensitivityText.text = ((int)sensitivity.value).ToString();
+    }
     public void SetGlobalVolume()
     {
         AudioListener.volume = mainVolume.value;
@@ -294,5 +313,22 @@ public class LobbyUIHandler : MonoBehaviour
     public void SetSFXVolume()
     {
         SoundManager.instance.SetSFXVolume(sfxVolume.value);
+    }
+    public void SetAutoCounter()
+    {
+        if (autoCounter.isOn)
+        {
+            autoCounterToggleImage.color = Color.blue;
+        }
+        else
+        {
+            autoCounterToggleImage.color = Color.red;
+        }
+    }
+    
+    // 옵션 창에서 back 버튼을 눌러 나오는 시점에서 옵션 정보를 세이브한다
+    public void SaveOptions()
+    {
+        UserInfoManager.instance.SaveOption(sensitivity.value, mainVolume.value, bgmVolume.value, sfxVolume.value, autoCounter.isOn);
     }
 }
