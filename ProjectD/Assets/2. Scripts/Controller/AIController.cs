@@ -22,7 +22,8 @@ public class AIController : MonoBehaviour
     [SerializeField] AnimationCurve AISteerCurve;
 
     CarController_ carController;
-    float gasInput;
+    [SerializeField] float gasInput;
+    LayerMask ignoreLayer;
 
     private void Start()
     {
@@ -47,6 +48,8 @@ public class AIController : MonoBehaviour
         frontRightleRaySP = transform.GetChild(0).GetChild(4).GetChild(2).transform;
         wallLeftRaySP = transform.GetChild(0).GetChild(4).GetChild(3).transform;
         WallRightRaySP = transform.GetChild(0).GetChild(4).GetChild(4).transform;
+        ignoreLayer = (-1) - (1 << LayerMask.NameToLayer("CheckPoint"));  // Everything에서 Player 레이어만 제외하고 충돌 체크함
+
     }
 
 
@@ -56,7 +59,7 @@ public class AIController : MonoBehaviour
     public void AIGas() //파란색
     {
         float slopeAngle = (Vector3.SignedAngle(transform.forward.normalized, Vector3.up, transform.forward.normalized) - 90) * -1f;
-        RaycastHit frontHit;
+        RaycastHit GasfrontHit;
 
         float frontDistance = 0;
 
@@ -65,14 +68,14 @@ public class AIController : MonoBehaviour
         Debug.DrawRay(frontMiddleRaySP.position - new Vector3(0, 1, 0), Quaternion.Euler(0, wheelAngle, 0) * frontMiddleRaySP.forward * 1000, Color.blue);
         // 왼쪽과 오른쪽 레이를 쏘아 충돌을 검출합니다.
 
-        if (Physics.Raycast(front, out frontHit))
+        if (Physics.Raycast(front, out GasfrontHit, Mathf.Infinity, ignoreLayer))
         {
-            frontDistance = frontHit.distance;
+            frontDistance = GasfrontHit.distance;
         }
         float angle = 0;
 
         // 가장 가까운 벽의 법선 벡터를 계산합니다.
-        Vector3 wallNormal = frontHit.normal;
+        Vector3 wallNormal = GasfrontHit.normal;
         Vector3 horizontalNormal = new Vector3(wallNormal.x, 0, wallNormal.z).normalized;
 
 
@@ -81,7 +84,7 @@ public class AIController : MonoBehaviour
 
         if (frontDistance * brakeSensitive + brakeMinDistance < carController.RigidSpeed)
         {
-            gasInput = Mathf.Lerp(gasInput, -1, 0.06f);
+            gasInput = Mathf.Lerp(gasInput, -1, 0.1f);
         }
         else if (frontDistance < carController.RigidSpeed)
         {
@@ -105,21 +108,25 @@ public class AIController : MonoBehaviour
         Ray leftFront = new Ray(frontLeftRaySP.position, frontLeftRaySP.forward);
         Ray rightFront = new Ray(frontRightleRaySP.position, frontRightleRaySP.forward);
         // 왼쪽과 오른쪽 레이를 쏘아 충돌을 검출합니다.
-        if (Physics.Raycast(leftFront, out leftHit, (carController.RigidSpeed * frontDetectedSensitive) + steeringDetectedSensitive))
+        if (Physics.Raycast(leftFront, out leftHit, (carController.RigidSpeed * frontDetectedSensitive) + steeringDetectedSensitive, ignoreLayer))
         {
             leftDistance = leftHit.distance;
         }
-        if (Physics.Raycast(rightFront, out rightHit, (carController.RigidSpeed * frontDetectedSensitive) + steeringDetectedSensitive))
+        if (Physics.Raycast(rightFront, out rightHit, (carController.RigidSpeed * frontDetectedSensitive) + steeringDetectedSensitive, ignoreLayer))
         {
             rightDistance = rightHit.distance;
         }
+        Debug.DrawRay(frontLeftRaySP.position, frontLeftRaySP.forward*(carController.RigidSpeed * frontDetectedSensitive + steeringDetectedSensitive), Color.yellow);
+        Debug.DrawRay(frontRightleRaySP.position, frontRightleRaySP.forward*(carController.RigidSpeed * frontDetectedSensitive + steeringDetectedSensitive), Color.yellow);
+
 
         RaycastHit frontHit;
 
         float frontDistance = 0;
 
         Ray front = new Ray(frontMiddleRaySP.position, frontMiddleRaySP.forward);
-        if (Physics.Raycast(front, out frontHit, (carController.RigidSpeed * frontDetectedSensitive) + steeringDetectedSensitive + 2))
+        Debug.DrawRay(frontMiddleRaySP.position, frontMiddleRaySP.forward* 100, Color.red);
+        if (Physics.Raycast(front, out frontHit, (carController.RigidSpeed * frontDetectedSensitive) + steeringDetectedSensitive + 2, ignoreLayer))
         {
             frontDistance = frontHit.distance;
         }
@@ -159,11 +166,11 @@ public class AIController : MonoBehaviour
         Debug.DrawRay(WallRightRaySP.position, Quaternion.Euler(0, wallAngle + wheelAngle, 0) * wallLeftRaySP.forward * 100, Color.white);
 
         // 왼쪽과 오른쪽 레이를 쏘아 충돌을 검출합니다.
-        if (Physics.Raycast(leftFront, out leftHit))
+        if (Physics.Raycast(leftFront, out leftHit, Mathf.Infinity, ignoreLayer))
         {
             leftDistance = leftHit.distance;
         }
-        if (Physics.Raycast(rightFront, out rightHit))
+        if (Physics.Raycast(rightFront, out rightHit, Mathf.Infinity, ignoreLayer))
         {
             rightDistance = rightHit.distance;
         }

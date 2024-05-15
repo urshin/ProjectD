@@ -8527,7 +8527,7 @@ MonoBehaviour:
   currentGear: 0
   KPH: 0
   LockWheel: 0
-  Friction: 0.92
+  Friction: 1.56
   DownForceValue: 0
   downforce: 0
   airDragCoeff: 0

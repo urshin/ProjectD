@@ -100,12 +100,13 @@ public class CarParticle : MonoBehaviour
 
 
     [SerializeField] GameObject Hitprefab;
-    private void OnCollisionEnter(Collision collision)
+    public void OnCollisionEnter(Collision collision)
     {
         //Debug.Log("錠塭天仄仃中嬴太;歲中仄;太凶歲中;太凶仄");
         ContactPoint contact = collision.contacts[0];
        GameObject hitCanvas =  Instantiate(Hitprefab, contact.point, Quaternion.LookRotation(Camera.main.transform.forward));
         Destroy(hitCanvas, 1.0f);
+        
 
     }
     private void OnCollisionStay(Collision collision)

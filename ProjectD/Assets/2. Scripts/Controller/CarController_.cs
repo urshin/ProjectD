@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
     public enum WheelWork //Àü,ÈÄ,4·û
@@ -723,5 +724,13 @@ public class CarController_ : MonoBehaviour
 
         }
         //racingWheel.transform.rotation = Quaternion.Euler(0, 0, steerSlider.value);
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        GetComponentInChildren<CarParticle>().OnCollisionEnter(collision);
+    }
+    private void OnCollisionStay(Collision collision)
+    {
+       
     }
 }
