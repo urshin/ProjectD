@@ -110,6 +110,14 @@ public class InGameManager : MonoBehaviour
         playerCar.GetComponentInChildren<CarController_>().InitializeSetting(playerCarIndex, false, UserInfoManager.instance.Option.autoCounter);
         enemyCar.GetComponentInChildren<CarController_>().InitializeSetting(enemyCarIndex, true, true);
 
+        //체크포인트 콜라이더 넣기
+        int lastChildIndex = Maps[GameManager.Instance.Map - 4].transform.childCount - 1;
+
+        playerCar.GetComponentInChildren<CheckPointTrigger>().colliders.AddRange(Maps[GameManager.Instance.Map - 4].transform.GetChild(lastChildIndex).GetComponentsInChildren<Collider>());
+        enemyCar.GetComponentInChildren<CheckPointTrigger>().colliders.AddRange(Maps[GameManager.Instance.Map - 4].transform.GetChild(lastChildIndex).GetComponentsInChildren<Collider>());
+
+
+
         //IngameCanvasHandler.Instance.InitUI();
         //go = Resources.Load("MapData\\Minimap") as GameObject;
         //Instantiate(go).GetComponent<Minimap>().InitialzeMiniMap(GameManager.Instance.Map - 4, playerCar.transform.GetChild(0).gameObject, enemyCar.transform.GetChild(0).gameObject);
@@ -251,6 +259,10 @@ public class InGameManager : MonoBehaviour
 
         }
         Maps[GameManager.Instance.Map-4].transform.GetChild(weather).gameObject.SetActive(true);
+        
+        //체크박스 활성화
+        int lastChildIndex = Maps[GameManager.Instance.Map - 4].transform.childCount - 1;
+        Maps[GameManager.Instance.Map - 4].transform.GetChild(lastChildIndex).gameObject.SetActive(true);
     }
 
     public void OnGameEnd(bool isPlayerWin)

@@ -38,11 +38,6 @@ public class CarController_ : MonoBehaviour
         public bool isGrounded;
     }
 
-    public float RigidSpeed
-    {
-        get { return playerRB.velocity.magnitude; }
-    }
-
     //휠 리스트
     public List<Wheel> wheels;
 
@@ -52,6 +47,11 @@ public class CarController_ : MonoBehaviour
     private Rigidbody playerRB; //리지드 바디
     [SerializeField] GameObject centerofmassObject;
     [SerializeField] Vector3 centerofmass; //차 무게 중심 이 될 곳
+
+    public float RigidSpeed
+    {
+        get { return playerRB.velocity.magnitude; }
+    }
 
 
     [Header("Handling")]
@@ -121,6 +121,9 @@ public class CarController_ : MonoBehaviour
     private void OnEnable()
     {
         //InitializedSetting();
+        playerRB = gameObject.GetComponent<Rigidbody>();
+        playerRB.centerOfMass = centerofmassObject.transform.localPosition;
+        centerofmass = playerRB.centerOfMass;
     }
     private void Update()
     {
@@ -213,9 +216,9 @@ public class CarController_ : MonoBehaviour
 
     public void InitializeIngame()
     {
-        playerRB = gameObject.GetComponent<Rigidbody>();
-        playerRB.centerOfMass = centerofmassObject.transform.localPosition;
-        centerofmass = playerRB.centerOfMass;
+        //playerRB = gameObject.GetComponent<Rigidbody>();
+        //playerRB.centerOfMass = centerofmassObject.transform.localPosition;
+        //centerofmass = playerRB.centerOfMass;
         ApplyMotorWork(); //전륜 후륜 정하기
         foreach (var wheel in wheels)
         {
