@@ -33,6 +33,7 @@ public class IngameCanvasHandler : MonoBehaviour
     [SerializeField] TextMeshProUGUI countdownNum;
 
     bool initialized;
+    int maxLap;
     private float timer = 0f; // 타이머 변수 초기화
     private int minutes; // 분
     private int seconds; // 초
@@ -56,6 +57,7 @@ public class IngameCanvasHandler : MonoBehaviour
         transform.GetChild(0).gameObject.SetActive(true);
         playerCarController = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<CarController_>();
         timer = 0f;
+        maxLap= InGameManager.instance.maxLap;
         initialized = true;
     }
 
@@ -64,6 +66,7 @@ public class IngameCanvasHandler : MonoBehaviour
     {
         if(initialized)
         {
+            lap.text = InGameManager.instance.PlayerLap+ "/" + maxLap; 
             timer += Time.deltaTime;
             // 시간을 분, 초, 밀리초로 변환
             minutes = Mathf.FloorToInt(timer / 60f);

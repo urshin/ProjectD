@@ -4255,6 +4255,9 @@ MonoBehaviour:
   playerCar: {fileID: 0}
   enemyCar: {fileID: 0}
   cam: {fileID: 0}
+  maxLap: 1
+  PlayerLap: 0
+  AILap: 0
   Maps:
   - {fileID: 498992324}
   - {fileID: 1117067493}

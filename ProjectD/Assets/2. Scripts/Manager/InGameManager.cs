@@ -30,6 +30,9 @@ public class InGameManager : MonoBehaviour
     [SerializeField] Camera cam;
     Transform playerSpawnPos;
     Transform enemySpawnPos;
+    public int maxLap;
+    public int PlayerLap;
+    public int AILap;
     [SerializeField] List<GameObject> Maps = new List<GameObject>();
     public static bool inGamePaused = false;
     [SerializeField] IngameCanvasHandler inGameCanvasHandler;
@@ -47,7 +50,9 @@ public class InGameManager : MonoBehaviour
     private void Start()
     {
         currentState = InGameState.standBy;
-        if(Camera.main == null)
+        PlayerLap = 1;
+        AILap = 1;
+        if (Camera.main == null)
         {
             cam =Instantiate(Camera.main);
         }
@@ -151,7 +156,8 @@ public class InGameManager : MonoBehaviour
         playerCar.GetComponentInChildren<CheckPointTrigger>().colliders.AddRange(Maps[GameManager.Instance.Map - 4].transform.GetChild(lastChildIndex).GetComponentsInChildren<Collider>());
         enemyCar.GetComponentInChildren<CheckPointTrigger>().colliders.AddRange(Maps[GameManager.Instance.Map - 4].transform.GetChild(lastChildIndex).GetComponentsInChildren<Collider>());
 
-
+        playerCar.GetComponentInChildren<CheckPointTrigger>().setTrigger = true;
+        enemyCar.GetComponentInChildren<CheckPointTrigger>().setTrigger = true;
 
         //IngameCanvasHandler.Instance.InitUI();
         //go = Resources.Load("MapData\\Minimap") as GameObject;
