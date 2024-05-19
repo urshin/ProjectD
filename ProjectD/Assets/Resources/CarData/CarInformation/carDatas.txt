@@ -11,7 +11,7 @@
     "MaxRPM": 6000,
     "MaxMotorTorque": 240,
     "MaxBrakeTorque": 5000,
-    "RPMSmoothness": 100
+    "RPMSmoothness": 20
   },
   "Gear": {
     "FinalGearRatio": 3.7,
@@ -48,7 +48,7 @@
     "MaxRPM": 7000,
     "MaxMotorTorque": 340,
     "MaxBrakeTorque": 5000,
-    "RPMSmoothness": 100
+    "RPMSmoothness": 20
   },
   "Gear": {
     "FinalGearRatio": 3.7,
@@ -85,7 +85,7 @@
     "MaxRPM": 8000,
     "MaxMotorTorque": 240,
     "MaxBrakeTorque": 5000,
-    "RPMSmoothness": 100
+    "RPMSmoothness": 20
   },
   "Gear": {
     "FinalGearRatio": 3.7,
@@ -122,7 +122,7 @@
     "MaxRPM": 8000,
     "MaxMotorTorque": 276,
     "MaxBrakeTorque": 5000,
-    "RPMSmoothness": 100
+    "RPMSmoothness": 20
   },
   "Gear": {
     "FinalGearRatio": 3.7,

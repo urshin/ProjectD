@@ -29,7 +29,7 @@ public class CheckPointTrigger : MonoBehaviour
     }
     private void Update()
     {
-        if(setTrigger)
+        if (setTrigger)
         {
             if (!isReverse)
             {
@@ -41,58 +41,64 @@ public class CheckPointTrigger : MonoBehaviour
             }
             setTrigger = false;
         }
-        if (transform.root.tag == "Enemy")
+        if (InGameManager.instance.currentState == InGameState.playing)
         {
 
-            if (carController != null)
+            if (transform.root.tag == "Enemy")
             {
-                if (carController.RigidSpeed < 1)
+
+                if (carController != null)
                 {
-                    lowSpeedTime += Time.deltaTime;
+                    if (carController.RigidSpeed < 1)
+                    {
+                        lowSpeedTime += Time.deltaTime;
+                    }
+                    else
+                    {
+                        lowSpeedTime = 0f; // 타이머 리셋
+                    }
+
+                    if (lowSpeedTime >= requiredLowSpeedDuration && currentCheckpointIndex > 0)
+                    {
+
+
+                        Respawn(isReverse);
+
+                        lowSpeedTime = 0f; // 체크포인트 통과시 리셋
+                    }
                 }
-                else
+            }
+            if (transform.root.tag == "Player")
+            {
+
+                if (carController != null)
                 {
-                    lowSpeedTime = 0f; // 타이머 리셋
-                }
+                    if (carController.RigidSpeed < 1)
+                    {
+                        lowSpeedTime += Time.deltaTime;
+                    }
+                    else
+                    {
+                        lowSpeedTime = 0f; // 타이머 리셋
+                    }
 
-                if (lowSpeedTime >= requiredLowSpeedDuration && currentCheckpointIndex > 0)
-                {
+                    if (lowSpeedTime >= requiredLowSpeedDuration)
+                    {
+
+                        print("Press R to Respawn");
+                    }
 
 
-                    Respawn(isReverse);
-
-                    lowSpeedTime = 0f; // 체크포인트 통과시 리셋
+                    if (Input.GetKeyDown(KeyCode.R))
+                    {
+                        Respawn(isReverse);
+                        lowSpeedTime = 0f; // 체크포인트 통과시 리셋
+                    }
                 }
             }
         }
-        if (transform.root.tag == "Player")
-        {
-
-            if (carController != null)
-            {
-                if (carController.RigidSpeed < 1)
-                {
-                    lowSpeedTime += Time.deltaTime;
-                }
-                else
-                {
-                    lowSpeedTime = 0f; // 타이머 리셋
-                }
-
-                if (lowSpeedTime >= requiredLowSpeedDuration)
-                {
-
-                    print("Press R to Respawn");
-                }
 
 
-                if (Input.GetKeyDown(KeyCode.R))
-                {
-                    Respawn(isReverse);
-                    lowSpeedTime = 0f; // 체크포인트 통과시 리셋
-                }
-            }
-        }
     }
 
     private void Respawn(bool revers)
@@ -104,7 +110,7 @@ public class CheckPointTrigger : MonoBehaviour
         position = revers ? -4 : 4;
         int index = 1;
         index = revers ? 1 : -1;
-      
+
         carController.transform.rotation = colliders[currentCheckpointIndex + index].transform.rotation * Quaternion.Euler(0, look, 0);
         Vector3 newPosition = colliders[currentCheckpointIndex + index].transform.position;
         newPosition.x += position;
@@ -151,7 +157,7 @@ public class CheckPointTrigger : MonoBehaviour
                                 }
                             }
 
-                          
+
                         }
                     }
                     else

@@ -63,11 +63,11 @@ public class InGameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (inGamePaused)
+            if (inGamePaused && currentState == InGameState.pause)
             {
                 Resume();
             }
-            else
+            else if( currentState == InGameState.playing)
             {
                 Pause();
             }
@@ -75,16 +75,17 @@ public class InGameManager : MonoBehaviour
     }
     public void Resume()
     {
-
         inGameCanvasHandler.SaveOptions();
         inGameCanvasHandler.pausedCanvas.SetActive(false);
 
         Time.timeScale = 1f;
+        currentState = InGameState.playing;
         inGamePaused = false;
     }
 
     public void Pause()
     {
+        currentState = InGameState.pause;
         inGameCanvasHandler.pausedCanvas.SetActive(true);
 
         Time.timeScale = 0f;
