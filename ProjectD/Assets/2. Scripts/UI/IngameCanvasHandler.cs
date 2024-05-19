@@ -19,6 +19,15 @@ public class IngameCanvasHandler : MonoBehaviour
     [SerializeField] Slider gage;
     [SerializeField] Image ABS;
 
+    public GameObject pausedCanvas;
+    [SerializeField] TextMeshProUGUI sensitivityText;
+    [SerializeField] Slider sensitivity;
+    [SerializeField] Slider mainVolume;
+    [SerializeField] Slider bgmVolume;
+    [SerializeField] Slider sfxVolume;
+    [SerializeField] Toggle autoCounter;
+    [SerializeField] Image autoCounterToggleImage;
+
     CarController_ playerCarController;
 
     [SerializeField] TextMeshProUGUI countdownNum;
@@ -39,6 +48,7 @@ public class IngameCanvasHandler : MonoBehaviour
         Instance = this;
         initialized = false;
         transform.GetChild(0).gameObject.SetActive(false);
+       
     }
 
     public void InitUI()
@@ -107,5 +117,40 @@ public class IngameCanvasHandler : MonoBehaviour
 
         countdownNum.gameObject.SetActive(false);
         InGameManager.instance.StartGame();
+    }
+
+
+    public void SetSensitivity()
+    {
+        sensitivityText.text = ((int)sensitivity.value).ToString();
+    }
+    public void SetGlobalVolume()
+    {
+        AudioListener.volume = mainVolume.value;
+    }
+    public void SetBGMVolume()
+    {
+        SoundManager.instance.SetBGMVolume(bgmVolume.value);
+    }
+    public void SetSFXVolume()
+    {
+        SoundManager.instance.SetSFXVolume(sfxVolume.value);
+    }
+    public void SetAutoCounter()
+    {
+        if (autoCounter.isOn)
+        {
+            //autoCounterToggleImage.color = Color.blue;
+        }
+        else
+        {
+            //autoCounterToggleImage.color = Color.red;
+        }
+    }
+
+    // 옵션 창에서 back 버튼을 눌러 나오는 시점에서 옵션 정보를 세이브한다
+    public void SaveOptions()
+    {
+        UserInfoManager.instance.SaveOption(sensitivity.value, mainVolume.value, bgmVolume.value, sfxVolume.value, autoCounter.isOn);
     }
 }

@@ -31,6 +31,10 @@ public class InGameManager : MonoBehaviour
     Transform playerSpawnPos;
     Transform enemySpawnPos;
     [SerializeField] List<GameObject> Maps = new List<GameObject>();
+    public static bool inGamePaused = false;
+    [SerializeField] IngameCanvasHandler inGameCanvasHandler;
+  
+
 
     ResultUIHandler gameEndUI;
     public InGameState currentState;
@@ -47,8 +51,39 @@ public class InGameManager : MonoBehaviour
         {
             cam =Instantiate(Camera.main);
         }
-        
+       
         //InitGame();
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (inGamePaused)
+            {
+                Resume();
+            }
+            else
+            {
+                Pause();
+            }
+        }
+    }
+    public void Resume()
+    {
+
+        inGameCanvasHandler.SaveOptions();
+        inGameCanvasHandler.pausedCanvas.SetActive(false);
+
+        Time.timeScale = 1f;
+        inGamePaused = false;
+    }
+
+    public void Pause()
+    {
+        inGameCanvasHandler.pausedCanvas.SetActive(true);
+
+        Time.timeScale = 0f;
+        inGamePaused = true;
     }
 
     public void InitGame(int playerCarIndex, int enemyCarIndex)
