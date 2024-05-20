@@ -7142,7 +7142,7 @@ MonoBehaviour:
   m_Priority: 10
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 0}
-  m_Follow: {fileID: 0}
+  m_Follow: {fileID: 6733204523450469443}
   m_AnimatedTarget: {fileID: 538884882965181333}
   m_LayerIndex: 0
   m_ShowDebugText: 0
@@ -7180,6 +7180,12 @@ MonoBehaviour:
     m_ParentHash: 756556552
   - m_Hash: -524286625
     m_ParentHash: 756556552
+  - m_Hash: 755116725
+    m_ParentHash: 756556552
+  - m_Hash: -1274316017
+    m_ParentHash: 756556552
+  - m_Hash: -1022604391
+    m_ParentHash: 756556552
 --- !u!1 &1727017715509995131
 GameObject:
   m_ObjectHideFlags: 0
@@ -7203,7 +7209,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1727017715509995131}
-  m_LocalRotation: {x: 0.3537816, y: 0.61224216, z: -0.3537828, w: 0.61223847}
+  m_LocalRotation: {x: 0.3537816, y: 0.6122421, z: -0.35378286, w: 0.6122384}
   m_LocalPosition: {x: 0.017700195, y: -0.031761177, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -19268,7 +19274,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colliders: []
-  lapCount: 0
+  currentCheckpointIndex: 0
+  setTrigger: 0
+  isReverse: 0
+  currentLap: 0
 --- !u!1 &7378529451948431782
 GameObject:
   m_ObjectHideFlags: 0

@@ -22,7 +22,6 @@ public class GameManager : MonoBehaviour
     public GameState gameState;
     public MapWeatherState mapWeatherState;
     public MapTimeState mapTimeState;
-
     public int Map;
     public bool isReverse;
 
@@ -66,4 +65,9 @@ public enum MapTimeState
     Deep_Dusk,
     BlueSunset,
     Night_MoonBurst,
+}
+public enum SpeeoMeterState
+{
+    Horizontal,
+    TacoMeter,
 }

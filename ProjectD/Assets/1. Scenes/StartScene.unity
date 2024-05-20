@@ -233,6 +233,7 @@ MonoBehaviour:
   gameState: 0
   mapWeatherState: 0
   mapTimeState: 0
+  speeoMeter: 0
   Map: 0
   isReverse: 0
   isAutoCounter: 1

@@ -995,11 +995,14 @@ MonoBehaviour:
   m_Priority: 10
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 0}
-  m_Follow: {fileID: 0}
+  m_Follow: {fileID: 6614623988358591432}
   m_AnimatedTarget: {fileID: 1209998909323588025}
   m_LayerIndex: 0
   m_ShowDebugText: 0
-  m_ChildCameras: []
+  m_ChildCameras:
+  - {fileID: 2552217482957949522}
+  - {fileID: 3991314346081726382}
+  - {fileID: 5680419184757834202}
   m_Instructions:
   - m_FullHash: -2101235504
     m_VirtualCamera: {fileID: 2552217482957949522}
@@ -7642,7 +7645,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colliders: []
-  lapCount: 0
+  currentCheckpointIndex: 0
+  setTrigger: 0
+  isReverse: 0
+  currentLap: 0
 --- !u!1 &3382963667980957533
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,8 +12,20 @@ public class CheckPointTrigger : MonoBehaviour
     CarController_ carController;
     [SerializeField] bool isReverse;
     public int currentLap;
+    bool isIngame = false;
     private void OnEnable()
     {
+        if (GameManager.Instance.gameState == GameState.InGame)
+        {
+            isIngame = true;    
+        }
+        else
+        {
+            isIngame = false;
+        }
+        if(isIngame )
+        {
+
         setTrigger = false;
         isReverse = GameManager.Instance.isReverse;
         if (!isReverse)
@@ -26,78 +38,81 @@ public class CheckPointTrigger : MonoBehaviour
         }
         currentLap = 1;
         carController = GetComponentInParent<CarController_>();
+        }
     }
     private void Update()
     {
-        if (setTrigger)
+        if (isIngame)
         {
-            if (!isReverse)
+            if (setTrigger)
             {
-                currentCheckpointIndex = 0;
-            }
-            else if (isReverse)
-            {
-                currentCheckpointIndex = colliders.Count - 1;
-            }
-            setTrigger = false;
-        }
-        if (InGameManager.instance.currentState == InGameState.playing)
-        {
-
-            if (transform.root.tag == "Enemy")
-            {
-
-                if (carController != null)
+                if (!isReverse)
                 {
-                    if (carController.RigidSpeed < 1)
+                    currentCheckpointIndex = 0;
+                }
+                else if (isReverse)
+                {
+                    currentCheckpointIndex = colliders.Count - 1;
+                }
+                setTrigger = false;
+            }
+            if (InGameManager.instance.currentState == InGameState.playing)
+            {
+
+                if (transform.root.tag == "Enemy")
+                {
+
+                    if (carController != null)
                     {
-                        lowSpeedTime += Time.deltaTime;
+                        if (carController.RigidSpeed < 1)
+                        {
+                            lowSpeedTime += Time.deltaTime;
+                        }
+                        else
+                        {
+                            lowSpeedTime = 0f; // 타이머 리셋
+                        }
+
+                        if (lowSpeedTime >= requiredLowSpeedDuration && currentCheckpointIndex > 0)
+                        {
+
+
+                            Respawn(isReverse);
+
+                            lowSpeedTime = 0f; // 체크포인트 통과시 리셋
+                        }
                     }
-                    else
+                }
+                if (transform.root.tag == "Player")
+                {
+
+                    if (carController != null)
                     {
-                        lowSpeedTime = 0f; // 타이머 리셋
-                    }
+                        if (carController.RigidSpeed < 1)
+                        {
+                            lowSpeedTime += Time.deltaTime;
+                        }
+                        else
+                        {
+                            lowSpeedTime = 0f; // 타이머 리셋
+                        }
 
-                    if (lowSpeedTime >= requiredLowSpeedDuration && currentCheckpointIndex > 0)
-                    {
+                        if (lowSpeedTime >= requiredLowSpeedDuration)
+                        {
+
+                            print("Press R to Respawn");
+                        }
 
 
-                        Respawn(isReverse);
-
-                        lowSpeedTime = 0f; // 체크포인트 통과시 리셋
+                        if (Input.GetKeyDown(KeyCode.R))
+                        {
+                            Respawn(isReverse);
+                            lowSpeedTime = 0f; // 체크포인트 통과시 리셋
+                        }
                     }
                 }
             }
-            if (transform.root.tag == "Player")
-            {
-
-                if (carController != null)
-                {
-                    if (carController.RigidSpeed < 1)
-                    {
-                        lowSpeedTime += Time.deltaTime;
-                    }
-                    else
-                    {
-                        lowSpeedTime = 0f; // 타이머 리셋
-                    }
-
-                    if (lowSpeedTime >= requiredLowSpeedDuration)
-                    {
-
-                        print("Press R to Respawn");
-                    }
-
-
-                    if (Input.GetKeyDown(KeyCode.R))
-                    {
-                        Respawn(isReverse);
-                        lowSpeedTime = 0f; // 체크포인트 통과시 리셋
-                    }
-                }
-            }
         }
-
 
     }
 

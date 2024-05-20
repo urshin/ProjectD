@@ -6942,7 +6942,7 @@ MonoBehaviour:
   m_Priority: 10
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 0}
-  m_Follow: {fileID: 0}
+  m_Follow: {fileID: 3832537023283767312}
   m_AnimatedTarget: {fileID: 3858299145571807041}
   m_LayerIndex: 0
   m_ShowDebugText: 0
@@ -6979,6 +6979,12 @@ MonoBehaviour:
   - m_Hash: 458052534
     m_ParentHash: 756556552
   - m_Hash: -524286625
+    m_ParentHash: 756556552
+  - m_Hash: 755116725
+    m_ParentHash: 756556552
+  - m_Hash: -1274316017
+    m_ParentHash: 756556552
+  - m_Hash: -1022604391
     m_ParentHash: 756556552
 --- !u!1 &2999663362171642385
 GameObject:
@@ -14451,7 +14457,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colliders: []
-  lapCount: 0
+  currentCheckpointIndex: 0
+  setTrigger: 0
+  isReverse: 0
+  currentLap: 0
 --- !u!1 &6798303897360095706
 GameObject:
   m_ObjectHideFlags: 0

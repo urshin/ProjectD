@@ -13,6 +13,7 @@ public struct GameOption
     public float bgmVolume;
     public float sfxVolume;
     public bool autoCounter;
+    public SpeeoMeterState speeoMeter;
 }
 
 
@@ -100,6 +101,7 @@ public class UserInfoManager : MonoBehaviour
             option.bgmVolume = 0.5f;
             option.sfxVolume = 0.5f;
             option.autoCounter = true;
+            option.speeoMeter = SpeeoMeterState.TacoMeter;
             lapTime = new Dictionary<int, float>();
         }
 
@@ -126,7 +128,6 @@ public class UserInfoManager : MonoBehaviour
 
         SaveGameData();
     }
-
     public void SaveOption(float sens, float mainVol, float bgmVol, float sfxVol, bool counter)
     {
         option.sensitivity = sens;
@@ -134,7 +135,18 @@ public class UserInfoManager : MonoBehaviour
         option.bgmVolume = bgmVol;
         option.sfxVolume = sfxVol;
         option.autoCounter = counter;
-
+      
+        SaveGameData();
+    }
+    //오버로딩
+    public void SaveOption(float sens, float mainVol, float bgmVol, float sfxVol, bool counter, SpeeoMeterState gage)
+    {
+        option.sensitivity = sens;
+        option.mainVolume = mainVol;
+        option.bgmVolume = bgmVol;
+        option.sfxVolume = sfxVol;
+        option.autoCounter = counter;
+        option.speeoMeter = gage;
         SaveGameData();
     }
 

@@ -43,7 +43,7 @@ public class LobbyUIHandler : MonoBehaviour
     [SerializeField] Slider sfxVolume;
     [SerializeField] Toggle autoCounter;
     [SerializeField] Image autoCounterToggleImage;
-
+    public SpeeoMeterState speeoMeter;
 
     void Start()
     {
@@ -325,10 +325,25 @@ public class LobbyUIHandler : MonoBehaviour
             autoCounterToggleImage.color = Color.red;
         }
     }
-    
+    public void GageDropDownEvent(TMP_Dropdown select)
+    {
+        string op = select.options[select.value].text;
+        switch (op)
+        {
+            case "Horizontal":
+               speeoMeter = SpeeoMeterState.Horizontal;
+                break;
+            case "TacoMeter":
+                speeoMeter = SpeeoMeterState.TacoMeter;
+                break;
+           
+
+        }
+    }
+
     // 옵션 창에서 back 버튼을 눌러 나오는 시점에서 옵션 정보를 세이브한다
     public void SaveOptions()
     {
-        UserInfoManager.instance.SaveOption(sensitivity.value, mainVolume.value, bgmVolume.value, sfxVolume.value, autoCounter.isOn);
+        UserInfoManager.instance.SaveOption(sensitivity.value, mainVolume.value, bgmVolume.value, sfxVolume.value, autoCounter.isOn, speeoMeter);
     }
 }

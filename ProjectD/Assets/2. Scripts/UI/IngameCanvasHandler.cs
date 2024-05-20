@@ -14,10 +14,19 @@ public class IngameCanvasHandler : MonoBehaviour
     [SerializeField] TextMeshProUGUI timeSpen;
     [SerializeField] TextMeshProUGUI RPMTMP;
     [SerializeField] TextMeshProUGUI gearTMP;
+    [SerializeField] Slider handleSlider;
     [SerializeField] Slider gas;
     [SerializeField] Slider brake;
-    [SerializeField] Slider gage;
     [SerializeField] Image ABS;
+    [SerializeField] GameObject gages;
+    [SerializeField] Slider gage1_Slider;
+
+
+    [SerializeField] Image gage2_needle;
+    [SerializeField] TextMeshProUGUI gage2_RPMTMP;
+    [SerializeField] TextMeshProUGUI gage2_gearTMP;
+
+
 
     public GameObject pausedCanvas;
     [SerializeField] TextMeshProUGUI sensitivityText;
@@ -28,9 +37,13 @@ public class IngameCanvasHandler : MonoBehaviour
     [SerializeField] Toggle autoCounter;
     [SerializeField] Image autoCounterToggleImage;
 
+
+
     CarController_ playerCarController;
 
     [SerializeField] TextMeshProUGUI countdownNum;
+
+    
 
     bool initialized;
     int maxLap;
@@ -58,6 +71,18 @@ public class IngameCanvasHandler : MonoBehaviour
         playerCarController = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<CarController_>();
         timer = 0f;
         maxLap= InGameManager.instance.maxLap;
+        for (int i = 0; i < gages.transform.childCount; i++)
+        {
+            gages.transform.GetChild(i).gameObject.SetActive(false);
+        }
+        if (UserInfoManager.instance.Option.speeoMeter == SpeeoMeterState.Horizontal)
+        {
+            gages.transform.GetChild(0).gameObject.SetActive(true);
+        }
+       else if (UserInfoManager.instance.Option.speeoMeter == SpeeoMeterState.TacoMeter)
+        {
+            gages.transform.GetChild(1).gameObject.SetActive(true);
+        }
         initialized = true;
     }
 
@@ -73,11 +98,28 @@ public class IngameCanvasHandler : MonoBehaviour
             seconds = Mathf.FloorToInt(timer % 60f);
             milliseconds = Mathf.FloorToInt((timer * 100f) % 100f);
             timeSpen.text = "Time : " + minutes.ToString() + ":\t" + seconds.ToString() + ":\t" + milliseconds.ToString();
-            RPMTMP.text = playerCarController.currentRPM.ToString();
-            gearTMP.text = ((int)playerCarController.currentGear).ToString();
+            handleSlider.value = playerCarController.steerValue;
             gas.value = playerCarController.accel;
             brake.value = -1 * playerCarController.accel;
-            gage.value = playerCarController.currentRPM / playerCarController.maxRPM;
+
+
+            //gage1
+            gage1_Slider.value = playerCarController.currentRPM / playerCarController.maxRPM;
+            gearTMP.text = ((int)playerCarController.currentGear).ToString();
+            RPMTMP.text = playerCarController.currentRPM.ToString();
+
+
+
+
+            //gage2
+            //needle 
+            float rpmRatio = Mathf.Clamp01(playerCarController.currentRPM / playerCarController.maxRPM);
+            float rotationZ = Mathf.Lerp(-120, 120, rpmRatio);
+            gage2_needle.rectTransform.localRotation = Quaternion.Euler(0, 180, rotationZ);
+            //rpm, gear
+            gage2_RPMTMP.text = (Mathf.FloorToInt(playerCarController.currentRPM / 1000f)).ToString() + " X 1000";
+            gage2_gearTMP.text =  ((int)playerCarController.currentGear).ToString();
+
 
             if (playerCarController.handBrake)
             {
