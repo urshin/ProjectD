@@ -115,6 +115,7 @@ public class CarController_ : MonoBehaviour
     [Header("Effects")]
     [SerializeField] List<ParticleSystem> smoke;
     [SerializeField] GameObject smokePrefab;
+    [SerializeField] GameObject brakeLamp;
 
     public bool initialized;
 
@@ -342,6 +343,13 @@ public class CarController_ : MonoBehaviour
 
                 wheel.wheelCollider.brakeTorque = 0f;
             }
+            if (brakeLamp != null)
+            {
+                foreach (Material mat in brakeLamp.GetComponent<Renderer>().materials)
+                {
+                    mat.SetFloat("_BrakeParam", 0);
+                }
+            }
         }
         else if (accel <= -1 && wheelRPM <= 0)
         {
@@ -358,6 +366,13 @@ public class CarController_ : MonoBehaviour
 
                 wheel.wheelCollider.brakeTorque = 0f;
             }
+            if (brakeLamp != null)
+            {
+                foreach (Material mat in brakeLamp.GetComponent<Renderer>().materials)
+                {
+                    mat.SetFloat("_BrakeParam", 0);
+                }
+            }
         }
         else
         {
@@ -367,6 +382,13 @@ public class CarController_ : MonoBehaviour
                 var brakeTorque = maxBrakeTorque * accel * -1 * wheel.brakeBias;
                 wheel.wheelCollider.brakeTorque = brakeTorque;
                 wheel.wheelCollider.motorTorque = 0f;
+            }
+            if(brakeLamp != null)
+            {
+                foreach (Material mat in brakeLamp.GetComponent<Renderer>().materials)
+                {
+                    mat.SetFloat("_BrakeParam", 1);
+                }
             }
         }
 
@@ -382,6 +404,14 @@ public class CarController_ : MonoBehaviour
 
                     wheel.wheelCollider.brakeTorque = maxBrakeTorque;
                     wheel.wheelCollider.motorTorque = 0f;
+                }
+            }
+
+            if (brakeLamp != null)
+            {
+                foreach(Material mat in brakeLamp.GetComponent<Renderer>().materials)
+                {
+                    mat.SetFloat("_BrakeParam", 1);
                 }
             }
         }

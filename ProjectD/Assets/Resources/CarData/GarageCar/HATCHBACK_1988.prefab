@@ -59,8 +59,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 357179537506322846}
-  m_LocalRotation: {x: 0.021726385, y: 0.70677185, z: -0.02172632, w: 0.706774}
-  m_LocalPosition: {x: 3.505, y: 0.796, z: 0}
+  m_LocalRotation: {x: -0.053241156, y: 0.7051054, z: -0.05324204, w: -0.7050936}
+  m_LocalPosition: {x: 5.1666675, y: 0.85416675, z: 0.000015258789}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -547,7 +547,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1169077684349792768}
   m_LocalRotation: {x: -0, y: -1, z: -0, w: 0.0000026226041}
-  m_LocalPosition: {x: -0.00000667572, y: 0.75, z: -2.2500002}
+  m_LocalPosition: {x: -0, y: 1.99, z: -2.55}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -628,7 +628,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -999,10 +999,7 @@ MonoBehaviour:
   m_AnimatedTarget: {fileID: 1209998909323588025}
   m_LayerIndex: 0
   m_ShowDebugText: 0
-  m_ChildCameras:
-  - {fileID: 2552217482957949522}
-  - {fileID: 3991314346081726382}
-  - {fileID: 5680419184757834202}
+  m_ChildCameras: []
   m_Instructions:
   - m_FullHash: -2101235504
     m_VirtualCamera: {fileID: 2552217482957949522}
@@ -1307,8 +1304,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2167719814196297599}
-  m_LocalRotation: {x: 0.032201562, y: 0.7203189, z: -0.03351528, w: 0.69208425}
-  m_LocalPosition: {x: -0.289, y: 1.904, z: 0.351}
+  m_LocalRotation: {x: 0.047025297, y: 0.77956575, z: -0.058960255, w: 0.62176317}
+  m_LocalPosition: {x: -0.0000020861626, y: 2, z: 0.70833343}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7986,8 +7983,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3738515807191667878}
-  m_LocalRotation: {x: 0.055952933, y: 0.7048898, z: -0.055952955, w: 0.7048894}
-  m_LocalPosition: {x: -6.03, y: 3.68, z: 0}
+  m_LocalRotation: {x: 0.051920004, y: 0.70519704, z: -0.051919848, w: 0.7051992}
+  m_LocalPosition: {x: -10.562502, y: 4.291667, z: -0.000030517578}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8656,6 +8653,7 @@ MonoBehaviour:
   airDragCoeff: 0
   smoke: []
   smokePrefab: {fileID: 4969641942327939751, guid: d5f95f5b21b9506429333da8f2244e88, type: 3}
+  brakeLamp: {fileID: 5965791092124049222}
   initialized: 0
   slipAngle: 0
   steeringInput: 0

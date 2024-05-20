@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.SearchService;
 using UnityEngine;
 using static System.Net.WebRequestMethods;
 
@@ -40,7 +41,7 @@ public class InGameManager : MonoBehaviour
 
 
     ResultUIHandler gameEndUI;
-    public InGameState currentState;
+    public InGameState currentState = InGameState.standBy;
 
     private void Awake()
     {
@@ -289,6 +290,7 @@ public class InGameManager : MonoBehaviour
                 timeMaterial = sky;
             }
         }
+        
         RenderSettings.skybox = timeMaterial;
 
         //선택 된 게임 맵 true
