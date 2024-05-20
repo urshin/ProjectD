@@ -67,6 +67,7 @@ public class SceneControlManager : MonoBehaviour
         AsyncOperation ao;
 
         ao = SceneManager.LoadSceneAsync("InGame");
+        GameManager.Instance.gameState = GameState.InGame;
         while (!ao.isDone)
         {
             yield return null;

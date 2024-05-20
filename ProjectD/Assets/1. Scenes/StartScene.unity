@@ -652,12 +652,6 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 87965c9b4b0a8f44ead587bf203876e9, type: 2}
   - {fileID: 2100000, guid: 00a2ce3f9a3082c44a11ed606d167f29, type: 2}
   - {fileID: 2100000, guid: 7d24d6d9bb8235444a36969959eb9469, type: 2}
-  lightingSettings:
-  - {fileID: 4890085278179872738, guid: 013a4afe33b8b704b8b04a31af74eceb, type: 2}
-  - {fileID: 4890085278179872738, guid: c29afb0e9af90434a93ca397c6bf4fbf, type: 2}
-  - {fileID: 4890085278179872738, guid: f8a9a01ca39570f4cb783aa640a311b9, type: 2}
-  - {fileID: 4890085278179872738, guid: 96f18bcbd12f14e43af85c737fd8827d, type: 2}
-  - {fileID: 4890085278179872738, guid: 3fc8f3062cc4de94b80c617a0bc0ad00, type: 2}
   jsonFolderPath: Resources/CarInformation
   enemyData:
     index: 0

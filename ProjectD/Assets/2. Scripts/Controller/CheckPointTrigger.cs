@@ -17,28 +17,27 @@ public class CheckPointTrigger : MonoBehaviour
     {
         if (GameManager.Instance.gameState == GameState.InGame)
         {
-            isIngame = true;    
+            isIngame = true;
         }
         else
         {
             isIngame = false;
         }
-        if(isIngame )
-        {
+        
 
-        setTrigger = false;
-        isReverse = GameManager.Instance.isReverse;
-        if (!isReverse)
-        {
-            currentCheckpointIndex = 0;
-        }
-        else if (isReverse)
-        {
-            currentCheckpointIndex = colliders.Count - 1;
-        }
-        currentLap = 1;
-        carController = GetComponentInParent<CarController_>();
-        }
+            setTrigger = false;
+            isReverse = GameManager.Instance.isReverse;
+            if (!isReverse)
+            {
+                currentCheckpointIndex = 0;
+            }
+            else if (isReverse)
+            {
+                currentCheckpointIndex = colliders.Count - 1;
+            }
+            currentLap = 1;
+            carController = GetComponentInParent<CarController_>();
+        
     }
     private void Update()
     {
@@ -127,9 +126,18 @@ public class CheckPointTrigger : MonoBehaviour
         index = revers ? 1 : -1;
 
         carController.transform.rotation = colliders[currentCheckpointIndex + index].transform.rotation * Quaternion.Euler(0, look, 0);
-        Vector3 newPosition = colliders[currentCheckpointIndex + index].transform.position;
-        newPosition.x += position;
-        carController.transform.position = newPosition;
+        RaycastHit spawnPoint;
+        Ray spawnRay = new Ray(colliders[currentCheckpointIndex + index].transform.position+new Vector3(0,2,0), -colliders[currentCheckpointIndex + index].transform.up);
+        Physics.Raycast(spawnRay,out spawnPoint, 100, LayerMask.NameToLayer("Ground"));
+        Debug.DrawRay(colliders[currentCheckpointIndex + index].transform.position + new Vector3(0, 2, 0), -colliders[currentCheckpointIndex + index].transform.up*100, Color.yellow);
+
+        Vector3 newPosition = spawnPoint.point+new Vector3(0,1,0);
+        Vector3 localPosition = carController.transform.InverseTransformPoint(newPosition);
+        localPosition.z += position;
+        Vector3 finalWorldPosition = carController.transform.TransformPoint(localPosition);
+        carController.transform.position = finalWorldPosition;
+
+
     }
 
     private void OnTriggerEnter(Collider other)

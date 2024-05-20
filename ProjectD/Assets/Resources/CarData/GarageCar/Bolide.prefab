@@ -7146,10 +7146,7 @@ MonoBehaviour:
   m_AnimatedTarget: {fileID: 538884882965181333}
   m_LayerIndex: 0
   m_ShowDebugText: 0
-  m_ChildCameras:
-  - {fileID: 4848874488698038549}
-  - {fileID: 6755471633446177011}
-  - {fileID: 8206692510056397768}
+  m_ChildCameras: []
   m_Instructions:
   - m_FullHash: -2101235504
     m_VirtualCamera: {fileID: 4848874488698038549}
@@ -7337,7 +7334,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 1
-  m_FollowOffset: {x: -0.34, y: 0.96, z: -0}
+  m_FollowOffset: {x: 0, y: 0.42, z: -0.55}
   m_XDamping: 0
   m_YDamping: 0
   m_ZDamping: 0

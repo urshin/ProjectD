@@ -1,3 +1,4 @@
+using Cinemachine;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
@@ -43,7 +44,8 @@ public class IngameCanvasHandler : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI countdownNum;
 
-    
+
+    [SerializeField] CinemachineBlendListCamera blendListCamera;
 
     bool initialized;
     int maxLap;
@@ -71,6 +73,7 @@ public class IngameCanvasHandler : MonoBehaviour
         playerCarController = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<CarController_>();
         timer = 0f;
         maxLap= InGameManager.instance.maxLap;
+        
         for (int i = 0; i < gages.transform.childCount; i++)
         {
             gages.transform.GetChild(i).gameObject.SetActive(false);
@@ -136,6 +139,26 @@ public class IngameCanvasHandler : MonoBehaviour
         }
     }
 
+    public void initialCamera()//시작 카메라
+    {
+        GameObject cam1start = blendListCamera.transform.GetChild(0).gameObject;
+        GameObject cam1end = blendListCamera.transform.GetChild(1).gameObject;
+        GameObject cam2start = blendListCamera.transform.GetChild(2).gameObject;
+        GameObject cam2end = blendListCamera.transform.GetChild(3).gameObject;
+        Transform playerTrans = GameObject.FindGameObjectWithTag("Player").transform.GetChild(0).transform.GetChild(0);
+        Transform enemyTrans = GameObject.FindGameObjectWithTag("Enemy").transform.GetChild(0).transform.GetChild(0);
+        Vector3 midpoint = (enemyTrans.position + playerTrans.position) / 2;
+        float distance = Vector3.Distance(enemyTrans.position, playerTrans.position);
+        cam1start.transform.position = midpoint + new Vector3(4f, 0, -distance/2); // 필요한 경우 위치 조정
+        cam1end.transform.position = midpoint + new Vector3(4f, 0, distance / 2); // 필요한 경우 위치 조정
+        cam1start.transform.rotation = Quaternion.LookRotation(-enemyTrans.forward); // playerTrans의 반대 방향을 바라보게 설정
+        cam1end.transform.rotation = Quaternion.LookRotation(-playerTrans.forward); // playerTrans의 반대 방향을 바라보게 설정
+        cam2start.transform.position = midpoint + new Vector3(-0.5f, 0, 0); // 필요한 경우 위치 조정
+        cam2start.transform.rotation = playerTrans.rotation; 
+        cam2end.transform.position = midpoint + new Vector3(-2, 0, 0); // 필요한 경우 위치 조정
+        cam2end.transform.rotation = playerTrans.rotation;
+    }
+
     public void StartCountDown()
     {
         // UI에서 카운트다운 되는것 표현
@@ -145,9 +168,17 @@ public class IngameCanvasHandler : MonoBehaviour
     IEnumerator CountDown()
     {
         Vector2 origin = countdownNum.rectTransform.sizeDelta;
+        initialCamera();
+        
+        countdownNum.text = "READY";
+        yield return new WaitForSeconds(1);
+
+
+
 
         countdownNum.text = "3";
         countdownNum.rectTransform.DOSizeDelta(new Vector2(50, 50), 0.95f);
+        blendListCamera.enabled = true;
         yield return new WaitForSeconds(1);
 
         countdownNum.text = "2";
@@ -155,13 +186,26 @@ public class IngameCanvasHandler : MonoBehaviour
         countdownNum.rectTransform.DOSizeDelta(new Vector2(50, 50), 0.95f);
         yield return new WaitForSeconds(1);
 
+        blendListCamera.enabled = false;
         countdownNum.text = "1";
         countdownNum.rectTransform.sizeDelta = origin;
         countdownNum.rectTransform.DOSizeDelta(new Vector2(50, 50), 0.95f);
         yield return new WaitForSeconds(1);
 
-        countdownNum.gameObject.SetActive(false);
         InGameManager.instance.StartGame();
+        Color color = countdownNum.color;
+        countdownNum.text = "GO!";
+        for (int i = 0; i < 10; i++)
+        {
+
+        color.a -= 0.1f; // 50% 투명도로 설정
+        yield return new WaitForSeconds(0.1f);
+        countdownNum.color = color;
+        }
+        countdownNum.rectTransform.sizeDelta = origin;
+
+
+        countdownNum.gameObject.SetActive(false);
     }
 
 
