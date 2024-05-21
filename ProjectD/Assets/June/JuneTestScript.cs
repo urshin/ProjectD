@@ -9,6 +9,11 @@ public class JuneTestScript : MonoBehaviour
 
     void Start()
     {
+    InitialRoadLight();
+    }
+
+    public void InitialRoadLight()
+    {
         // 씬의 모든 렌더러를 가져옵니다.
         Renderer[] renderers = FindObjectsOfType<Renderer>();
 
@@ -62,7 +67,7 @@ public class JuneTestScript : MonoBehaviour
                         // 겹치는 큐브가 없다면 새 큐브를 소환합니다.
                         if (!isOverlapping)
                         {
-                            GameObject newCube = Instantiate(cubePrefab, worldVertexPosition, Quaternion.Euler(90,0,0));
+                            GameObject newCube = Instantiate(cubePrefab, worldVertexPosition, Quaternion.Euler(90, 0, 0));
                             newCube.tag = "RoadSpotLight";
                             newCube.transform.parent = transform;
                         }

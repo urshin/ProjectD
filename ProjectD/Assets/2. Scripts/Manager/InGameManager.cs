@@ -103,7 +103,7 @@ public class InGameManager : MonoBehaviour
         gameEndUI = GameObject.FindGameObjectWithTag("UI").GetComponent<ResultUIHandler>();
         gameEndUI.DisableUI();
         MapSelection();
-
+        //GetComponent<JuneTestScript>().InitialRoadLight();
         // 아래 코드 동작을 위해 맵 프리팹의 첫 자식으로 GameObjects, 그 첫 자식으로 SpawnPoints, 그 아래 자식에
         // 순서대로 정방향 플레이어, 정방향 적, 역방향 플레이어, 역방향 적 스폰 포인트 지점을 만들어 둬야 한다
 
@@ -283,6 +283,7 @@ public class InGameManager : MonoBehaviour
         Material timeMaterial = null;
         // skybox 변수에 GameManager의 mapTimeState를 문자열로 저장
         string skybox = GameManager.Instance.mapTimeState.ToString().Replace("_","");
+        
         foreach (Material sky in DataManager.Instance.skyBoxs)
         {
             if (sky.name.Contains(skybox, StringComparison.OrdinalIgnoreCase))
@@ -307,6 +308,11 @@ public class InGameManager : MonoBehaviour
         //체크박스 활성화
         int lastChildIndex = Maps[GameManager.Instance.Map - 4].transform.childCount - 1;
         Maps[GameManager.Instance.Map - 4].transform.GetChild(lastChildIndex).gameObject.SetActive(true);
+        if(GameManager.Instance.mapTimeState!= MapTimeState.Cold_Sunset)
+        {
+            Maps[GameManager.Instance.Map - 4].transform.GetChild(lastChildIndex-1).gameObject.SetActive(true);
+
+        }
     }
 
     public void OnGameEnd(bool isPlayerWin)

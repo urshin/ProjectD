@@ -19,15 +19,13 @@ public class LightController : MonoBehaviour
 
     private float currentFogDensity;
 
+    
     void Start()
     {
-        //FogSetting();
-       // SetTimeLight();
+        SetTimeLight();
+        
     }
-    void Update()
-    {
-    }
-
+ 
     private void SetTimeLight()
     {
         if (GameManager.Instance.mapTimeState == MapTimeState.Cold_Night) // นใ
