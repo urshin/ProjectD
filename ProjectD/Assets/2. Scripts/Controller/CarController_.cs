@@ -304,7 +304,9 @@ public class CarController_ : MonoBehaviour
 
         //미끌어지는 각
         slipAngle = Vector3.Angle(transform.forward, playerRB.velocity - transform.forward);
+        steerValue = Mathf.Clamp(steerValue, -540f, 540f);
         float steeringAngle = steerValue * maxSteerAngle / (1080.0f / 2);//steerSlider.value * maxSteerAngle / (1080.0f / 2);
+        autoCounter = GameManager.Instance.isAutoCounter;
         if (autoCounter)
         {
             if (slipAngle < 120f)
@@ -312,7 +314,7 @@ public class CarController_ : MonoBehaviour
                 steeringAngle += Vector3.SignedAngle(transform.forward, playerRB.velocity + transform.forward, Vector3.up);
             }
         }
-        steeringAngle = Mathf.Clamp(steeringAngle, -90f, 90f);
+       steeringAngle = Mathf.Clamp(steeringAngle, -90f, 90f);
 
 
 

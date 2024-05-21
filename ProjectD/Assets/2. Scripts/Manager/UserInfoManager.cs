@@ -89,6 +89,7 @@ public class UserInfoManager : MonoBehaviour
             ownMusic = data.ownMusic;
             option = data.option;
             lapTime = data.lapTime;
+            
         }
         else
         {

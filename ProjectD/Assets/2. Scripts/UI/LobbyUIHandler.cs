@@ -319,10 +319,12 @@ public class LobbyUIHandler : MonoBehaviour
         if (autoCounter.isOn)
         {
             autoCounterToggleImage.color = Color.blue;
+            GameManager.Instance.isAutoCounter = true;
         }
         else
         {
             autoCounterToggleImage.color = Color.red;
+            GameManager.Instance.isAutoCounter = false;
         }
     }
     public void GageDropDownEvent(TMP_Dropdown select)

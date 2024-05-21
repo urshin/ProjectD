@@ -66,6 +66,19 @@ public class IngameCanvasHandler : MonoBehaviour
         transform.GetChild(0).gameObject.SetActive(false);
        
     }
+    private void OnEnable()
+    {
+        sensitivity.value = UserInfoManager.instance.Option.sensitivity;
+        mainVolume.value = UserInfoManager.instance.Option.mainVolume;
+        bgmVolume.value = UserInfoManager.instance.Option.bgmVolume;
+        sfxVolume.value = UserInfoManager.instance.Option.sfxVolume;
+        autoCounter.isOn = UserInfoManager.instance.Option.autoCounter;
+        SetSensitivity();
+        SetGlobalVolume();
+        SetBGMVolume();
+        SetSFXVolume();
+        SetAutoCounter();
+    }
 
     public void InitUI()
     {
@@ -229,11 +242,11 @@ public class IngameCanvasHandler : MonoBehaviour
     {
         if (autoCounter.isOn)
         {
-            //autoCounterToggleImage.color = Color.blue;
+            GameManager.Instance.isAutoCounter = true;
         }
         else
         {
-            //autoCounterToggleImage.color = Color.red;
+            GameManager.Instance.isAutoCounter = false;
         }
     }
 
