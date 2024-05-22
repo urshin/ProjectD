@@ -77,6 +77,7 @@ public class InGameManager : MonoBehaviour
     public void Resume()
     {
         inGameCanvasHandler.SaveOptions();
+        inGameCanvasHandler.ApplyOption();
         inGameCanvasHandler.pausedCanvas.SetActive(false);
 
         Time.timeScale = 1f;

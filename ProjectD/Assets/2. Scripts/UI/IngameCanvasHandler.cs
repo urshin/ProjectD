@@ -68,6 +68,11 @@ public class IngameCanvasHandler : MonoBehaviour
     }
     private void OnEnable()
     {
+        ApplyOption();
+    }
+
+    public void ApplyOption()
+    {
         sensitivity.value = UserInfoManager.instance.Option.sensitivity;
         mainVolume.value = UserInfoManager.instance.Option.mainVolume;
         bgmVolume.value = UserInfoManager.instance.Option.bgmVolume;

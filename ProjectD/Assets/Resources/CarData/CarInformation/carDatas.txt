@@ -7,21 +7,16 @@
   "Engine": {
     "Transmission": "Manual",
     "WheelWork": "AWD",
-    "MinRPM": 1000,
-    "MaxRPM": 6000,
-    "MaxMotorTorque": 240,
+    "MinRPM": 1200,
+    "MaxRPM": 6500,
+    "MaxMotorTorque": 260,
     "MaxBrakeTorque": 5000,
     "RPMSmoothness": 20
   },
   "Gear": {
-    "FinalGearRatio": 3.7,
+    "FinalGearRatio": 3.8 ,
     "GearRatios": [
-      4,
-      2.3,
-      1.5,
-      1.2,
-      1,
-      0.7
+      3.8, 2.5, 1.8, 1.4, 1.1, 0.8
     ],
     "ReverseRatio": 3.3,
     "ShiftUp": 0.9,
@@ -42,23 +37,18 @@
     "MaxSteerAngle": 40
   },
   "Engine": {
-    "Transmission": "Manual",
+    "Transmission": "Auto",
     "WheelWork": "REAR",
-    "MinRPM": 1300,
-    "MaxRPM": 7000,
-    "MaxMotorTorque": 340,
+    "MinRPM": 1400 ,
+    "MaxRPM": 7500 ,
+    "MaxMotorTorque": 320 ,
     "MaxBrakeTorque": 5000,
     "RPMSmoothness": 20
   },
   "Gear": {
-    "FinalGearRatio": 3.7,
+    "FinalGearRatio": 3.9 ,
     "GearRatios": [
-      4,
-      2.3,
-      1.5,
-      1.2,
-      1,
-      0.7
+      4.2, 2.6, 1.8, 1.4, 1.0, 0.75
     ],
     "ReverseRatio": 3.3,
     "ShiftUp": 0.9,
@@ -81,21 +71,16 @@
   "Engine": {
     "Transmission": "Auto",
     "WheelWork": "Front",
-    "MinRPM": 1100,
-    "MaxRPM": 8000,
-    "MaxMotorTorque": 240,
+    "MinRPM": 1000 ,
+    "MaxRPM": 7000 ,
+    "MaxMotorTorque": 220 ,
     "MaxBrakeTorque": 5000,
     "RPMSmoothness": 20
   },
   "Gear": {
-    "FinalGearRatio": 3.7,
+    "FinalGearRatio": 3.6,
     "GearRatios": [
-      4,
-      2.3,
-      1.5,
-      1.2,
-      1,
-      0.7
+       3.5, 2.2, 1.7, 1.3, 1.0, 0.8 
     ],
     "ReverseRatio": 3.3,
     "ShiftUp": 0.9,
@@ -119,20 +104,47 @@
     "Transmission": "Auto",
     "WheelWork": "AWD",
     "MinRPM": 1300,
-    "MaxRPM": 8000,
-    "MaxMotorTorque": 276,
+    "MaxRPM": 7500 ,
+    "MaxMotorTorque": 280 ,
     "MaxBrakeTorque": 5000,
     "RPMSmoothness": 20
   },
   "Gear": {
     "FinalGearRatio": 3.7,
     "GearRatios": [
-      4,
-      2.3,
-      1.5,
-      1.2,
-      1,
-      0.7
+     3.8, 2.4, 1.6, 1.3, 1.0, 0.75
+    ],
+    "ReverseRatio": 3.3,
+    "ShiftUp": 0.9,
+    "ShiftDown": 0.6,
+    "ShiftDelay": 1
+  },
+  "Environment": {
+    "DownForceValue": 5,
+    "DownForce": 1,
+    "AirDragCoeff": 0.015
+  }
+}
+
+{
+  "index": 4,
+  "name": "80Car",
+  "Handling": {
+    "MaxSteerAngle": 40
+  },
+  "Engine": {
+    "Transmission": "Auto",
+    "WheelWork": "Manual",
+    "MinRPM": 1200 ,
+    "MaxRPM": 7500 ,
+    "MaxMotorTorque": 270 ,
+    "MaxBrakeTorque": 5000,
+    "RPMSmoothness": 20
+  },
+  "Gear": {
+    "FinalGearRatio": 3.8,
+    "GearRatios": [
+      3.7, 2.5, 1.7, 1.3, 1.0, 0.75 
     ],
     "ReverseRatio": 3.3,
     "ShiftUp": 0.9,

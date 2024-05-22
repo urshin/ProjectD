@@ -24881,7 +24881,7 @@ MonoBehaviour:
   gage2_RPMTMP: {fileID: 2139078629}
   gage2_gearTMP: {fileID: 1043837720}
   pausedCanvas: {fileID: 680553465}
-  sensitivityText: {fileID: 697870813}
+  sensitivityText: {fileID: 945358909}
   sensitivity: {fileID: 632980834}
   mainVolume: {fileID: 700708594}
   bgmVolume: {fileID: 901642595}
