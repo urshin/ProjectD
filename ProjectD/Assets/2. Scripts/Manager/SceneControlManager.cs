@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 public class SceneControlManager : MonoBehaviour
 {
     static SceneControlManager uniqueInstance;
 
+    [SerializeField] Volume ppc;
     public static SceneControlManager Instance
     {
         get { return uniqueInstance; }
@@ -29,6 +31,7 @@ public class SceneControlManager : MonoBehaviour
         SoundManager.instance.PlayBGM(0);
         AsyncOperation ao;
         ao = SceneManager.LoadSceneAsync("Lobby");
+       // ppc.weight = 1;
         while (!ao.isDone)
         {
             yield return null;
@@ -47,6 +50,7 @@ public class SceneControlManager : MonoBehaviour
         SoundManager.instance.PlayBGM(1);
         AsyncOperation ao;
         ao = SceneManager.LoadSceneAsync("GarageScene1");
+        //ppc.weight = 0;
         while(!ao.isDone)
         {
             yield return null;
@@ -66,11 +70,12 @@ public class SceneControlManager : MonoBehaviour
     {
         //SoundManager.instance.PlayBGM(Random.Range(2, DataManager.Instance.bgmDictionary.Count));
         SoundManager.instance.PlayBGM(bgmIndex);
-
         AsyncOperation ao;
 
         ao = SceneManager.LoadSceneAsync("InGame");
+        //ppc.weight = 1;
         GameManager.Instance.gameState = GameState.InGame;
+
         while (!ao.isDone)
         {
             yield return null;
