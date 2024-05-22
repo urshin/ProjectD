@@ -244,7 +244,7 @@ public class LobbyUIHandler : MonoBehaviour
     public void OnClickExitBTN()
     {
         HideAllPanel();
-        UnityEditor.EditorApplication.isPlaying = false;
+        Application.Quit();
 
     }
 
