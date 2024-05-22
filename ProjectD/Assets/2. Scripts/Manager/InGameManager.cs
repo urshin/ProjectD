@@ -56,7 +56,9 @@ public class InGameManager : MonoBehaviour
         {
             cam =Instantiate(Camera.main);
         }
-       
+        Cursor.visible = false;
+        Resume();
+
         //InitGame();
     }
     private void Update()
@@ -78,20 +80,25 @@ public class InGameManager : MonoBehaviour
         inGameCanvasHandler.SaveOptions();
         inGameCanvasHandler.ApplyOption();
         inGameCanvasHandler.pausedCanvas.SetActive(false);
-
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Locked;
         Time.timeScale = 1f;
         currentState = InGameState.playing;
         inGamePaused = false;
+
     }
 
     public void Pause()
     {
         currentState = InGameState.pause;
         inGameCanvasHandler.pausedCanvas.SetActive(true);
-
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.None;
         Time.timeScale = 0f;
         inGamePaused = true;
+
     }
+    
 
     public void InitGame(int playerCarIndex, int enemyCarIndex)
     {
