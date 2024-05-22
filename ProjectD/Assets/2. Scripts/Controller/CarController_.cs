@@ -404,7 +404,7 @@ public class CarController_ : MonoBehaviour
                     // wheel.wheelCollider.brakeTorque = Mathf.Infinity;
                     //wheel.wheelCollider.motorTorque = 0f;
 
-                    wheel.wheelCollider.brakeTorque = maxBrakeTorque;
+                    //wheel.wheelCollider.brakeTorque = maxBrakeTorque;
                     wheel.wheelCollider.motorTorque = 0f;
                 }
             }

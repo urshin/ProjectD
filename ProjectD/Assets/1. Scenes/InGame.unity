@@ -13594,8 +13594,8 @@ Transform:
   - {fileID: 820670320}
   - {fileID: 860809427}
   - {fileID: 49144669}
-  - {fileID: 170523365}
   - {fileID: 1085411189}
+  - {fileID: 170523365}
   m_Father: {fileID: 1243211245}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -14521,8 +14521,8 @@ Transform:
   - {fileID: 1442818384}
   - {fileID: 43001571}
   - {fileID: 1935169883}
-  - {fileID: 592385449}
   - {fileID: 634411743}
+  - {fileID: 592385449}
   m_Father: {fileID: 1243211245}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

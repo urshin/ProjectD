@@ -3,6 +3,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -163,19 +164,20 @@ public class IngameCanvasHandler : MonoBehaviour
         GameObject cam1end = blendListCamera.transform.GetChild(1).gameObject;
         GameObject cam2start = blendListCamera.transform.GetChild(2).gameObject;
         GameObject cam2end = blendListCamera.transform.GetChild(3).gameObject;
-        Transform playerTrans = GameObject.FindGameObjectWithTag("Player").transform.GetChild(0).transform.GetChild(0);
-        Transform enemyTrans = GameObject.FindGameObjectWithTag("Enemy").transform.GetChild(0).transform.GetChild(0);
+        Transform playerTrans = GameObject.FindGameObjectWithTag("Player").transform.GetChild(0).transform.GetChild(0).transform;
+        Transform enemyTrans = GameObject.FindGameObjectWithTag("Enemy").transform.GetChild(0).transform.GetChild(0).transform;
         Vector3 midpoint = (enemyTrans.position + playerTrans.position) / 2;
         float distance = Vector3.Distance(enemyTrans.position, playerTrans.position);
-        cam1start.transform.position = midpoint + new Vector3(4f, 0, -distance/2); // 필요한 경우 위치 조정
-        cam1end.transform.position = midpoint + new Vector3(4f, 0, distance / 2); // 필요한 경우 위치 조정
+        cam1start.transform.position = midpoint + playerTrans.forward*4 + playerTrans.right*(distance/2); // 필요한 경우 위치 조정
         cam1start.transform.rotation = Quaternion.LookRotation(-enemyTrans.forward); // playerTrans의 반대 방향을 바라보게 설정
         cam1end.transform.rotation = Quaternion.LookRotation(-playerTrans.forward); // playerTrans의 반대 방향을 바라보게 설정
-        cam2start.transform.position = midpoint + new Vector3(-0.5f, 0, 0); // 필요한 경우 위치 조정
+        cam1end.transform.position = midpoint + playerTrans.forward * 4 - playerTrans.right * (distance/2); // 필요한 경우 위치 조정
+        cam2start.transform.position = midpoint - playerTrans.forward * 0.5f; // 필요한 경우 위치 조정
         cam2start.transform.rotation = playerTrans.rotation; 
-        cam2end.transform.position = midpoint + new Vector3(-2, 0, 0); // 필요한 경우 위치 조정
+        cam2end.transform.position = midpoint - playerTrans.forward * 2f; // 필요한 경우 위치 조정
         cam2end.transform.rotation = playerTrans.rotation;
     }
+    
 
     public void StartCountDown()
     {

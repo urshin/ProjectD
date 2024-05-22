@@ -17,6 +17,7 @@ public class SceneControlManager : MonoBehaviour
         uniqueInstance = this;
         DontDestroyOnLoad(gameObject);
     }
+ 
 
     public void StartLobbyScene()
     {
@@ -32,6 +33,7 @@ public class SceneControlManager : MonoBehaviour
         {
             yield return null;
         }
+        System.GC.Collect();
     }
 
 
@@ -49,6 +51,7 @@ public class SceneControlManager : MonoBehaviour
         {
             yield return null;
         }
+        System.GC.Collect();
 
         // 초기화
     }
@@ -72,7 +75,7 @@ public class SceneControlManager : MonoBehaviour
         {
             yield return null;
         }
-
+        System.GC.Collect();
         // 인게임매니저를 싱글톤으로 만들고 초기화 호출
         InGameManager.instance.InitGame(playerCarIndex, enemyCarIndex);
     }

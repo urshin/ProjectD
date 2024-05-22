@@ -67,7 +67,7 @@ public class CarAudio : MonoBehaviour
         cc = gameObject.GetComponent<CarController_>();
 
         // lowPitchMax ¼³Á¤
-        lowPitchMax = (cc.maxRPM / 1000) / 2;
+        lowPitchMax = (cc.maxRPM / 1000) *0.7f;
     }
 
     private void FixedUpdate()
@@ -159,7 +159,7 @@ public class CarAudio : MonoBehaviour
     {
         if (WheelSourse.clip == null)
             WheelSourse.clip = skid;
-        WheelSourse.volume = 0.5f + tireSlipAmount / 3;
+        WheelSourse.volume = 0.7f + tireSlipAmount / 3;
         if (isSkid)
         {
             WheelSourse.enabled = true;
