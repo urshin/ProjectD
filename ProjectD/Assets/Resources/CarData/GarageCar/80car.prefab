@@ -11961,7 +11961,8 @@ MonoBehaviour:
   airDragCoeff: 0
   smoke: []
   smokePrefab: {fileID: 4969641942327939751, guid: d5f95f5b21b9506429333da8f2244e88, type: 3}
-  brakeLamp: {fileID: 6149763178660196225}
+  brakeLamp:
+  - {fileID: 6149763178660196225}
   initialized: 0
   slipAngle: 0
   steeringInput: 0
@@ -14815,7 +14816,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6691828084705376346}
-  m_LocalRotation: {x: 0.060985543, y: 0.7044704, z: -0.06098526, w: 0.7044736}
+  m_LocalRotation: {x: 0.060985543, y: 0.70447034, z: -0.06098526, w: 0.7044737}
   m_LocalPosition: {x: -5.9665313, y: 2.4242709, z: -0.000017642975}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -15143,7 +15144,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6902450557693325330}
-  m_LocalRotation: {x: 0.051915765, y: 0.70519996, z: -0.051915996, w: 0.70519686}
+  m_LocalRotation: {x: 0.0519157, y: 0.70519996, z: -0.051915932, w: 0.70519686}
   m_LocalPosition: {x: 2.2712831, y: 0.5413421, z: 0.00000667572}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -16433,8 +16434,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8299016512157630259}
-  m_LocalRotation: {x: 0.0963669, y: 0.7273205, z: -0.1043882, w: 0.6714324}
-  m_LocalPosition: {x: 0.03, y: 1.29, z: 0.4}
+  m_LocalRotation: {x: 0.031689882, y: 0.7335691, z: -0.034286723, w: 0.67800933}
+  m_LocalPosition: {x: -0.0000011622906, y: 0.9179278, z: 0.40012243}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

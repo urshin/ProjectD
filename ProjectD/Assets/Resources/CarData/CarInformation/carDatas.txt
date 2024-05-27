@@ -157,3 +157,35 @@
     "AirDragCoeff": 0.015
   }
 }
+
+{
+  "index": 5,
+  "name": "volkswagen_golf_mk1",
+  "Handling": {
+    "MaxSteerAngle": 40
+  },
+  "Engine": {
+    "Transmission": "Auto",
+    "WheelWork": "Manual",
+    "MinRPM": 1200 ,
+    "MaxRPM": 8000 ,
+    "MaxMotorTorque": 320 ,
+    "MaxBrakeTorque": 5000,
+    "RPMSmoothness": 20
+  },
+  "Gear": {
+    "FinalGearRatio": 3.8,
+    "GearRatios": [
+      3.7, 2.5, 1.7, 1.3, 1.0, 0.75 
+    ],
+    "ReverseRatio": 3.3,
+    "ShiftUp": 0.9,
+    "ShiftDown": 0.6,
+    "ShiftDelay": 1
+  },
+  "Environment": {
+    "DownForceValue": 5,
+    "DownForce": 1,
+    "AirDragCoeff": 0.015
+  }
+}

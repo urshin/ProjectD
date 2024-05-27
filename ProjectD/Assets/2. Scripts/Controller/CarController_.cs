@@ -115,7 +115,7 @@ public class CarController_ : MonoBehaviour
     [Header("Effects")]
     [SerializeField] List<ParticleSystem> smoke;
     [SerializeField] GameObject smokePrefab;
-    [SerializeField] GameObject brakeLamp;
+    [SerializeField] GameObject[] brakeLamp;
 
     public bool initialized;
 
@@ -345,11 +345,15 @@ public class CarController_ : MonoBehaviour
 
                 wheel.wheelCollider.brakeTorque = 0f;
             }
-            if (brakeLamp != null)
+            if (brakeLamp.Length != 0)
             {
-                foreach (Material mat in brakeLamp.GetComponent<Renderer>().materials)
+                foreach(var brakeLamp_ in brakeLamp)
+                {
+
+                foreach (Material mat in brakeLamp_.GetComponent<Renderer>().materials)
                 {
                     mat.SetFloat("_BrakeParam", 0);
+                }
                 }
             }
         }
@@ -368,11 +372,15 @@ public class CarController_ : MonoBehaviour
 
                 wheel.wheelCollider.brakeTorque = 0f;
             }
-            if (brakeLamp != null)
+            if (brakeLamp.Length != 0)
             {
-                foreach (Material mat in brakeLamp.GetComponent<Renderer>().materials)
+                foreach (var brakeLamp_ in brakeLamp)
                 {
-                    mat.SetFloat("_BrakeParam", 0);
+
+                    foreach (Material mat in brakeLamp_.GetComponent<Renderer>().materials)
+                    {
+                        mat.SetFloat("_BrakeParam", 0);
+                    }
                 }
             }
         }
@@ -385,11 +393,15 @@ public class CarController_ : MonoBehaviour
                 wheel.wheelCollider.brakeTorque = brakeTorque;
                 wheel.wheelCollider.motorTorque = 0f;
             }
-            if(brakeLamp != null)
+            if (brakeLamp.Length != 0)
             {
-                foreach (Material mat in brakeLamp.GetComponent<Renderer>().materials)
+                foreach (var brakeLamp_ in brakeLamp)
                 {
-                    mat.SetFloat("_BrakeParam", 1);
+
+                    foreach (Material mat in brakeLamp_.GetComponent<Renderer>().materials)
+                    {
+                        mat.SetFloat("_BrakeParam", 0);
+                    }
                 }
             }
         }
@@ -409,11 +421,15 @@ public class CarController_ : MonoBehaviour
                 }
             }
 
-            if (brakeLamp != null)
+            if (brakeLamp.Length != 0)
             {
-                foreach(Material mat in brakeLamp.GetComponent<Renderer>().materials)
+                foreach (var brakeLamp_ in brakeLamp)
                 {
-                    mat.SetFloat("_BrakeParam", 1);
+
+                    foreach (Material mat in brakeLamp_.GetComponent<Renderer>().materials)
+                    {
+                        mat.SetFloat("_BrakeParam",1);
+                    }
                 }
             }
         }
