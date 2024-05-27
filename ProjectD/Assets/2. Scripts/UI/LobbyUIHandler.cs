@@ -33,6 +33,12 @@ public class LobbyUIHandler : MonoBehaviour
     [SerializeField] GameObject startCar;
     [SerializeField] GameObject[] maps;
 
+    [SerializeField] TMP_Dropdown timeDropdown;
+    [SerializeField] TMP_Dropdown weatherDropdown;
+
+    [SerializeField] GameObject lapTimeTextBox;
+    [SerializeField] GameObject lapTimeBoxPrefab;
+
     [SerializeField] GameObject isReverse;
     public LobbyState lobbystate;
 
@@ -156,6 +162,7 @@ public class LobbyUIHandler : MonoBehaviour
 
         mapSelectPanel.SetActive(true);
         lobbystate = LobbyState.MapSelect;
+        OnClickMap(4);
     }
 
    
@@ -169,6 +176,9 @@ public class LobbyUIHandler : MonoBehaviour
         }
         
         maps[num-4].gameObject.SetActive(true);
+        timeDropdown.value = 0;
+        weatherDropdown.value = 0;
+        InitLapTimeBox();
     }
 
     public void TimeDropDownEvent(TMP_Dropdown select)
@@ -201,7 +211,7 @@ public class LobbyUIHandler : MonoBehaviour
 
         switch (op)
         {
-            case "Spring":
+            case "Autumn":
                 GameManager.Instance.mapWeatherState = MapWeatherState.Autumn;
                 break;
             case "Summer":
@@ -210,9 +220,58 @@ public class LobbyUIHandler : MonoBehaviour
             case "Winter":
                 GameManager.Instance.mapWeatherState = MapWeatherState.Winter;
                 break;
-    
-
         }
+
+        InitLapTimeBox();
+    }
+
+    void InitLapTimeBox()
+    {
+        foreach (Transform child in lapTimeTextBox.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        int currentLapTimeIndex = (int)GameManager.Instance.mapWeatherState * 100 + GameManager.Instance.Map;
+
+        if (UserInfoManager.instance.BestLapTime.TryGetValue(currentLapTimeIndex, out float time))
+        {
+            GameObject go = Instantiate(lapTimeBoxPrefab, lapTimeTextBox.transform);
+            go.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Best Lap";
+            int minutes = Mathf.FloorToInt(time / 60f);
+            int seconds = Mathf.FloorToInt(time % 60f);
+            int milliseconds = Mathf.FloorToInt((time * 100f) % 100f);
+            go.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = minutes.ToString() + " : " + seconds.ToString() + " : " + milliseconds.ToString();
+
+            int lapTimeCounter = UserInfoManager.instance.LapTime[currentLapTimeIndex].Count;
+
+            for (int i = 0; i < lapTimeCounter; i++)
+            {
+                go = Instantiate(lapTimeBoxPrefab, lapTimeTextBox.transform);
+                go.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Recent Lap " + (i + 1).ToString();
+                float timer = UserInfoManager.instance.LapTime[currentLapTimeIndex][i];
+                minutes = Mathf.FloorToInt(timer / 60f);
+                seconds = Mathf.FloorToInt(timer % 60f);
+                milliseconds = Mathf.FloorToInt((timer * 100f) % 100f);
+                go.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = minutes.ToString() + " : " + seconds.ToString() + " : " + milliseconds.ToString();
+            }
+        }
+
+        //if (UserInfoManager.instance.LapTime.TryGetValue(currentLapTimeIndex, out List<float> value))
+        //{
+        //    int lapTimeCounter = UserInfoManager.instance.LapTime[currentLapTimeIndex].Count;
+
+        //    for (int i = 0; i < lapTimeCounter; i++)
+        //    {
+        //        GameObject go = Instantiate(lapTimeBoxPrefab, lapTimeTextBox.transform);
+        //        go.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Recent Lap " + (i + 1).ToString();
+        //        float timer = UserInfoManager.instance.LapTime[currentLapTimeIndex][i];
+        //        int minutes = Mathf.FloorToInt(timer / 60f);
+        //        int seconds = Mathf.FloorToInt(timer % 60f);
+        //        int milliseconds = Mathf.FloorToInt((timer * 100f) % 100f);
+        //        go.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = minutes.ToString() + " : " + seconds.ToString() + " : " + milliseconds.ToString();
+        //    }
+        //}
     }
 
     public void OnClickReverseButton()

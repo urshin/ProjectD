@@ -17,6 +17,8 @@ public struct GameOption
 }
 
 
+
+
 public class UserInfoManager : MonoBehaviour
 {
     static UserInfoManager uniqueInstance;
@@ -36,7 +38,10 @@ public class UserInfoManager : MonoBehaviour
 
         //1맵 3계절
         //Dictionary<int, float> data; key -> weather*100 + map ;  value -> LapTime;
-        public Dictionary<int, float> lapTime;
+        // 베스트랩을 보관하는 동시에 최근 10번의 랩타임을 저장해야 한다
+        // 밸류 값으로 List<int>를 저장하고 리스트의 크기를 10으로 한다
+        public Dictionary<int, List<float>> lapTime;
+        public Dictionary<int, float> bestLapTime;
     }
 
     // 보유한 차량, 음악은 정수로 저장하는데, 이는 비트 연산자로 소유 여부를 판가름하기 위함
@@ -49,7 +54,8 @@ public class UserInfoManager : MonoBehaviour
     int cash;
     int purchasedCar;
     int ownMusic;
-    Dictionary<int, float> lapTime;
+    Dictionary<int, List<float>> lapTime;
+    Dictionary<int, float> bestLapTime;
 
     // 수정이 불가능하고 참조만 할 수 있도록 프로퍼티
     public GameOption Option
@@ -68,9 +74,13 @@ public class UserInfoManager : MonoBehaviour
     {
         get { return ownMusic; }
     }
-    public Dictionary<int, float> LapTime
+    public Dictionary<int, List<float>> LapTime
     {
         get { return lapTime; }
+    }
+    public Dictionary<int, float> BestLapTime
+    {
+        get { return bestLapTime; }
     }
 
     private void Awake()
@@ -84,12 +94,12 @@ public class UserInfoManager : MonoBehaviour
         // 세이브 파일 데이터를 읽어 유저 정보를 설정
         if (LoadGameData())
         {
-            cash =  data.cash;
+            cash = data.cash;
             purchasedCar = data.purchasedCar;
             ownMusic = data.ownMusic;
             option = data.option;
             lapTime = data.lapTime;
-            
+            bestLapTime = data.bestLapTime;
         }
         else
         {
@@ -103,7 +113,8 @@ public class UserInfoManager : MonoBehaviour
             option.sfxVolume = 0.5f;
             option.autoCounter = true;
             option.speeoMeter = SpeeoMeterState.TacoMeter;
-            lapTime = new Dictionary<int, float>();
+            lapTime = new Dictionary<int, List<float>>();
+            bestLapTime = new Dictionary<int, float>();
         }
 
         SceneControlManager.Instance.StartLobbyScene();
@@ -136,7 +147,7 @@ public class UserInfoManager : MonoBehaviour
         option.bgmVolume = bgmVol;
         option.sfxVolume = sfxVol;
         option.autoCounter = counter;
-      
+
         SaveGameData();
     }
     //오버로딩
@@ -160,13 +171,37 @@ public class UserInfoManager : MonoBehaviour
     public void OnGameEnd(int earnedCash, int mapIndex, int weatherIndex, float time = 0)
     {
         cash += earnedCash;
-        if(lapTime.ContainsKey(weatherIndex * 100 + mapIndex))
+        if (lapTime.ContainsKey(weatherIndex * 100 + mapIndex))
         {
-            lapTime[weatherIndex * 100 + mapIndex] = time;
+            int count = lapTime[weatherIndex * 100 + mapIndex].Count;
+            if (count > 9)
+                count = 9;
+            else
+            {
+                // 카운트가 최대값인 10이 아니라면 밑의 i+1에서 오류가 발생하므로 쓰레기값을 넣어 처리되도록 한다
+                lapTime[weatherIndex * 100 + mapIndex].Add(0);
+            }
+
+
+            for (int i = count - 1; i >= 0; i--)
+            {
+                lapTime[weatherIndex * 100 + mapIndex][i + 1] = lapTime[weatherIndex * 100 + mapIndex][i];
+            }
+
+            lapTime[weatherIndex * 100 + mapIndex][0] = time;
+            if (bestLapTime[weatherIndex * 100 + mapIndex] > time)
+            {
+                bestLapTime[weatherIndex * 100 + mapIndex] = time;
+            }
         }
         else
         {
-            lapTime.Add(weatherIndex * 100 + mapIndex, time);
+            List<float> temp = new List<float>();
+            temp.Add(time);
+
+            // 기록이 없었다면 무조건 신기록이므로 베스트랩으로 저장한다
+            bestLapTime[weatherIndex * 100 + mapIndex] = time;
+            lapTime.Add(weatherIndex * 100 + mapIndex, temp);
         }
 
         SaveGameData();
@@ -179,6 +214,7 @@ public class UserInfoManager : MonoBehaviour
         data.ownMusic = ownMusic;
         data.option = option;
         data.lapTime = lapTime;
+        data.bestLapTime = bestLapTime;
 
         string filePath = Application.persistentDataPath + "/" + fileName;
         string jsonData = JsonConvert.SerializeObject(data);

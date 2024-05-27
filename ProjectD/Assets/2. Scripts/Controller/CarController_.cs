@@ -400,7 +400,7 @@ public class CarController_ : MonoBehaviour
 
                     foreach (Material mat in brakeLamp_.GetComponent<Renderer>().materials)
                     {
-                        mat.SetFloat("_BrakeParam", 0);
+                        mat.SetFloat("_BrakeParam", 1);
                     }
                 }
             }

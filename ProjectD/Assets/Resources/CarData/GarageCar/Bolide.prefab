@@ -7206,7 +7206,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1727017715509995131}
-  m_LocalRotation: {x: 0.3537816, y: 0.6122421, z: -0.35378286, w: 0.6122384}
+  m_LocalRotation: {x: 0.3537816, y: 0.61224216, z: -0.3537828, w: 0.61223847}
   m_LocalPosition: {x: 0.017700195, y: -0.031761177, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -15272,7 +15272,7 @@ MonoBehaviour:
   airDragCoeff: 0
   smoke: []
   smokePrefab: {fileID: 4969641942327939751, guid: d5f95f5b21b9506429333da8f2244e88, type: 3}
-  brakeLamp: {fileID: 0}
+  brakeLamp: []
   initialized: 0
   slipAngle: 0
   steeringInput: 0

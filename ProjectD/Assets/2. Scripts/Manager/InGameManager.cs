@@ -325,5 +325,6 @@ public class InGameManager : MonoBehaviour
     public void OnGameEnd(bool isPlayerWin)
     {
         gameEndUI.ActiveUI(isPlayerWin, IngameCanvasHandler.Instance.lapTime);
+        UserInfoManager.instance.OnGameEnd(100, GameManager.Instance.Map, (int)GameManager.Instance.mapWeatherState, IngameCanvasHandler.Instance.lapTime);
     }
 }
