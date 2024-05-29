@@ -57,6 +57,7 @@ public class SceneControlManager : MonoBehaviour
         }
         System.GC.Collect();
 
+
         // √ ±‚»≠
     }
 
