@@ -37,6 +37,20 @@ public class GameManager : MonoBehaviour
      
 
     }
+    public void LockMouse()
+    {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        
+       
+    }
+    public void FreeMouse()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        Time.timeScale = 1;
+
+    }
 }
 public enum GameMode
 {
