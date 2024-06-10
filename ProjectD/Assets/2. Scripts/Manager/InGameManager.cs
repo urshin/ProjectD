@@ -80,7 +80,7 @@ public class InGameManager : MonoBehaviour
         inGameCanvasHandler.SaveOptions();
         inGameCanvasHandler.ApplyOption();
         inGameCanvasHandler.pausedCanvas.SetActive(false);
-        Cursor.visible = true;
+        Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         Time.timeScale = 1f;
         currentState = InGameState.playing;
@@ -92,13 +92,26 @@ public class InGameManager : MonoBehaviour
     {
         currentState = InGameState.pause;
         inGameCanvasHandler.pausedCanvas.SetActive(true);
-        Cursor.visible = false;
+        Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         Time.timeScale = 0f;
         inGamePaused = true;
 
     }
-    
+    public void OnclickGarage()
+    {
+        inGameCanvasHandler.SaveOptions();
+        inGameCanvasHandler.ApplyOption();
+        inGameCanvasHandler.pausedCanvas.SetActive(false);
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        Time.timeScale = 1f;
+        currentState = InGameState.end;
+        inGamePaused = false;
+
+
+    }
+
 
     public void InitGame(int playerCarIndex, int enemyCarIndex)
     {
